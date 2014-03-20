@@ -1,4 +1,5 @@
 import lensfun
+import gc
 
 # the following string were taken from the lensfun xml files
 camMaker = 'NIKON CORPORATION'
@@ -43,3 +44,16 @@ def testModifier():
     
     undistCoords = mod.applySubpixelGeometryDistortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
+    
+def testDeallocationBug():
+    db = lensfun.Database()
+    cam = db.findCameras(camMaker, camModel)[0]
+    lens = db.findLenses(cam, lensMaker, lensModel)[0]
+    
+    # by garbage collecting the database object, its queried objects
+    # are deallocated as well, which is not what we want
+    del db
+    gc.collect()
+    
+    assert cam.Maker.lower() == camMaker.lower()
+    assert lens.Maker.lower() == lensMaker.lower()
