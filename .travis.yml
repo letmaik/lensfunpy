@@ -1,7 +1,7 @@
 language: python
 virtualenv:
   system_site_packages: true
-before_install:
-  - apt-get install python-numpy liblensfun0 liblensfun-dev
-install: pip install .
+install:
+  - sudo apt-get install python-numpy liblensfun0 liblensfun-dev
+  - pip install .
 script: nosetests
