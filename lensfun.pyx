@@ -298,14 +298,14 @@ cdef class Modifier:
     
     def applySubpixelDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         width, height = self._widthHeight(width, height)
-        cdef np.ndarray[DTYPE_t, ndim=3, mode='c'] res = np.empty((height, width, 2), dtype=DTYPE)
-        lf_modifier_apply_subpixel_distortion(self.lf, xu, yu, width, height, &res[0,0,0])
+        cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
+        lf_modifier_apply_subpixel_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
         return res
 
     def applySubpixelGeometryDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         width, height = self._widthHeight(width, height)
-        cdef np.ndarray[DTYPE_t, ndim=3, mode='c'] res = np.empty((height, width, 2), dtype=DTYPE)
-        lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0])
+        cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
+        lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
         return res
     
     def _widthHeight(self, width, height):
