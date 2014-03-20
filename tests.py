@@ -50,8 +50,11 @@ def testDeallocationBug():
     cam = db.findCameras(camMaker, camModel)[0]
     lens = db.findLenses(cam, lensMaker, lensModel)[0]
     
-    # by garbage collecting the database object, its queried objects
-    # are deallocated as well, which is not what we want
+    # By garbage collecting the database object, its queried objects
+    # were deallocated as well, which is not what we want.
+    # Now, all queried objects hold a reference to the Database object
+    # they came from. This way, the Database object is only deallocated
+    # when all queried objects were garbage collected.
     del db
     gc.collect()
     

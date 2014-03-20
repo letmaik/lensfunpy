@@ -135,7 +135,7 @@ cdef class Database:
         cams = []
         cdef int i = 0
         while lfCams[i] is not NULL:
-            cams.append(Camera(<uintptr_t>lfCams[i]))
+            cams.append(Camera(<uintptr_t>lfCams[i], self))
             i += 1
         lf_free(lfCams)
         return cams
@@ -158,22 +158,19 @@ cdef class Database:
         lenses = []
         cdef int i = 0
         while lfLenses[i] is not NULL:
-            lenses.append(Lens(<uintptr_t>lfLenses[i]))
+            lenses.append(Lens(<uintptr_t>lfLenses[i], self))
             i += 1            
         lf_free(lfLenses)
         return lenses       
 
-# TODO Camera and Lens objects could hold a reference to the Database object they came from
-#      so that the Database (and its Camera and Lens objects) is only deallocated when
-#      no queried objects are alive anymore, otherwise there might be unexpected behaviours
-# -> write unit test which triggers this      
-    
 cdef class Camera:
 
     cdef lfCamera* lf
+    cdef Database db
 
-    def __cinit__(self, uintptr_t lfCam):
+    def __cinit__(self, uintptr_t lfCam, Database db):
         self.lf = <lfCamera*> lfCam
+        self.db = db
     
     property Maker:
         def __get__(self):
@@ -214,10 +211,12 @@ cdef class Camera:
 
 cdef class Lens:
 
-    cdef lfLens* lf 
+    cdef lfLens* lf
+    cdef Database db
 
-    def __cinit__(self, uintptr_t lfLen):
+    def __cinit__(self, uintptr_t lfLen, Database db):
         self.lf = <lfLens*> lfLen
+        self.db = db
         
     property Maker:
         def __get__(self):
