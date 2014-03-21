@@ -272,6 +272,11 @@ cdef class Modifier:
     cdef float crop
     cdef int width, height
     cdef lfModifier* lf
+    
+    # values used for initialize
+    cdef float focal
+    cdef float aperture
+    cdef float distance
 
     def __cinit__(self, Lens lens not None, float crop, int width, int height):
         self.lens = lens
@@ -288,6 +293,9 @@ cdef class Modifier:
         lf_modifier_initialize (self.lf, self.lens.lf, LF_PF_U8,
                                 focal, aperture, distance, scale,
                                 targeom, flags, reverse)
+        self.focal = focal
+        self.aperture = aperture
+        self.distance = distance
 
     def applyGeometryDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         width, height = self._widthHeight(width, height)
@@ -306,6 +314,18 @@ cdef class Modifier:
         cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
         lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
         return res
+    
+    property FocalLength:
+        def __get__(self):
+            return self.focal
+        
+    property Aperture:
+        def __get__(self):
+            return self.aperture
+        
+    property Distance:
+        def __get__(self):
+            return self.distance
     
     def _widthHeight(self, width, height):
         if width == -1:
