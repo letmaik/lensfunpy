@@ -79,7 +79,7 @@ def read(fname):
 
 setup(
       name = 'lensfunpy',
-      version = '0.9.0',
+      version = '0.9.1',
       description = 'Python wrapper for the lensfun library',
       long_description = read('README.rst'),
       author = 'Maik Riechert',
@@ -96,5 +96,5 @@ setup(
         'Topic :: Software Development :: Libraries',
       ),
       ext_modules = extensions,
-      data_files=[('', ['lensfun.pyx'])],
+      data_files=[('', ['lensfun.pyx', 'README.rst'])],
 )
