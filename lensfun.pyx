@@ -47,6 +47,7 @@ cdef extern from "lensfun.h":
         lfMLstr Maker
         lfMLstr Model
         lfMLstr Variant
+        char* Mount
         float CropFactor
         int Score
     struct lfLens:
@@ -56,6 +57,8 @@ cdef extern from "lensfun.h":
         float MaxFocal
         float MinAperture
         float MaxAperture
+        float CropFactor
+        float AspectRatio
         int Score
     struct lfModifier:
         pass
@@ -184,6 +187,10 @@ cdef class Camera:
         def __get__(self):
             return '' if self.lf.Variant is NULL else self.lf.Variant
         
+    property Mount:
+        def __get__(self):
+            return '' if self.lf.Mount is NULL else self.lf.Mount
+        
     property CropFactor:
         def __get__(self):
             return self.lf.CropFactor
@@ -198,6 +205,7 @@ cdef class Camera:
                 return (self.Maker == other.Maker and
                         self.Model == other.Model and
                         self.Variant == other.Variant and
+                        self.Mount == other.Mount and
                         self.CropFactor == other.CropFactor)
             else:
                 return NotImplemented
@@ -206,7 +214,8 @@ cdef class Camera:
         
     def __repr__(self):
         return ('Camera(Maker: ' + self.Maker + '; Model: ' + self.Model +
-            '; Variant: ' + self.Variant + '; Crop Factor: ' + str(self.CropFactor) +
+            '; Variant: ' + self.Variant + '; Mount: ' + self.Mount + 
+            '; Crop Factor: ' + str(self.CropFactor) +
             '; Score: ' + str(self.Score) + ')')
 
 cdef class Lens:
@@ -241,6 +250,14 @@ cdef class Lens:
     property MaxAperture:
         def __get__(self):
             return self.lf.MaxAperture
+        
+    property CropFactor:
+        def __get__(self):
+            return self.lf.CropFactor
+        
+    property AspectRatio:
+        def __get__(self):
+            return self.lf.AspectRatio
             
     property Score:
         def __get__(self):
@@ -254,7 +271,9 @@ cdef class Lens:
                         self.MinFocal == other.MinFocal and
                         self.MaxFocal == other.MaxFocal and
                         self.MinAperture == other.MinAperture and
-                        self.MaxAperture == other.MaxAperture)
+                        self.MaxAperture == other.MaxAperture and
+                        self.CropFactor == other.CropFactor and
+                        self.AspectRatio == other.AspectRatio)
             else:
                 return NotImplemented
         else:
@@ -264,6 +283,7 @@ cdef class Lens:
         return ('Lens(Maker: ' + self.Maker + '; Model: ' + self.Model +
             '; Focal: ' + str(self.MinFocal) + '-' + str(self.MaxFocal) +
             '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
+            '; Crop factor: ' + str(self.CropFactor) + '; Aspect ratio: ' + str(self.AspectRatio) +
             '; Score: ' + str(self.Score) + ')')
 
 cdef class Modifier:
