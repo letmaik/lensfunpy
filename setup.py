@@ -82,7 +82,6 @@ setup(
       version = '0.9.0',
       description = 'Python wrapper for the lensfun library',
       long_description = read('README.rst'),
-      license = read('LICENSE'),
       author = 'Maik Riechert',
       author_email = 'maik.riechert@arcor.de',
       url = 'https://github.com/neothemachine/lensfunpy',
