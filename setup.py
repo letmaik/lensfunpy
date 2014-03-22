@@ -72,11 +72,29 @@ extensions = [Extension("lensfun",
 if use_cython:    
     extensions = cythonize(extensions)
 
+def read(fname):
+    with open(fname) as fp:
+        content = fp.read()
+    return content
+
 setup(
-      name = 'lensfun',
-      version = '1.0',
-      description = 'lensfun wrapper',
+      name = 'lensfunpy',
+      version = '0.9.0',
+      description = 'Python wrapper for the lensfun library',
+      long_description = read('README.rst'),
+      license = read('LICENSE'),
       author = 'Maik Riechert',
       author_email = 'maik.riechert@arcor.de',
+      url = 'https://github.com/neothemachine/lensfunpy',
+      classifiers=(
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Cython',
+        'Programming Language :: Python',
+        'Topic :: Multimedia :: Graphics',
+        'Topic :: Software Development :: Libraries',
+      ),
       ext_modules = extensions,
 )
