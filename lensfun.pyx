@@ -15,6 +15,7 @@ DTYPE = np.float32
 ctypedef np.float32_t DTYPE_t
 
 cdef extern from "lensfun.h":
+    ctypedef int LF_VERSION
     ctypedef char *lfMLstr
     enum lfError:
         LF_NO_ERROR
@@ -58,7 +59,8 @@ cdef extern from "lensfun.h":
         float MinAperture
         float MaxAperture
         float CropFactor
-        float AspectRatio
+        # AspectRatio added in 0.2.8, but there's no easy way to include this conditionally (limitation of Cython)
+        # float AspectRatio
         int Score
     struct lfModifier:
         pass
@@ -254,10 +256,12 @@ cdef class Lens:
     property CropFactor:
         def __get__(self):
             return self.lf.CropFactor
-        
-    property AspectRatio:
-        def __get__(self):
-            return self.lf.AspectRatio
+
+# see cdef extern block
+#    IF LF_VERSION >= LF_VERSION_028:
+#        property AspectRatio:
+#            def __get__(self):
+#                return self.lf.AspectRatio
             
     property Score:
         def __get__(self):
@@ -272,8 +276,7 @@ cdef class Lens:
                         self.MaxFocal == other.MaxFocal and
                         self.MinAperture == other.MinAperture and
                         self.MaxAperture == other.MaxAperture and
-                        self.CropFactor == other.CropFactor and
-                        self.AspectRatio == other.AspectRatio)
+                        self.CropFactor == other.CropFactor)
             else:
                 return NotImplemented
         else:
@@ -283,8 +286,7 @@ cdef class Lens:
         return ('Lens(Maker: ' + self.Maker + '; Model: ' + self.Model +
             '; Focal: ' + str(self.MinFocal) + '-' + str(self.MaxFocal) +
             '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
-            '; Crop factor: ' + str(self.CropFactor) + '; Aspect ratio: ' + str(self.AspectRatio) +
-            '; Score: ' + str(self.Score) + ')')
+            '; Crop factor: ' + str(self.CropFactor) + '; Score: ' + str(self.Score) + ')')
 
 cdef class Modifier:
 
