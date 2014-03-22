@@ -97,4 +97,5 @@ setup(
         'Topic :: Software Development :: Libraries',
       ),
       ext_modules = extensions,
+      data_files=[('', ['lensfun.pyx'])],
 )
