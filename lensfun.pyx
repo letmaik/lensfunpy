@@ -59,7 +59,7 @@ cdef extern from "lensfun.h":
         float MinAperture
         float MaxAperture
         float CropFactor
-        # AspectRatio added in 0.2.8, but there's no easy way to include this conditionally (limitation of Cython)
+        # AspectRatio added in 0.2.9, but there's no easy way to include this conditionally (limitation of Cython)
         # float AspectRatio
         int Score
     struct lfModifier:
@@ -258,7 +258,7 @@ cdef class Lens:
             return self.lf.CropFactor
 
 # see cdef extern block
-#    IF LF_VERSION >= LF_VERSION_028:
+#    IF LF_VERSION >= LF_VERSION_029:
 #        property AspectRatio:
 #            def __get__(self):
 #                return self.lf.AspectRatio
