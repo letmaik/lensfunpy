@@ -1,3 +1,6 @@
+from __future__ import division
+
+import numpy as np
 import lensfun
 import gc
 
@@ -39,11 +42,18 @@ def testModifier():
     undistCoords = mod.applyGeometryDistortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
     
+    # check if coordinates were actually transformed
+    y, x = np.mgrid[0:undistCoords.shape[0], 0:undistCoords.shape[1]]
+    coords = np.dstack((x,y))
+    assert np.any(undistCoords != coords)
+    
     undistCoords = mod.applySubpixelDistortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
+    assert np.any(undistCoords[:,:,0] != coords)
     
     undistCoords = mod.applySubpixelGeometryDistortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
+    assert np.any(undistCoords[:,:,0] != coords)
     
 def testDeallocationBug():
     db = lensfun.Database()
