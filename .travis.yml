@@ -3,5 +3,6 @@ virtualenv:
   system_site_packages: true
 install:
   - sudo apt-get install python-numpy liblensfun0 liblensfun-dev
+  - pip install cython
   - pip install .
 script: nosetests
