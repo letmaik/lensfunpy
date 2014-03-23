@@ -142,6 +142,11 @@ cdef extern from "lensfun.h":
 def enum(**enums):
     return type('Enum', (), enums)
 
+def enumKey(enu, val):
+    # cython doesn't like tuple unpacking in lambdas ("Expected ')', found ','")
+    #return filter(lambda (k,v): v == val, enu.__dict__.items())[0][0]
+    return filter(lambda item: item[1] == val, enu.__dict__.items())[0][0]
+
 ModifyFlags = enum(
                    TCA=LF_MODIFY_TCA,
                    VIGNETTING=LF_MODIFY_VIGNETTING,
@@ -490,9 +495,10 @@ cdef class Lens:
         
     def __repr__(self):
         return ('Lens(Maker: ' + self.Maker + '; Model: ' + self.Model +
-            '; Focal: ' + str(self.MinFocal) + '-' + str(self.MaxFocal) +
-            '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
-            '; Crop factor: ' + str(self.CropFactor) + '; Score: ' + str(self.Score) + ')')
+                '; Type: ' + enumKey(LensType, self.Type) + 
+                '; Focal: ' + str(self.MinFocal) + '-' + str(self.MaxFocal) +
+                '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
+                '; Crop factor: ' + str(self.CropFactor) + '; Score: ' + str(self.Score) + ')')
 
 cdef _convertCalibDistortion(lfLensCalibDistortion ** lfCalibs):
     if lfCalibs == NULL:
