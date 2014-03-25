@@ -10,12 +10,14 @@ env:
 install:
   - sudo apt-get install python-numpy
   # see http://stackoverflow.com/a/5244583/60982 on how to extract latest SVN tag 
-  - if [ "${USE_LATEST_LENSFUN}" == true ]; then
+  - if [ $USE_LATEST_LENSFUN == true ]; then
       cd .. ;
       svn co $LENSFUN_SVN`svn log -v $LENSFUN_SVN/tags | awk '/^   A/ { print $2 }' | head -1` lensfun ;
       cd lensfun ;
       ./configure ;
       sudo make install ;
+      echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf ;
+      ldconfig ;
       cd ../lensfunpy ;
     else
       sudo apt-get install liblensfun0 liblensfun-dev ;
