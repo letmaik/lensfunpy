@@ -63,9 +63,13 @@ You need to have the `lensfun library <http://lensfun.berlios.de>`_ installed to
 
 On Ubuntu, you can get (an outdated) version with:
 
+.. code-block:: sh
+
     sudo apt-get install liblensfun0 liblensfun-dev
     
 Or install the latest developer version from the SVN repository:
+
+.. code-block:: sh
 
     svn co svn://svn.berlios.de/lensfun/trunk lensfun
     cd lensfun
@@ -77,6 +81,8 @@ Troubleshooting
     
 If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:
+
+.. code-block:: sh
 
     echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf
     sudo ldconfig
