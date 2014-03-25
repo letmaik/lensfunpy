@@ -26,7 +26,13 @@ How to find cameras and lenses:
     lens = db.findLenses(cam, lensMaker, lensModel)[0]
     
     print cam
+    # Camera(Maker: NIKON CORPORATION; Model: NIKON D3S; Variant: ; 
+    #        Mount: Nikon F AF; Crop Factor: 1.0; Score: 0)
+    
     print lens
+    # Lens(Maker: Nikon; Model: Nikkor 28mm f/2.8D AF; Type: RECTILINEAR;
+    #      Focal: 28.0-28.0; Aperture: 2.79999995232-2.79999995232; 
+    #      Crop factor: 1.0; Score: 110)    
 
 How to correct lens distortion:
 
