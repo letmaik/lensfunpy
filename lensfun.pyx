@@ -471,15 +471,15 @@ cdef class Lens:
 
     property CalibDistortion:
         def __get__(self):
-            return _convertCalibDistortions(self.lf.CalibDistortion)
+            return _convertCalibsDistortion(self.lf.CalibDistortion)
 
     property CalibTCA:
         def __get__(self):
-            return _convertCalibTCA(self.lf.CalibTCA)
+            return _convertCalibsTCA(self.lf.CalibTCA)
 
     property CalibVignetting:
         def __get__(self):
-            return _convertCalibVignetting(self.lf.CalibVignetting)
+            return _convertCalibsVignetting(self.lf.CalibVignetting)
         
     def interpolateDistortion(self, float focal):
         cdef lfLensCalibDistortion* res = <lfLensCalibDistortion*>malloc(sizeof(lfLensCalibDistortion))
@@ -488,7 +488,23 @@ cdef class Lens:
         calib = _convertCalibDistortion(res)
         lf_free(res)
         return calib
-                        
+    
+    def interpolateTCA(self, float focal):
+        cdef lfLensCalibTCA* res = <lfLensCalibTCA*>malloc(sizeof(lfLensCalibTCA))
+        # TODO what does the returned bool tell me?
+        b = lf_lens_interpolate_tca(self.lf, focal, res)
+        calib = _convertCalibTCA(res)
+        lf_free(res)
+        return calib
+    
+    def interpolateVignetting(self, float focal, float aperture, float distance):
+        cdef lfLensCalibVignetting* res = <lfLensCalibVignetting*>malloc(sizeof(lfLensCalibVignetting))
+        # TODO what does the returned bool tell me?
+        b = lf_lens_interpolate_vignetting(self.lf, focal, aperture, distance, res)
+        calib = _convertCalibVignetting(res)
+        lf_free(res)
+        return calib
+                            
     property Score:
         def __get__(self):
             return self.lf.Score
@@ -515,7 +531,7 @@ cdef class Lens:
                 '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
                 '; Crop factor: ' + str(self.CropFactor) + '; Score: ' + str(self.Score) + ')')
 
-cdef _convertCalibDistortions(lfLensCalibDistortion ** lfCalibs):
+cdef _convertCalibsDistortion(lfLensCalibDistortion ** lfCalibs):
     if lfCalibs == NULL:
         return []
     calibs = []
@@ -531,30 +547,38 @@ cdef _convertCalibDistortion(lfLensCalibDistortion * lfCalib):
                                 [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2]])
     return calib
 
-cdef _convertCalibTCA(lfLensCalibTCA ** lfCalibs):
+cdef _convertCalibsTCA(lfLensCalibTCA ** lfCalibs):
     if lfCalibs == NULL:
         return []
     calibs = []
     cdef int i = 0
     while lfCalibs[i] is not NULL:
-        calib = LensCalibTCA(lfCalibs[i].Model, lfCalibs[i].Focal, 
-                             [lfCalibs[i].Terms[0], lfCalibs[i].Terms[1], lfCalibs[i].Terms[2],
-                              lfCalibs[i].Terms[3], lfCalibs[i].Terms[4], lfCalibs[i].Terms[5]])
+        calib = _convertCalibTCA(lfCalibs[i])
         calibs.append(calib)
         i += 1
     return calibs
 
-cdef _convertCalibVignetting(lfLensCalibVignetting ** lfCalibs):
+cdef _convertCalibTCA(lfLensCalibTCA * lfCalib):
+    calib = LensCalibTCA(lfCalib.Model, lfCalib.Focal, 
+                         [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2],
+                          lfCalib.Terms[3], lfCalib.Terms[4], lfCalib.Terms[5]])
+    return calib
+
+cdef _convertCalibsVignetting(lfLensCalibVignetting ** lfCalibs):
     if lfCalibs == NULL:
         return []
     calibs = []
     cdef int i = 0
     while lfCalibs[i] is not NULL:
-        calib = LensCalibVignetting(lfCalibs[i].Model, lfCalibs[i].Focal, lfCalibs[i].Aperture, lfCalibs[i].Distance,
-                                    [lfCalibs[i].Terms[0], lfCalibs[i].Terms[1], lfCalibs[i].Terms[2]])
+        calib = _convertCalibVignetting(lfCalibs[i])
         calibs.append(calib)
         i += 1
     return calibs
+
+cdef _convertCalibVignetting(lfLensCalibVignetting * lfCalib):
+    calib = LensCalibVignetting(lfCalib.Model, lfCalib.Focal, lfCalib.Aperture, lfCalib.Distance,
+                                [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2]])
+    return calib
 
 npPixelFormat = dict({np.uint8: LF_PF_U8,
                       np.uint16: LF_PF_U16,
