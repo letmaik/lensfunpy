@@ -1,15 +1,25 @@
 language: python
 virtualenv:
   system_site_packages: true
-install:
-  - sudo apt-get install python-numpy
-  - $LENSFUN_INSTALL
-  - pip install cython
-  - pip install .
-script: nosetests
 env:
   global:
     - LENSFUN_SVN="svn://svn.berlios.de/lensfun"
   matrix:
-    - LENSFUN_INSTALL="sudo apt-get install liblensfun0 liblensfun-dev"
-    - LENSFUN_INSTALL="cd .. ; svn co $LENSFUN_SVN`svn log -v $LENSFUN_SVN/tags | awk '/^   A/ { print $2 }' | head -1` lensfun ; cd lensfun ; ./configure ; sudo make install ; cd ../lensfunpy"
+    - USE_LATEST_LENSFUN=true
+    - USE_LATEST_LENSFUN=false
+install:
+  - sudo apt-get install python-numpy
+  # see http://stackoverflow.com/a/5244583/60982 on how to extract latest SVN tag 
+  - if [ "${USE_LATEST_LENSFUN}" == true ]; then
+      cd .. ;
+      svn co $LENSFUN_SVN`svn log -v $LENSFUN_SVN/tags | awk '/^   A/ { print $2 }' | head -1` lensfun ;
+      cd lensfun ;
+      ./configure ;
+      sudo make install ;
+      cd ../lensfunpy ;
+    else
+      sudo apt-get install liblensfun0 liblensfun-dev ;
+    fi
+  - pip install cython
+  - pip install .
+script: nosetests
