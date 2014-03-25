@@ -56,4 +56,24 @@ Installation
 You need to have the `lensfun library <http://lensfun.berlios.de>`_ installed to use this wrapper.
 
 On Ubuntu, you can get (an outdated) version with:
-sudo apt-get install liblensfun0 liblensfun-dev
+
+    sudo apt-get install liblensfun0 liblensfun-dev
+    
+Or install the latest developer version from the SVN repository:
+
+    svn co svn://svn.berlios.de/lensfun/trunk lensfun
+    cd lensfun
+    ./configure
+    sudo make install
+    
+Troubleshooting
+---------------
+    
+If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
+when trying to use lensfunpy, then do the following:
+
+    echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf
+    sudo ldconfig
+
+The lensfun library is installed in /usr/local/lib and apparently this folder is not searched
+for libraries by default in some Linux distributions.
