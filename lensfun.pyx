@@ -483,25 +483,28 @@ cdef class Lens:
         
     def interpolateDistortion(self, float focal):
         cdef lfLensCalibDistortion* res = <lfLensCalibDistortion*>PyMem_Malloc(sizeof(lfLensCalibDistortion))
-        # TODO what does the returned bool tell me?
-        b = lf_lens_interpolate_distortion(self.lf, focal, res)
-        calib = _convertCalibDistortion(res)
+        if lf_lens_interpolate_distortion(self.lf, focal, res):
+            calib = _convertCalibDistortion(res)
+        else:
+            calib = None
         PyMem_Free(res)
         return calib
     
     def interpolateTCA(self, float focal):
         cdef lfLensCalibTCA* res = <lfLensCalibTCA*>PyMem_Malloc(sizeof(lfLensCalibTCA))
-        # TODO what does the returned bool tell me?
-        b = lf_lens_interpolate_tca(self.lf, focal, res)
-        calib = _convertCalibTCA(res)
+        if lf_lens_interpolate_tca(self.lf, focal, res):
+            calib = _convertCalibTCA(res)
+        else:
+            calib = None
         PyMem_Free(res)
         return calib
     
     def interpolateVignetting(self, float focal, float aperture, float distance):
         cdef lfLensCalibVignetting* res = <lfLensCalibVignetting*>PyMem_Malloc(sizeof(lfLensCalibVignetting))
-        # TODO what does the returned bool tell me?
-        b = lf_lens_interpolate_vignetting(self.lf, focal, aperture, distance, res)
-        calib = _convertCalibVignetting(res)
+        if lf_lens_interpolate_vignetting(self.lf, focal, aperture, distance, res):
+            calib = _convertCalibVignetting(res)
+        else:
+            calib = None
         PyMem_Free(res)
         return calib
                             
