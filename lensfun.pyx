@@ -1,4 +1,5 @@
 from libc.stdint cimport uintptr_t
+from libc.stdlib cimport malloc
 
 import numpy as np
 from collections import namedtuple
@@ -119,6 +120,7 @@ cdef extern from "lensfun.h":
         LF_MODIFY_ALL
     
     void lf_free (void *data)
+    
     lfDatabase *lf_db_new ()
     void lf_db_destroy (lfDatabase *db)
     lfError lf_db_load (lfDatabase *db)
@@ -130,6 +132,7 @@ cdef extern from "lensfun.h":
     const lfCamera **lf_db_find_cameras_ext (const lfDatabase *db, const char *maker, const char *model, int sflags)
     const lfLens **lf_db_find_lenses_hd (const lfDatabase *db, const lfCamera *camera, const char *maker, const char *lens, int sflags)
     const lfMount *lf_db_find_mount (const lfDatabase *db, const char *mount)
+    
     lfModifier *lf_modifier_new (const lfLens *lens, float crop, int width, int height)
     void lf_modifier_destroy (lfModifier *modifier)
     int lf_modifier_initialize (lfModifier *modifier, const lfLens *lens, lfPixelFormat format,
@@ -138,6 +141,10 @@ cdef extern from "lensfun.h":
     int lf_modifier_apply_geometry_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
     int lf_modifier_apply_subpixel_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
     int lf_modifier_apply_subpixel_geometry_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
+    
+    int lf_lens_interpolate_distortion (const lfLens *lens, float focal, lfLensCalibDistortion *res)
+    int lf_lens_interpolate_tca (const lfLens *lens, float focal, lfLensCalibTCA *res)
+    int lf_lens_interpolate_vignetting (const lfLens *lens, float focal, float aperture, float distance, lfLensCalibVignetting *res)
 
 def enum(**enums):
     return type('Enum', (), enums)
@@ -464,7 +471,7 @@ cdef class Lens:
 
     property CalibDistortion:
         def __get__(self):
-            return _convertCalibDistortion(self.lf.CalibDistortion)
+            return _convertCalibDistortions(self.lf.CalibDistortion)
 
     property CalibTCA:
         def __get__(self):
@@ -473,6 +480,14 @@ cdef class Lens:
     property CalibVignetting:
         def __get__(self):
             return _convertCalibVignetting(self.lf.CalibVignetting)
+        
+    def interpolateDistortion(self, float focal):
+        cdef lfLensCalibDistortion* res = <lfLensCalibDistortion*>malloc(sizeof(lfLensCalibDistortion))
+        # TODO what does the returned bool tell me?
+        b = lf_lens_interpolate_distortion(self.lf, focal, res)
+        calib = _convertCalibDistortion(res)
+        lf_free(res)
+        return calib
                         
     property Score:
         def __get__(self):
@@ -500,17 +515,21 @@ cdef class Lens:
                 '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
                 '; Crop factor: ' + str(self.CropFactor) + '; Score: ' + str(self.Score) + ')')
 
-cdef _convertCalibDistortion(lfLensCalibDistortion ** lfCalibs):
+cdef _convertCalibDistortions(lfLensCalibDistortion ** lfCalibs):
     if lfCalibs == NULL:
         return []
     calibs = []
     cdef int i = 0
     while lfCalibs[i] is not NULL:
-        calib = LensCalibDistortion(lfCalibs[i].Model, lfCalibs[i].Focal, 
-                                    [lfCalibs[i].Terms[0], lfCalibs[i].Terms[1], lfCalibs[i].Terms[2]])
+        calib = _convertCalibDistortion(lfCalibs[i])
         calibs.append(calib)
         i += 1
     return calibs
+
+cdef _convertCalibDistortion(lfLensCalibDistortion * lfCalib):
+    calib = LensCalibDistortion(lfCalib.Model, lfCalib.Focal, 
+                                [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2]])
+    return calib
 
 cdef _convertCalibTCA(lfLensCalibTCA ** lfCalibs):
     if lfCalibs == NULL:
