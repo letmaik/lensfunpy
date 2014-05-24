@@ -71,7 +71,7 @@ Or install the latest developer version from the SVN repository:
 
 .. code-block:: sh
 
-    svn co svn://svn.berlios.de/lensfun/trunk lensfun
+    git clone git://git.code.sf.net/p/lensfun/code lensfun
     cd lensfun
     ./configure
     sudo make install
