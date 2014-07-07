@@ -9,7 +9,6 @@ env:
     - USE_LATEST_LENSFUN=false
 install:
   - sudo apt-get install python-numpy
-  # see http://stackoverflow.com/a/5244583/60982 on how to extract latest SVN tag 
   - if [ $USE_LATEST_LENSFUN == true ]; then
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
