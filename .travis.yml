@@ -13,7 +13,7 @@ install:
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
       cd lensfun ;
-      git checkout `git describe --abbrev=0 --tags` # latest version
+      git checkout `git describe --abbrev=0 --tags` ; # latest version
       ./configure ;
       sudo make install ;
       echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf ;
