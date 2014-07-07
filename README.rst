@@ -5,7 +5,7 @@ lensfunpy
     :target: https://travis-ci.org/neothemachine/lensfunpy
     :alt: Build Status
 
-lensfunpy is an easy-to-use Python wrapper for the `lensfun library <http://lensfun.berlios.de>`_.
+lensfunpy is an easy-to-use Python wrapper for the `lensfun library <http://lensfun.sourceforge.net>`_.
 
 Sample code
 -----------
@@ -59,7 +59,7 @@ How to correct lens distortion:
 Installation
 ------------
 
-You need to have the `lensfun library <http://lensfun.berlios.de>`_ installed to use this wrapper.
+You need to have the `lensfun library <http://lensfun.sourceforge.net>`_ installed to use this wrapper.
 
 On Ubuntu, you can get (an outdated) version with:
 
@@ -71,7 +71,7 @@ Or install the latest developer version from the SVN repository:
 
 .. code-block:: sh
 
-    svn co svn://svn.berlios.de/lensfun/trunk lensfun
+    git clone git://git.code.sf.net/p/lensfun/code lensfun
     cd lensfun
     ./configure
     sudo make install
