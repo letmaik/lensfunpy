@@ -25,6 +25,51 @@ def testDatabaseLoading():
     assert lens.Maker.lower() == lensMaker.lower()
     assert lens.Model.lower() == lensModel.lower()
     
+def testDatabaseXMLLoading():
+    xml = '''
+<lensdatabase>
+    <mount>
+        <name>Nikon F AF</name>
+        <compat>Nikon F</compat>
+        <compat>Nikon F AI</compat>
+        <compat>Nikon F AI-S</compat>
+        <compat>M42</compat>
+        <compat>T2</compat>
+        <compat>Generic</compat>
+    </mount>
+    <camera>
+        <maker>Nikon Corporation</maker>
+        <maker lang="en">Nikon</maker>
+        <model>Nikon D3S</model>
+        <model lang="en">D3S</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+    </camera>
+    <lens>
+        <maker>Nikon</maker>
+        <model>Nikkor 28mm f/2.8D AF</model>
+        <mount>Nikon F AF</mount>
+        <cropfactor>1.0</cropfactor>
+        <calibration>
+            <distortion model="ptlens" focal="28" a="0" b="0.025773" c="-0.085777" />
+        </calibration>
+    </lens>
+</lensdatabase>
+    '''
+    db = lensfun.Database(xml=xml, loadAll=False)
+    
+    assert len(db.getCameras()) == 1
+    assert len(db.getLenses()) == 1
+    assert len(db.getMounts()) == 1
+    
+    cam = db.findCameras(camMaker, camModel)[0]
+    lens = db.findLenses(cam, lensMaker, lensModel)[0]
+    
+    assert cam.Maker.lower() == camMaker.lower()
+    assert cam.Model.lower() == camModel.lower()
+    assert lens.Maker.lower() == lensMaker.lower()
+    assert lens.Model.lower() == lensModel.lower()
+    
 def testModifier():
     db = lensfun.Database()
     cam = db.findCameras(camMaker, camModel)[0]

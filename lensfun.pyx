@@ -125,6 +125,7 @@ cdef extern from "lensfun.h":
     void lf_db_destroy (lfDatabase *db)
     lfError lf_db_load (lfDatabase *db)
     lfError lf_db_load_file (lfDatabase *db, const char *filename)
+    lfError lf_db_load_data (lfDatabase *db, const char *errcontext, const char *data, size_t data_size)
     const lfCamera *const *lf_db_get_cameras (const lfDatabase *db)
     const lfLens *const *lf_db_get_lenses (const lfDatabase *db)
     const lfMount *const *lf_db_get_mounts (const lfDatabase *db)
@@ -204,11 +205,14 @@ cdef class Database:
     def __cinit__(self):
         self.lf = lf_db_new()
             
-    def __init__(self, filenames = None):
-        if filenames is not None:
+    def __init__(self, filenames=None, xml=None, loadAll=True):
+        if filenames:
             for filename in filenames:
                 err = lf_db_load_file(self.lf, filename)
-        else:
+        if xml:
+            err = lf_db_load_data(self.lf, 'XML', xml, len(xml))
+        
+        if (not filenames and not xml) or loadAll:
             err = lf_db_load(self.lf)
         
     def __dealloc__(self):
