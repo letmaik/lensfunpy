@@ -605,6 +605,7 @@ cdef class Modifier:
     cdef float focal
     cdef float aperture
     cdef float distance
+    cdef float scale
 
     def __cinit__(self, Lens lens not None, float crop, int width, int height):
         self.lens = lens
@@ -625,6 +626,23 @@ cdef class Modifier:
         self.focal = focal
         self.aperture = aperture
         self.distance = distance
+        self.scale = scale
+        
+    property Lens:
+        def __get__(self):
+            return self.lens
+        
+    property Crop:
+        def __get__(self):
+            return self.crop
+        
+    property Width:
+        def __get__(self):
+            return self.width
+        
+    property Height:
+        def __get__(self):
+            return self.height
         
     property FocalLength:
         def __get__(self):
@@ -637,6 +655,10 @@ cdef class Modifier:
     property Distance:
         def __get__(self):
             return self.distance
+        
+    property Scale:
+        def __get__(self):
+            return self.scale
 
     def applyGeometryDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         width, height = self._widthHeight(width, height)
