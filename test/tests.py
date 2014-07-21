@@ -26,7 +26,7 @@ def testDatabaseLoading():
     assert lens.Model.lower() == lensModel.lower()
     
 def testDatabaseXMLLoading():
-    xml = '''
+    xml = """
 <lensdatabase>
     <mount>
         <name>Nikon F AF</name>
@@ -55,7 +55,7 @@ def testDatabaseXMLLoading():
         </calibration>
     </lens>
 </lensdatabase>
-    '''
+    """
     db = lensfun.Database(xml=xml, loadAll=False)
     
     assert len(db.getCameras()) == 1
