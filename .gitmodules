@@ -1,0 +1,3 @@
+[submodule "external/lensfun"]
+	path = external/lensfun
+	url = git://git.code.sf.net/p/lensfun/code
