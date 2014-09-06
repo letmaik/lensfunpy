@@ -23,6 +23,9 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
+  # lensfun is included as a submodule
+  - "git submodule update --init"
+
   - ECHO "Filesystem root:"
   - ps: "ls \"C:/\""
 
