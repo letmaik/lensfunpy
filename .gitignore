@@ -37,3 +37,5 @@ nosetests.xml
 .project
 .pydevproject
 /MANIFEST
+
+/glib*.zip

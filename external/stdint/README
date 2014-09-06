@@ -1,0 +1,5 @@
+MSVC 2008 doesn't have stdint.h, see https://stackoverflow.com/q/126279.
+As we need the uintptr_t type we therefore include a copy of stdint.h 
+from http://snipplr.com/view/18199/stdinth/ in here.
+
+MSVC 2008 is required to build Windows extensions for Python 2.7.
