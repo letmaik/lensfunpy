@@ -38,9 +38,9 @@ if isWindows:
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
     # -DBUILD_STATIC=on
-    cmds = [cmake + ' .. -DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ',
+    cmds = [cmake + ' .. -G "NMake Makefiles" -DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ',
             'dir',
-            'nmake /F ' + os.path.join(cmake_build, 'Makefile')
+            'nmake'
             ]
     for cmd in cmds:
         print cmd
