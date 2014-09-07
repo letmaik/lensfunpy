@@ -1,8 +1,9 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 import numpy
 import subprocess
 import errno
 import os
+import shutil
 import sys
 import urllib
 import zipfile
@@ -11,29 +12,34 @@ isWindows = os.name == 'nt'
 is64Bit = sys.maxsize > 2**32
 
 if isWindows:
-    # download glib2 dlls and dev package and extract into external/lensfun/glib-2.0
+    # download glib2 and cmake to compile lensfun
+    glib_dir = 'external/lensfun/glib-2.0'
     glib_arch = 'win64' if is64Bit else 'win32'
     glib_libs_url = 'http://win32builder.gnome.org/packages/3.6/glib_2.34.3-1_{}.zip'.format(glib_arch)
     glib_dev_url = 'http://win32builder.gnome.org/packages/3.6/glib-dev_2.34.3-1_{}.zip'.format(glib_arch)
-    glib_files = [(glib_libs_url, 'glib_2.34.3-1.zip'), (glib_dev_url, 'glib-dev_2.34.3-1.zip')]
-    for url, path in glib_files:
+    # the cmake zip contains a cmake-3.0.1-win32-x86 folder when extracted
+    cmake_url = 'http://www.cmake.org/files/v3.0/cmake-3.0.1-win32-x86.zip'
+    cmake = os.path.abspath('external/cmake-3.0.1-win32-x86/bin/cmake')
+    files = [(glib_libs_url, 'glib_2.34.3-1.zip', glib_dir), 
+                  (glib_dev_url, 'glib-dev_2.34.3-1.zip', glib_dir),
+                  (cmake_url, 'cmake-3.0.1-win32-x86.zip', 'external')]
+    for url, path, extractdir in files:
         if os.path.exists(path):
-            break
+            continue
         print 'Downloading {}'.format(url)
         urllib.urlretrieve(url, path)
         with zipfile.ZipFile(path) as z:
-            z.extractall('external/lensfun/glib-2.0')
-        
-    # configure and compile lensfun, we need the .dll and lensfun.h
-    # lensfun requires GNU Make and glib2
+            z.extractall(extractdir)
+            
+    # configure and compile lensfun
     cwd = os.getcwd()
-    os.chdir('external/lensfun')
-    conf_arch = 'x86_64' if is64Bit else 'x86'
-    
-    # FIXME configure doesn't find glib-2.0 
-    cmds = ['python configure --compiler=msvc --target=windows.' + conf_arch + ' --mode=release ' +\
-            '--prefix= --bindir= --includedir= --libdir= --docdir= --datadir= --sysconfdir= --libexecdir=',
-            'make libs'
+    cmake_build = 'external/lensfun/cmake_build'
+    if not os.path.exists(cmake_build):
+        os.mkdir(cmake_build)
+    os.chdir(cmake_build)
+    # -DBUILD_STATIC=on
+    cmds = [cmake + ' .. -DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ',
+            'nmake'
             ]
     for cmd in cmds:
         print cmd
@@ -41,7 +47,8 @@ if isWindows:
             sys.exit()   
     os.chdir(cwd)
     
-    # TODO check if the files that we need were produced     
+    lensfunh_dir = os.path.join(cmake_build)
+    lensfunlib_dir = os.path.join(cmake_build, 'libs', 'lensfun')
 
 # adapted from cffi's setup.py
 # the following may be overridden if pkg-config exists
@@ -88,9 +95,8 @@ def use_pkg_config():
 
 if isWindows:
     include_dirs += ['external/stdint', 
-                     'external/lensfun/include/lensfun']
-    #library_dirs += ['external/lensfun/glib-2.0/bin']
-    # TODO continue
+                     lensfunh_dir]
+    library_dirs += [lensfunlib_dir]
 else:
     use_pkg_config()
 
@@ -105,9 +111,9 @@ else:
 
 ext = '.pyx' if use_cython else '.c'
 
-extensions = [Extension("lensfun",
+extensions = [Extension("lensfunpy._lensfun",
               include_dirs=include_dirs,
-              sources=['lensfun' + ext],
+              sources=['_lensfun' + ext],
               libraries=libraries,
               library_dirs=library_dirs,
               extra_compile_args=extra_compile_args,
@@ -121,6 +127,12 @@ def read(fname):
     with open(fname) as fp:
         content = fp.read()
     return content
+
+if isWindows:
+    shutil.copyfile('external/lensfun/cmake_build/libs/lensfun/lensfun.dll', 'lensfunpy/lensfun.dll')
+    package_data = {'lensfunpy': ['lensfun.dll']}
+else:
+    package_data = None
 
 setup(
       name = 'lensfunpy',
@@ -140,6 +152,8 @@ setup(
         'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
       ),
+      packages = find_packages(),
       ext_modules = extensions,
-      data_files=[('', ['lensfun.pyx', 'README.rst'])],
+      package_data = package_data,
+      data_files = [('', ['_lensfun.pyx', 'README.rst'])],
 )

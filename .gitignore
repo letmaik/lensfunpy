@@ -1,4 +1,4 @@
-lensfun.c
+_lensfun.c
 
 *.py[cod]
 
@@ -39,3 +39,6 @@ nosetests.xml
 /MANIFEST
 
 /glib*.zip
+/cmake*.zip
+/external/cmake*
+/lensfunpy/lensfun.dll

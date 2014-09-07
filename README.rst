@@ -14,14 +14,14 @@ How to find cameras and lenses:
 
 .. code-block:: python
 
-    import lensfun
+    import lensfunpy
 
     camMaker = 'NIKON CORPORATION'
     camModel = 'NIKON D3S'
     lensMaker = 'Nikon'
     lensModel = 'Nikkor 28mm f/2.8D AF'
 
-    db = lensfun.Database()
+    db = lensfunpy.Database()
     cam = db.findCameras(camMaker, camModel)[0]
     lens = db.findLenses(cam, lensMaker, lensModel)[0]
     
@@ -49,7 +49,7 @@ How to correct lens distortion:
     im = cv2.imread(imagePath)
     height, width = im.shape[0], im.shape[1]
     
-    mod = lensfun.Modifier(lens, cam.CropFactor, width, height)
+    mod = lensfunpy.Modifier(lens, cam.CropFactor, width, height)
     mod.initialize(focalLength, aperture, distance)
     
     undistCoords = mod.applyGeometryDistortion()

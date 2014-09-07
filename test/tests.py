@@ -1,7 +1,7 @@
 from __future__ import division
 
 import numpy as np
-import lensfun
+import lensfunpy as lensfun
 import gc
 
 # the following string were taken from the lensfun xml files
