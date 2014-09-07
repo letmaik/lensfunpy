@@ -39,7 +39,8 @@ if isWindows:
     os.chdir(cmake_build)
     # -DBUILD_STATIC=on
     cmds = [cmake + ' .. -DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ',
-            'nmake'
+            'dir',
+            'nmake /F ' + os.path.join(cmake_build, 'Makefile')
             ]
     for cmd in cmds:
         print cmd
@@ -155,5 +156,6 @@ setup(
       packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
+      # FIXME data files get installed in python root
       data_files = [('', ['_lensfun.pyx', 'README.rst'])],
 )
