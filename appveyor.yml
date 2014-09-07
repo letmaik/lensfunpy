@@ -61,6 +61,8 @@ test_script:
   # Build the compiled extension and run the project tests
   # -u disables output buffering which caused intermixing of lines
   #  when the external tools were started
+  - "%CMD_IN_ENV% python -u setup.py build_ext --inplace"
+  - "dir lensfunpy"
   - "%CMD_IN_ENV% python -u setup.py nosetests"
 
 after_test:
