@@ -46,7 +46,7 @@ install:
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
   # we use conda to prevent compiling numpy etc.
-  - "conda install numpy cython nose"
+  - "conda install --yes numpy cython nose"
   - "pip install wheel"
   
   # Install the build dependencies of the project. If some dependencies contain
