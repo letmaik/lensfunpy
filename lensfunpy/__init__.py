@@ -8,4 +8,4 @@ if os.name == 'nt':
     cdll.LoadLibrary(dllpath)
 
 import lensfunpy._lensfun
-globals().update(lensfunpy._lensfun)
+globals().update(lensfunpy._lensfun.__dict__)
