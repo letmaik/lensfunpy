@@ -1,4 +1,4 @@
-from setuptools import setup, Extension, find_packages
+from setuptools import setup, Extension
 import numpy
 import subprocess
 import errno
@@ -153,7 +153,7 @@ setup(
         'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
       ),
-      packages = find_packages(),
+      packages = ['lensfunpy'],
       ext_modules = extensions,
       package_data = package_data,
       # FIXME data files get installed in python root
