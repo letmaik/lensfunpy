@@ -23,5 +23,4 @@ install:
       sudo apt-get install liblensfun0 liblensfun-dev ;
     fi
   - pip install cython
-  - pip install -v .
-script: nosetests
+script: python setup.py nosetests
