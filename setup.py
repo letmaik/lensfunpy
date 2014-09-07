@@ -132,7 +132,7 @@ if isWindows:
     shutil.copyfile('external/lensfun/cmake_build/libs/lensfun/lensfun.dll', 'lensfunpy/lensfun.dll')
     package_data = {'lensfunpy': ['lensfun.dll']}
 else:
-    package_data = None
+    package_data = {}
 
 setup(
       name = 'lensfunpy',
