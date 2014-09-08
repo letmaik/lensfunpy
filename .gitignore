@@ -38,7 +38,6 @@ nosetests.xml
 .pydevproject
 /MANIFEST
 
-/glib*.zip
-/cmake*.zip
+*.zip
+*.dll
 /external/cmake*
-/lensfunpy/lensfun.dll

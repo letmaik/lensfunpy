@@ -17,12 +17,17 @@ if isWindows:
     glib_arch = 'win64' if is64Bit else 'win32'
     glib_libs_url = 'http://win32builder.gnome.org/packages/3.6/glib_2.34.3-1_{}.zip'.format(glib_arch)
     glib_dev_url = 'http://win32builder.gnome.org/packages/3.6/glib-dev_2.34.3-1_{}.zip'.format(glib_arch)
+    # lensfun uses glib2 functionality that requires libiconv and gettext as runtime libraries
+    libiconv_url = 'http://win32builder.gnome.org/packages/3.6/libiconv_1.13.1-1_{}.zip'.format(glib_arch)
+    gettext_url = 'http://win32builder.gnome.org/packages/3.6/gettext_0.18.2.1-1_{}.zip'.format(glib_arch)
     # the cmake zip contains a cmake-3.0.1-win32-x86 folder when extracted
     cmake_url = 'http://www.cmake.org/files/v3.0/cmake-3.0.1-win32-x86.zip'
     cmake = os.path.abspath('external/cmake-3.0.1-win32-x86/bin/cmake')
     files = [(glib_libs_url, 'glib_2.34.3-1.zip', glib_dir), 
-                  (glib_dev_url, 'glib-dev_2.34.3-1.zip', glib_dir),
-                  (cmake_url, 'cmake-3.0.1-win32-x86.zip', 'external')]
+             (glib_dev_url, 'glib-dev_2.34.3-1.zip', glib_dir),
+             (libiconv_url, 'libiconv_1.13.1-1.zip', glib_dir),
+             (gettext_url, 'gettext_0.18.2.1-1.zip', glib_dir),
+             (cmake_url, 'cmake-3.0.1-win32-x86.zip', 'external')]
     for url, path, extractdir in files:
         if os.path.exists(path):
             continue
@@ -129,11 +134,17 @@ def read(fname):
         content = fp.read()
     return content
 
+package_data = {}
 if isWindows:
-    shutil.copyfile('external/lensfun/cmake_build/libs/lensfun/lensfun.dll', 'lensfunpy/lensfun.dll')
-    package_data = {'lensfunpy': ['lensfun.dll']}
-else:
-    package_data = {}
+    package_data['lensfunpy'] = []
+    runtime_libs = [('lensfun.dll', 'external/lensfun/cmake_build/libs/lensfun'),
+                    ('libglib-2.0-0.dll', 'external/lensfun/glib-2.0/bin'),
+                    ('libiconv-2.dll', 'external/lensfun/glib-2.0/bin'),
+                    ('libintl-8.dll', 'external/lensfun/glib-2.0/bin'), # gettext
+                    ]
+    for filename, folder in runtime_libs:
+        shutil.copyfile(os.path.join(folder, filename), 'lensfunpy/' + filename)
+        package_data['lensfunpy'].append(filename)
 
 setup(
       name = 'lensfunpy',
