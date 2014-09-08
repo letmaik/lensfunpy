@@ -204,7 +204,8 @@ cdef class Database:
 
     def __cinit__(self):
         self.lf = lf_db_new()
-            
+    
+    # NOTE: when changing this constructor, it also has to be changed in lensfunpy.__init__!
     def __init__(self, filenames=None, xml=None, loadAll=True):
         if filenames:
             for filename in filenames:

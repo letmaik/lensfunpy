@@ -6,6 +6,7 @@ environment:
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
 
   matrix:
+  	# Note that we use miniconda, so the minor versions are irrelevant here
     - PYTHON: "C:\\Python27_32"
       PYTHON_VERSION: "2.7.8"
       PYTHON_ARCH: "32"
