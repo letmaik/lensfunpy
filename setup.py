@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 import numpy
 import subprocess
 import errno
@@ -136,19 +136,27 @@ def read(fname):
 
 package_data = {}
 if isWindows:
+    # bundle runtime dlls
     package_data['lensfunpy'] = []
+    glib_bin_dir = os.path.join(glib_dir, 'bin')
     runtime_libs = [('lensfun.dll', 'external/lensfun/cmake_build/libs/lensfun'),
-                    ('libglib-2.0-0.dll', 'external/lensfun/glib-2.0/bin'),
-                    ('libiconv-2.dll', 'external/lensfun/glib-2.0/bin'),
-                    ('libintl-8.dll', 'external/lensfun/glib-2.0/bin'), # gettext
+                    ('libglib-2.0-0.dll', glib_bin_dir),
+                    ('libiconv-2.dll', glib_bin_dir),
+                    ('libintl-8.dll', glib_bin_dir), # gettext
                     ]
     for filename, folder in runtime_libs:
         shutil.copyfile(os.path.join(folder, filename), 'lensfunpy/' + filename)
         package_data['lensfunpy'].append(filename)
+    
+    # bundle database xmls
+    import glob
+    for path in glob.glob('external/lensfun/data/db/*.xml'):
+        shutil.copyfile(path, 'lensfunpy/db_files/' + os.path.basename(path))
+    package_data['lensfunpy.db_files'] = ['*.xml']
 
 setup(
       name = 'lensfunpy',
-      version = '0.12.0',
+      version = '1.0.0',
       description = 'Python wrapper for the lensfun library',
       long_description = read('README.rst'),
       author = 'Maik Riechert',
@@ -164,7 +172,7 @@ setup(
         'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
       ),
-      packages = ['lensfunpy'],
+      packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
       # FIXME data files get installed in python root

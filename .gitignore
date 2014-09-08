@@ -40,4 +40,5 @@ nosetests.xml
 
 *.zip
 *.dll
+/lensfunpy/db_files/*.xml
 /external/cmake*
