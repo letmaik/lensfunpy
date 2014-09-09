@@ -176,12 +176,12 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Cython',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
       ),
       packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
-      # FIXME data files get installed in python root
-      data_files = [('', ['_lensfun.pyx', 'README.rst'])],
 )
