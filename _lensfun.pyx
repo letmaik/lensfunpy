@@ -209,9 +209,9 @@ cdef class Database:
     def __init__(self, filenames=None, xml=None, loadAll=True):
         if filenames:
             for filename in filenames:
-                err = lf_db_load_file(self.lf, filename)
+                err = lf_db_load_file(self.lf, _chars(filename))
         if xml:
-            err = lf_db_load_data(self.lf, 'XML', xml, len(xml))
+            err = lf_db_load_data(self.lf, 'XML', _chars(xml), len(xml))
         
         if (not filenames and not xml) or loadAll:
             err = lf_db_load(self.lf)
@@ -613,7 +613,7 @@ cdef class Modifier:
         self.crop = crop
         self.width = width
         self.height = height
-        self.lf = lf_modifier_new (lens.lf, crop, width, height)
+        self.lf = lf_modifier_new(lens.lf, crop, width, height)
         
     def __dealloc__(self):
         lf_free(self.lf)
@@ -686,3 +686,8 @@ cdef class Modifier:
             height = self.height
         return width, height
         
+cdef char[:] _chars(s):
+    if isinstance(s, unicode):
+        # convert unicode to chars
+        s = (<unicode>s).encode('utf8')
+    return s

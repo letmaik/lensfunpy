@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import numpy as np
 import lensfunpy as lensfun
@@ -72,8 +72,11 @@ def testDatabaseXMLLoading():
     
 def testModifier():
     db = lensfun.Database()
+    print(1)
     cam = db.findCameras(camMaker, camModel)[0]
+    print(2)
     lens = db.findLenses(cam, lensMaker, lensModel)[0]
+    print(3)
     
     focalLength = 28.0
     aperture = 1.4
@@ -82,10 +85,13 @@ def testModifier():
     height = 2832
     
     mod = lensfun.Modifier(lens, cam.CropFactor, width, height)
+    print(4)
     mod.initialize(focalLength, aperture, distance)
-    
+    print(5)
+        
     undistCoords = mod.applyGeometryDistortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
+    print(6)
     
     # check if coordinates were actually transformed
     y, x = np.mgrid[0:undistCoords.shape[0], 0:undistCoords.shape[1]]
