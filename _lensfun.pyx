@@ -241,7 +241,7 @@ cdef class Database:
         if looseSearch:
             lfCams = lf_db_find_cameras_ext(self.lf, cmaker, cmodel, LF_SEARCH_LOOSE)
         else:
-            lfCams = lf_db_find_cameras(self.lf, maker, model)
+            lfCams = lf_db_find_cameras(self.lf, cmaker, cmodel)
         cams = self._convertCams(lfCams)
         lf_free(lfCams)
         return cams
