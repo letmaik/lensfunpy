@@ -72,11 +72,8 @@ def testDatabaseXMLLoading():
     
 def testModifier():
     db = lensfun.Database()
-    print(1)
     cam = db.findCameras(camMaker, camModel)[0]
-    print(2)
     lens = db.findLenses(cam, lensMaker, lensModel)[0]
-    print(3)
     
     focalLength = 28.0
     aperture = 1.4
@@ -85,13 +82,10 @@ def testModifier():
     height = 2832
     
     mod = lensfun.Modifier(lens, cam.CropFactor, width, height)
-    print(4)
     mod.initialize(focalLength, aperture, distance)
-    print(5)
         
     undistCoords = mod.applyGeometryDistortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
-    print(6)
     
     # check if coordinates were actually transformed
     y, x = np.mgrid[0:undistCoords.shape[0], 0:undistCoords.shape[1]]
@@ -121,3 +115,6 @@ def testDeallocationBug():
     
     assert cam.Maker.lower() == camMaker.lower()
     assert lens.Maker.lower() == lensMaker.lower()
+    
+# TODO lensfun's find* functions modify the score directly in the original db objects
+#  -> another invocation of find* will overwrite the old scores

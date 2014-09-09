@@ -616,7 +616,7 @@ cdef class Modifier:
         self.lf = lf_modifier_new(lens.lf, crop, width, height)
         
     def __dealloc__(self):
-        lf_free(self.lf)
+        lf_modifier_destroy(self.lf)
 
     def initialize(self, float focal, float aperture, float distance = 1.0, float scale = 0.0, 
                    lfLensType targeom = LF_RECTILINEAR, pixelFormat = np.uint8, 
@@ -686,7 +686,7 @@ cdef class Modifier:
             height = self.height
         return width, height
         
-cdef char[:] _chars(s):
+cdef char * _chars(s):
     if isinstance(s, unicode):
         # convert unicode to chars
         s = (<unicode>s).encode('utf8')
