@@ -233,11 +233,11 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            cmaker = maker
+            cmaker = _chars(maker)
         if model is None:
             cmodel = NULL
         else:
-            cmodel = model
+            cmodel = _chars(model)
         if looseSearch:
             lfCams = lf_db_find_cameras_ext(self.lf, cmaker, cmodel, LF_SEARCH_LOOSE)
         else:
@@ -255,7 +255,7 @@ cdef class Database:
         
     def findMount(self, name):
         cdef const lfMount * lfMoun
-        lfMoun = lf_db_find_mount(self.lf, name)
+        lfMoun = lf_db_find_mount(self.lf, _chars(name))
         return Mount(<uintptr_t>lfMoun, self)
     
     def getLenses(self):
@@ -272,11 +272,11 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            cmaker = maker
+            cmaker = _chars(maker)
         if lens is None:
             clens = NULL
         else:
-            clens = lens
+            clens = _chars(lens)
         lfLenses = lf_db_find_lenses_hd(self.lf, camera.lf, cmaker, clens, LF_SEARCH_LOOSE if looseSearch else 0)
         lenses = self._convertLenses(lfLenses)
         lf_free(lfLenses)
