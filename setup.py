@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from setuptools import setup, Extension, find_packages
 import numpy
 import subprocess
@@ -5,8 +7,13 @@ import errno
 import os
 import shutil
 import sys
-import urllib
 import zipfile
+try:
+    # Python 3
+    from urllib.request import urlretrieve
+except ImportError:
+    # Python 2
+    from urllib import urlretrieve
 
 isWindows = os.name == 'nt'
 is64Bit = sys.maxsize > 2**32
@@ -31,8 +38,8 @@ if isWindows:
     for url, path, extractdir in files:
         if os.path.exists(path):
             continue
-        print 'Downloading {}'.format(url)
-        urllib.urlretrieve(url, path)
+        print('Downloading', url)
+        urlretrieve(url, path)
         with zipfile.ZipFile(path) as z:
             z.extractall(extractdir)
             
@@ -48,7 +55,7 @@ if isWindows:
             'nmake'
             ]
     for cmd in cmds:
-        print cmd
+        print(cmd)
         if os.system(cmd) != 0:
             sys.exit()   
     os.chdir(cwd)
