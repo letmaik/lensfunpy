@@ -6,10 +6,17 @@ import gc
 from numpy.testing.utils import assert_equal
 
 # the following string were taken from the lensfun xml files
-camMaker = 'NIKON CORPORATION'
-camModel = 'NIKON D3S'
-lensMaker = 'Nikon'
-lensModel = 'Nikkor 28mm f/2.8D AF'
+camMaker = b'NIKON CORPORATION'
+camModel = b'NIKON D3S'
+lensMaker = b'Nikon'
+lensModel = b'Nikkor 28mm f/2.8D AF'
+# Note regarding b-prefix:
+# As lensfunpy returns byte strings (not unicode) we declare the above
+# as byte strings as well to make comparison in unit tests easier.
+# (Python 2 would default to byte, Python 3 to unicode and comparing byte
+#  with unicode fails without en/decoding)
+
+# TODO what should lensfunpy really return? unicode? is lensfun data in utf8 or not?
 
 def testDatabaseLoading():
     db = lensfun.Database()
