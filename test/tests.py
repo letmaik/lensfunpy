@@ -3,6 +3,7 @@ from __future__ import division, print_function
 import numpy as np
 import lensfunpy as lensfun
 import gc
+from numpy.testing.utils import assert_equal
 
 # the following string were taken from the lensfun xml files
 camMaker = 'NIKON CORPORATION'
@@ -14,16 +15,16 @@ def testDatabaseLoading():
     db = lensfun.Database()
        
     cams = db.findCameras(camMaker, camModel)
-    assert len(cams) == 1
+    assert_equal(len(cams), 1)
     cam = cams[0]
-    assert cam.Maker.lower() == camMaker.lower()
-    assert cam.Model.lower() == camModel.lower()
+    assert_equal(cam.Maker.lower(), camMaker.lower())
+    assert_equal(cam.Model.lower(), camModel.lower())
     
     lenses = db.findLenses(cam, lensMaker, lensModel)
-    assert len(lenses) == 1
+    assert_equal(len(lenses), 1)
     lens = lenses[0]
-    assert lens.Maker.lower() == lensMaker.lower()
-    assert lens.Model.lower() == lensModel.lower()
+    assert_equal(lens.Maker.lower(), lensMaker.lower())
+    assert_equal(lens.Model.lower(), lensModel.lower())
     
 def testDatabaseXMLLoading():
     xml = """
@@ -58,17 +59,17 @@ def testDatabaseXMLLoading():
     """
     db = lensfun.Database(xml=xml, loadAll=False)
     
-    assert len(db.getCameras()) == 1
-    assert len(db.getLenses()) == 1
-    assert len(db.getMounts()) == 1
+    assert_equal(len(db.getCameras()), 1)
+    assert_equal(len(db.getLenses()), 1)
+    assert_equal(len(db.getMounts()), 1)
     
     cam = db.findCameras(camMaker, camModel)[0]
     lens = db.findLenses(cam, lensMaker, lensModel)[0]
     
-    assert cam.Maker.lower() == camMaker.lower()
-    assert cam.Model.lower() == camModel.lower()
-    assert lens.Maker.lower() == lensMaker.lower()
-    assert lens.Model.lower() == lensModel.lower()
+    assert_equal(cam.Maker.lower(), camMaker.lower())
+    assert_equal(cam.Model.lower(), camModel.lower())
+    assert_equal(lens.Maker.lower(), lensMaker.lower())
+    assert_equal(lens.Model.lower(), lensModel.lower())
     
 def testModifier():
     db = lensfun.Database()
@@ -113,8 +114,8 @@ def testDeallocationBug():
     del db
     gc.collect()
     
-    assert cam.Maker.lower() == camMaker.lower()
-    assert lens.Maker.lower() == lensMaker.lower()
+    assert_equal(cam.Maker.lower(), camMaker.lower())
+    assert_equal(lens.Maker.lower(), lensMaker.lower())
     
 # TODO lensfun's find* functions modify the score directly in the original db objects
 #  -> another invocation of find* will overwrite the old scores
