@@ -42,8 +42,7 @@ def _ask_pkg_config(resultlist, option, result_prefix='', sysroot=False):
             for x in res:
                 assert x.startswith(result_prefix)
             res = [x[len(result_prefix):] for x in res]
-#            print 'PKG_CONFIG:', option, res
-            #
+
             sysroot = sysroot and os.environ.get('PKG_CONFIG_SYSROOT_DIR', '')
             if sysroot:
                 # old versions of pkg-config don't support this env var,
@@ -51,7 +50,6 @@ def _ask_pkg_config(resultlist, option, result_prefix='', sysroot=False):
                 res = [path if path.startswith(sysroot)
                             else sysroot + path
                          for path in res]
-            #
             resultlist[:] = res
 
 def use_pkg_config():
@@ -63,10 +61,20 @@ def use_pkg_config():
 
 include_dirs += [numpy.get_include()]
 
+if isWindows:
+    cmake_build = 'external/lensfun/cmake_build'
+    lensfunh_dir = os.path.join(cmake_build)
+    lensfunlib_dir = os.path.join(cmake_build, 'libs', 'lensfun')
+    
+    include_dirs += ['external/stdint', lensfunh_dir]
+    library_dirs += [lensfunlib_dir]
+else:
+    use_pkg_config()
+
 def windows_lensfun_compile():
     # check that lensfun git submodule is cloned
     if not os.path.exists('external/lensfun/README'):
-        print('The lensfun git submodule is not cloned yet, will invoke "git submodule update --init" now.')
+        print('lensfun git submodule is not cloned yet, will invoke "git submodule update --init" now')
         if os.system('git submodule update --init') != 0:
             raise Exception('git failed')
     
@@ -133,17 +141,7 @@ def windows_lensfun_compile():
         print('copying', path, '->', dest)
         shutil.copyfile(path, dest)
     
-if isWindows:
-    cmake_build = 'external/lensfun/cmake_build'
-    lensfunh_dir = os.path.join(cmake_build)
-    lensfunlib_dir = os.path.join(cmake_build, 'libs', 'lensfun')
-    
-    include_dirs += ['external/stdint', lensfunh_dir]
-    library_dirs += [lensfunlib_dir]
-else:
-    use_pkg_config()
-    
-package_data = {}        
+package_data = {}
 
 # evil hack, check cmd line for relevant commands
 # custom cmdclasses didn't work out in this case
@@ -153,6 +151,17 @@ if isWindows and any(s in cmdline for s in ['bdist', 'build_ext']):
         
     package_data['lensfunpy'] = ['db_files/*.xml',
                                  '*.dll']
+    
+if any(s in cmdline for s in ['clean', 'sdist']):
+    # When running sdist after a previous run of bdist or build_ext
+    # then even with the 'clean' command the .egg-info folder stays.
+    # This folder contains SOURCES.txt which in turn is used by sdist
+    # to include package data files, but we don't want .dll's and .xml
+    # files in our source distribution. Therefore, to prevent accidents,
+    # we help a little...
+    egg_info = 'lensfunpy.egg-info'
+    print('removing', egg_info)
+    shutil.rmtree(egg_info, ignore_errors=True)
 
 try:
     from Cython.Build import cythonize
