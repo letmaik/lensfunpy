@@ -13,7 +13,6 @@ if os.name == 'nt':
     
     from functools import wraps
     import glob
-    import lensfunpy.db_files
     
     _ROOT = os.path.abspath(os.path.dirname(__file__))
     _xml_glob = os.path.join(_ROOT, 'db_files', '*.xml')
