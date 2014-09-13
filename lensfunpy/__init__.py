@@ -15,12 +15,14 @@ if os.name == 'nt':
     import glob
     import lensfunpy.db_files
     
+    _ROOT = os.path.abspath(os.path.dirname(__file__))
+    _xml_glob = os.path.join(_ROOT, 'db_files', '*.xml')
+    
     @wraps(_Database)
     def Database(filenames=None, xml=None, loadAll=True):
         if loadAll:
             if not filenames:
                 filenames = []
-            xml_glob = os.path.join(os.path.dirname(lensfunpy.db_files.__file__), '*.xml')
-            filenames.extend(glob.glob(xml_glob))
+            filenames.extend(glob.glob(_xml_glob))
         return _Database(filenames, xml, loadAll)
     
