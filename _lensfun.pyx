@@ -1,4 +1,5 @@
 # cython: c_string_type=unicode, c_string_encoding=utf8
+# cython: embedsignature=True
 
 from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free

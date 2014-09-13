@@ -4,6 +4,10 @@ lensfunpy
 .. image:: https://travis-ci.org/neothemachine/lensfunpy.svg?branch=master
     :target: https://travis-ci.org/neothemachine/lensfunpy
     :alt: Build Status
+    
+.. image:: https://ci.appveyor.com/api/projects/status/qg6tssjvx5xjb3xd/branch/master
+    :target: https://ci.appveyor.com/project/neothemachine/lensfunpy/branch/master
+    :alt: Build Status
 
 lensfunpy is an easy-to-use Python wrapper for the `lensfun library <http://lensfun.sourceforge.net>`_.
 
@@ -53,7 +57,7 @@ How to correct lens distortion:
     mod.initialize(focalLength, aperture, distance)
     
     undistCoords = mod.applyGeometryDistortion()
-    imUndistorted = cv2.remap(im, undistCoords, None, cv.INTER_LANCZOS4)
+    imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
     cv2.imwrite(undistortedImagePath, imUndistorted)
     
 Installation

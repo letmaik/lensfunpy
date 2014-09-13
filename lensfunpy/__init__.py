@@ -11,9 +11,11 @@ if os.name == 'nt':
     _Database = Database
     del Database
     
+    from functools import wraps
     import glob
     import lensfunpy.db_files
     
+    @wraps(_Database)
     def Database(filenames=None, xml=None, loadAll=True):
         if loadAll:
             if not filenames:
