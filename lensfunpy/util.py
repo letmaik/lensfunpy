@@ -1,0 +1,29 @@
+import numpy as np
+
+def remapOpenCv(im, undistCoords):
+    import cv2
+    return cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
+
+def remapScipy(im, undistCoords):
+    from scipy.ndimage.interpolation import map_coordinates
+    
+    height, width = im.shape[0], im.shape[1]
+    
+    # switch to y,x order
+    undistCoords = undistCoords[:,:,::-1]
+
+    # make it (h, w, 3, 3)
+    coords = np.empty((height, width, 3, 3))
+    coords_channel = np.zeros((height, width, 3))
+    coords_channel[:,:,:2] = undistCoords
+    coords[:,:,0] = coords_channel
+    coords[:,:,1] = coords_channel
+    coords[:,:,1,2] = 1
+    coords[:,:,2] = coords_channel
+    coords[:,:,2,2] = 2
+    undistCoords = coords
+    
+    # (3, h, w, 3)
+    undistCoords = np.rollaxis(undistCoords, 3)
+        
+    return map_coordinates(im, undistCoords, order=1)
