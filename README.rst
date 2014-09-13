@@ -9,7 +9,7 @@ lensfunpy
     :target: https://ci.appveyor.com/project/neothemachine/lensfunpy/branch/master
     :alt: Build Status
 
-lensfunpy is an easy-to-use Python wrapper for the `lensfun library <http://lensfun.sourceforge.net>`_.
+lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
 
 Sample code
 -----------
@@ -60,10 +60,10 @@ How to correct lens distortion:
     imUndistorted = cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
     cv2.imwrite(undistortedImagePath, imUndistorted)
     
-Installation
-------------
+Installation on Linux
+---------------------
 
-You need to have the `lensfun library <http://lensfun.sourceforge.net>`_ installed to use this wrapper.
+You need to have the lensfun_ library installed to use this wrapper.
 
 On Ubuntu, you can get (an outdated) version with:
 
@@ -80,8 +80,7 @@ Or install the latest developer version from the SVN repository:
     ./configure
     sudo make install
     
-Troubleshooting
----------------
+After that, it's the usual `pip install lensfunpy`.
     
 If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:
@@ -93,3 +92,15 @@ when trying to use lensfunpy, then do the following:
 
 The lensfun library is installed in /usr/local/lib and apparently this folder is not searched
 for libraries by default in some Linux distributions.
+
+Installation on Windows
+-----------------------
+
+Binaries are provided for Python 2.7 and 3.4 for both 32 and 64 bit.
+These can be installed with a simple `pip install lensfunpy`.
+
+Binaries for other Python versions are currently not produced but if there is a need
+then this is possible as well. In that case, just contact me.
+
+
+.. _lensfun: http://lensfun.sourceforge.net
