@@ -1,3 +1,5 @@
+# cython: c_string_type=unicode, c_string_encoding=utf8
+
 from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
@@ -686,8 +688,8 @@ cdef class Modifier:
             height = self.height
         return width, height
         
-cdef char * _chars(s):
+cdef char* _chars(s):
     if isinstance(s, unicode):
         # convert unicode to chars
-        s = (<unicode>s).encode('utf8')
+        s = (<unicode>s).encode('UTF-8')
     return s
