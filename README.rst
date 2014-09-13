@@ -80,7 +80,7 @@ Or install the latest developer version from the SVN repository:
     ./configure
     sudo make install
     
-After that, it's the usual `pip install lensfunpy`.
+After that, it's the usual ``pip install lensfunpy``.
     
 If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:
@@ -97,7 +97,7 @@ Installation on Windows
 -----------------------
 
 Binaries are provided for Python 2.7 and 3.4 for both 32 and 64 bit.
-These can be installed with a simple `pip install lensfunpy`.
+These can be installed with a simple ``pip install lensfunpy``.
 
 Binaries for other Python versions are currently not produced but if there is a need
 then this is possible as well. In that case, just contact me.
