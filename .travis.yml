@@ -1,12 +1,15 @@
 language: python
+
 virtualenv:
   system_site_packages: true
+
 env:
   global:
     - LENSFUN_GIT="git://git.code.sf.net/p/lensfun/code"
   matrix:
     - USE_LATEST_LENSFUN=true
     - USE_LATEST_LENSFUN=false
+
 install:
   - sudo apt-get install python-numpy
   - if [ $USE_LATEST_LENSFUN == true ]; then
@@ -23,4 +26,15 @@ install:
       sudo apt-get install liblensfun0 liblensfun-dev ;
     fi
   - pip install cython
+
 script: python setup.py nosetests --verbosity=3
+
+deploy:
+  provider: pypi
+  user: neothemachine
+  password:
+    secure: "pCn0C1WsU6HoslSXhVZySIzn0f2mfiCWHC7t4tbkhLCrBQuSNNIgSf1lvQdsEAbluqi8IFTmRasfi9cOV/PDO+4W1O8qpPhYVc2INfF4lFs6ef/Ow3kK5+exnjaUMbc0SyAjekQ8f0z0rVKvDANvByAYeeeQbj8pCXBHV9SSs98="
+  on:
+    tags: true
+    all_branches: true
+    condition: $USE_LATEST_LENSFUN = false

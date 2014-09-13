@@ -4,6 +4,9 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
+    
+    PYPI_PASS:
+      secure: K/M1K0yykepbIoiNCP/exSrT+Vqd3BGabL2B2zS94Mo=
 
   # Note that we use miniconda, so the minor versions are irrelevant here
   matrix:
@@ -24,9 +27,6 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
-  # lensfun is included as a submodule
-  - "git submodule update --init"
-
   - ECHO "Filesystem root:"
   - ps: "ls \"C:/\""
 
@@ -73,6 +73,9 @@ artifacts:
   # Archive the generated wheel package in the ci.appveyor.com build report.
   - path: dist\*
 
-#on_success:
-#  - TODO: upload the content of dist/*.whl to a public wheelhouse
-#
+on_success: |
+  $gitinfo = `git log -n 1 --pretty=format:'%d'`
+  if (($env:APPVEYOR_REPO_BRANCH -eq "master") -and ($gitinfo -match "tag: v")) {
+    (Get-Content appveyor\.pypirc) | Foreach-Object {$_ -replace '%PASS%',$env:PYPI_PASS} | Out-File $env:userprofile\.pypirc
+    %CMD_IN_ENV% python setup.py bdist_wheel upload
+  }
