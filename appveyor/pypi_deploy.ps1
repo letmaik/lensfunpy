@@ -1,6 +1,4 @@
-#requires -version 2.0
-
-$gitinfo = `git log -n 1 --pretty=format:'%d'`
+$gitinfo = git log -n 1 --pretty=format:'%d'
 echo "git log: $gitinfo"
 if (($gitinfo -match "master") -and ($gitinfo -match "tag: v")) {
   (Get-Content appveyor\.pypirc) | Foreach-Object {$_ -replace '%PASS%',$env:PYPI_PASS} | Out-File $env:userprofile\.pypirc
