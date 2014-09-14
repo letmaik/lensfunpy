@@ -192,7 +192,7 @@ if use_cython:
 
 setup(
       name = 'lensfunpy',
-      version = '1.0.0',
+      version = '1.0.1',
       description = 'Python wrapper for the lensfun library',
       long_description = open('README.rst').read(),
       author = 'Maik Riechert',
