@@ -27,10 +27,13 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
-  - ECHO "Filesystem root:"
+  - ECHO Powershell version:
+  - ps: "$PSVersionTable.PSVersion.Major"
+
+  - ECHO Filesystem root:
   - ps: "ls \"C:/\""
 
-  - ECHO "Installed SDKs:"
+  - ECHO Installed SDKs:
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
   # Install Python (from the official .msi of http://python.org) and pip when
@@ -74,6 +77,5 @@ artifacts:
   - path: dist\*
 
 deploy_script:
-  - "git log -n 1 --pretty=format:'%d'"
   - "powershell ./appveyor/pypi_deploy.ps1"
   
