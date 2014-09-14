@@ -192,7 +192,7 @@ setup(
       author = 'Maik Riechert',
       author_email = 'maik.riechert@arcor.de',
       url = 'https://github.com/neothemachine/lensfunpy',
-      classifiers=(
+      classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Natural Language :: English',
@@ -203,7 +203,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
-      ),
+      ],
       packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
