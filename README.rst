@@ -97,7 +97,8 @@ Installation on Windows
 -----------------------
 
 Binaries are provided for Python 2.7 and 3.4 for both 32 and 64 bit.
-These can be installed with a simple ``pip install lensfunpy``.
+These can be installed with a simple ``pip install --use-wheel lensfunpy`` 
+(or just ``pip install lensfunpy`` if using pip >= 1.5).
 
 Binaries for other Python versions are currently not produced but if there is a need
 then this is possible as well. In that case, just contact me.
