@@ -74,5 +74,6 @@ artifacts:
   - path: dist\*
 
 deploy_script:
+  - "git log -n 1 --pretty=format:'%d'"
   - "powershell ./appveyor/pypi_deploy.ps1"
   
