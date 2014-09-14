@@ -163,18 +163,24 @@ if any(s in cmdline for s in ['clean', 'sdist']):
     print('removing', egg_info)
     shutil.rmtree(egg_info, ignore_errors=True)
 
-try:
-    from Cython.Build import cythonize
-except ImportError:
+pyx_path = '_lensfun.pyx'
+c_path = '_lensfun.c'
+if not os.path.exists(pyx_path):
+    # we are running from a source dist which doesn't include the .pyx
     use_cython = False
 else:
-    use_cython = True
+    try:
+        from Cython.Build import cythonize
+    except ImportError:
+        use_cython = False
+    else:
+        use_cython = True
 
-ext = '.pyx' if use_cython else '.c'
+source_path = pyx_path if use_cython else c_path
 
 extensions = [Extension("lensfunpy._lensfun",
               include_dirs=include_dirs,
-              sources=['_lensfun' + ext],
+              sources=[source_path],
               libraries=libraries,
               library_dirs=library_dirs,
               extra_compile_args=extra_compile_args,
