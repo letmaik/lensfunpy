@@ -59,8 +59,6 @@ def use_pkg_config():
     _ask_pkg_config(extra_link_args,    '--libs-only-other')
     _ask_pkg_config(libraries,          '--libs-only-l', '-l')
 
-include_dirs += [numpy.get_include()]
-
 if isWindows:
     cmake_build = 'external/lensfun/cmake_build'
     lensfunh_dir = os.path.join(cmake_build)
@@ -70,6 +68,9 @@ if isWindows:
     library_dirs += [lensfunlib_dir]
 else:
     use_pkg_config()
+
+# this must be after use_pkg_config()!
+include_dirs += [numpy.get_include()]
 
 def windows_lensfun_compile():
     # check that lensfun git submodule is cloned
