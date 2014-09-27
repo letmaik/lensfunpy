@@ -90,18 +90,24 @@ def windows_lensfun_compile():
     # the cmake zip contains a cmake-3.0.1-win32-x86 folder when extracted
     cmake_url = 'http://www.cmake.org/files/v3.0/cmake-3.0.1-win32-x86.zip'
     cmake = os.path.abspath('external/cmake-3.0.1-win32-x86/bin/cmake')
-    files = [(glib_libs_url, 'glib_2.34.3-1.zip', glib_dir), 
-             (glib_dev_url, 'glib-dev_2.34.3-1.zip', glib_dir),
-             (libiconv_url, 'libiconv_1.13.1-1.zip', glib_dir),
-             (gettext_url, 'gettext_0.18.2.1-1.zip', glib_dir),
-             (cmake_url, 'cmake-3.0.1-win32-x86.zip', 'external')]
-    for url, path, extractdir in files:
-        if not os.path.exists(path):
-            print('Downloading', url)
-            urlretrieve(url, path)
-        with zipfile.ZipFile(path) as z:
-            print('Extracting', path, 'into', extractdir)
-            z.extractall(extractdir)
+    files = [(glib_libs_url, glib_dir, glib_dir + '/bin/libglib-2.0-0.dll'), 
+             (glib_dev_url, glib_dir, glib_dir + '/lib/libglib-2.0.def'),
+             (libiconv_url, glib_dir, glib_dir + '/lib/libiconv-2.dll'),
+             (gettext_url, glib_dir, glib_dir + '/bin/libintl-8.dll'),
+             (cmake_url, 'external', cmake)]
+    for url, extractdir, extractcheck in files:
+        if not os.path.exists(extractcheck):
+            path = 'external/' + os.path.basename(url)
+            if not os.path.exists(path):
+                print('Downloading', url)
+                urlretrieve(url, path)
+        
+            with zipfile.ZipFile(path) as z:
+                print('Extracting', path, 'into', extractdir)
+                z.extractall(extractdir)
+                
+            if not os.path.exists(path):
+                raise RuntimeError(path + ' not found!')
     
     # configure and compile lensfun
     cwd = os.getcwd()
