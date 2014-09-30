@@ -17,7 +17,12 @@ DTYPE = np.float32
 ctypedef np.float32_t DTYPE_t
 
 cdef extern from "lensfun.h":
-    ctypedef int LF_VERSION
+    cdef int LF_VERSION
+    cdef int LF_VERSION_MAJOR
+    cdef int LF_VERSION_MINOR
+    cdef int LF_VERSION_MICRO
+    cdef int LF_VERSION_BUGFIX
+    
     ctypedef char *lfMLstr
     
     enum lfError:
@@ -152,6 +157,8 @@ def enumKey(enu, val):
     # cython doesn't like tuple unpacking in lambdas ("Expected ')', found ','")
     #return filter(lambda (k,v): v == val, enu.__dict__.items())[0][0]
     return filter(lambda item: item[1] == val, enu.__dict__.items())[0][0]
+
+lensfun_version = (LF_VERSION_MAJOR, LF_VERSION_MINOR, LF_VERSION_MICRO, LF_VERSION_BUGFIX)
 
 ModifyFlags = enum(
                    TCA=LF_MODIFY_TCA,

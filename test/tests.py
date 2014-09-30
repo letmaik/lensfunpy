@@ -29,7 +29,12 @@ def testDatabaseLoading():
     assert_equal(len(lenses), 1)
     lens = lenses[0]
     assert_equal(lens.Maker.lower(), lensMaker.lower())
-    assert_equal(lens.Model.lower(), lensModel.lower())
+    
+    if lensfun.lensfun_version >= (0,3):
+        # lens names were "streamlined" in lensfun 0.3
+        assert_equal(lens.Model.lower(), u'nikon af nikkor 28mm f/2.8d')
+    else:
+        assert_equal(lens.Model.lower(), lensModel.lower())
     
 def testDatabaseXMLLoading():
     xml = """
