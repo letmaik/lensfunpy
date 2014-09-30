@@ -1,4 +1,4 @@
-#include lensfun.h
+#include "lensfun.h"
 
 /*
 The version constants were introduced in 0.2.6. 
