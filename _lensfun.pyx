@@ -16,13 +16,13 @@ np.import_array()
 DTYPE = np.float32
 ctypedef np.float32_t DTYPE_t
 
-cdef extern from "lensfun.h":
-    cdef int LF_VERSION
+cdef extern from "version_helper.h":
     cdef int LF_VERSION_MAJOR
     cdef int LF_VERSION_MINOR
     cdef int LF_VERSION_MICRO
     cdef int LF_VERSION_BUGFIX
-    
+
+cdef extern from "lensfun.h":   
     ctypedef char *lfMLstr
     
     enum lfError:
@@ -451,7 +451,8 @@ cdef class Lens:
         def __get__(self):
             return self.lf.CropFactor
 
-# see cdef extern block
+# TODO conditionals don't have access to imported definitions
+#  see also comment in cdef extern block
 #    IF LF_VERSION >= LF_VERSION_029:
 #        property AspectRatio:
 #            def __get__(self):
