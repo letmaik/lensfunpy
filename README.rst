@@ -77,7 +77,7 @@ Or install the latest developer version from the SVN repository:
 
     git clone git://git.code.sf.net/p/lensfun/code lensfun
     cd lensfun
-    ./configure
+    cmake .
     sudo make install
     
 After that, it's the usual ``pip install lensfunpy``.

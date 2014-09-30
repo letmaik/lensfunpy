@@ -13,11 +13,12 @@ env:
 install:
   - sudo apt-get install python-numpy
   - if [ $USE_LATEST_LENSFUN == true ]; then
+      sudo apt-get install cmake ;
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
       cd lensfun ;
       git checkout `git describe --abbrev=0 --tags` ;
-      ./configure ;
+      cmake . ;
       sudo make install ;
       echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf ;
       sudo ldconfig ;
