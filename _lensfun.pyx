@@ -42,7 +42,6 @@ cdef extern from "lensfun.h":
         LF_DIST_MODEL_NONE
         LF_DIST_MODEL_POLY3
         LF_DIST_MODEL_POLY5
-        LF_DIST_MODEL_FOV1
         LF_DIST_MODEL_PTLENS
     struct lfLensCalibDistortion:
         lfDistortionModel Model
@@ -100,9 +99,6 @@ cdef extern from "lensfun.h":
         # float AspectRatio
         float CenterX
         float CenterY
-        float RedCCI
-        float GreenCCI
-        float BlueCCI
         lfLensCalibDistortion **CalibDistortion
         lfLensCalibTCA **CalibTCA
         lfLensCalibVignetting **CalibVignetting
@@ -116,7 +112,6 @@ cdef extern from "lensfun.h":
     enum:
         LF_MODIFY_TCA
         LF_MODIFY_VIGNETTING
-        LF_MODIFY_CCI
         LF_MODIFY_DISTORTION
         LF_MODIFY_GEOMETRY
         LF_MODIFY_SCALE
@@ -161,7 +156,6 @@ def enumKey(enu, val):
 ModifyFlags = enum(
                    TCA=LF_MODIFY_TCA,
                    VIGNETTING=LF_MODIFY_VIGNETTING,
-                   CCI=LF_MODIFY_CCI,
                    DISTORTION=LF_MODIFY_DISTORTION,
                    GEOMETRY=LF_MODIFY_GEOMETRY,
                    SCALE=LF_MODIFY_SCALE,
@@ -180,7 +174,6 @@ DistortionModel = enum(
                        NONE=LF_DIST_MODEL_NONE,
                        POLY3=LF_DIST_MODEL_POLY3,
                        POLY5=LF_DIST_MODEL_POLY5,
-                       FOV1=LF_DIST_MODEL_FOV1,
                        PTLENS=LF_DIST_MODEL_PTLENS
                        )
 
@@ -464,18 +457,6 @@ cdef class Lens:
     property CenterY:
         def __get__(self):
             return self.lf.CenterY
-        
-    property RedCCI:
-        def __get__(self):
-            return self.lf.RedCCI
-
-    property GreenCCI:
-        def __get__(self):
-            return self.lf.GreenCCI
-        
-    property BlueCCI:
-        def __get__(self):
-            return self.lf.BlueCCI
 
     property CalibDistortion:
         def __get__(self):
