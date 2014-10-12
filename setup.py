@@ -128,8 +128,9 @@ def windows_lensfun_compile():
             ]
     for cmd in cmds:
         print(cmd)
-        if os.system(cmd) != 0:
-            sys.exit()   
+        code = os.system(cmd)
+        if code != 0:
+            sys.exit(code) 
     os.chdir(cwd)
     
     # bundle runtime dlls
@@ -171,8 +172,9 @@ def mac_lensfun_compile():
             ]
     for cmd in cmds:
         print(cmd)
-        if os.system(cmd) != 0:
-            sys.exit()
+        code = os.system(cmd)
+        if code != 0:
+            sys.exit(code)
     os.chdir(cwd)
 
 package_data = {}
