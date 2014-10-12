@@ -96,10 +96,10 @@ def windows_lensfun_compile():
     gettext_url = 'http://win32builder.gnome.org/packages/3.6/gettext_0.18.2.1-1_{}.zip'.format(glib_arch)
     # the cmake zip contains a cmake-3.0.1-win32-x86 folder when extracted
     cmake_url = 'http://www.cmake.org/files/v3.0/cmake-3.0.1-win32-x86.zip'
-    cmake = os.path.abspath('external/cmake-3.0.1-win32-x86/bin/cmake')
+    cmake = os.path.abspath('external/cmake-3.0.1-win32-x86/bin/cmake.exe')
     files = [(glib_libs_url, glib_dir, glib_dir + '/bin/libglib-2.0-0.dll'), 
-             (glib_dev_url, glib_dir, glib_dir + '/lib/libglib-2.0.def'),
-             (libiconv_url, glib_dir, glib_dir + '/lib/libiconv-2.dll'),
+             (glib_dev_url, glib_dir, glib_dir + '/lib/glib-2.0.lib'),
+             (libiconv_url, glib_dir, glib_dir + '/bin/libiconv-2.dll'),
              (gettext_url, glib_dir, glib_dir + '/bin/libintl-8.dll'),
              (cmake_url, 'external', cmake)]
     for url, extractdir, extractcheck in files:
