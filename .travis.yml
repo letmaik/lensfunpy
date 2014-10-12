@@ -6,6 +6,8 @@ virtualenv:
 env:
   global:
     - LENSFUN_GIT="git://git.code.sf.net/p/lensfun/code"
+    # GitHub Access Token to trigger lensfunpy-mac-wheels builds
+    - secure: "l7N3ME70ltwbnQSdcTV9QiE+QtCMrnbNJthHAGpvqsGVXPS7TNrF92UhuI67e1ALeWqF+JK5lr9wml0OPn1dDnZt8aZ1R3OKQm+3eQVx1bg6csqYCu1OY9AJ+0ZRVOd0PsqZ5RU+JSrYJUPOTiDj7uZD74MFMAhcW2iAGaKm+iM="   
   matrix:
     - USE_LATEST_LENSFUN=true
     - USE_LATEST_LENSFUN=false
@@ -13,7 +15,6 @@ env:
 install:
   - sudo apt-get install python-numpy
   - if [ $USE_LATEST_LENSFUN == true ]; then
-      sudo apt-get install cmake ;
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
       cd lensfun ;
@@ -29,6 +30,12 @@ install:
   - pip install cython
 
 script: python setup.py nosetests --verbosity=3
+
+after_success:
+  - if [ $USE_LATEST_LIBRAW == true ]; then
+      pip install travispy ;
+      python -c "import os; from travispy import TravisPy; t = TravisPy.github_auth(os.environ['GITHUB_TOKEN']); t.build(t.repo('neothemachine/lensfunpy-mac-wheels').last_build_id).restart()" ;
+    fi
 
 deploy:
   provider: pypi
