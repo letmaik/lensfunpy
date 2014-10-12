@@ -155,7 +155,7 @@ def windows_lensfun_compile():
         print('copying', path, '->', dest)
         shutil.copyfile(path, dest)
 
-def mac_libraw_compile():
+def mac_lensfun_compile():
     clone_submodules()
         
     # configure and compile libraw
