@@ -14,8 +14,12 @@ try:
 except ImportError:
     # Python 2
     from urllib import urlretrieve
+    
+if sys.version_info < (2, 7):
+    raise NotImplementedError('Minimum supported Python version is 2.7')
 
 isWindows = os.name == 'nt'
+isMac = sys.platform == 'darwin'
 is64Bit = sys.maxsize > 2**32
 
 # adapted from cffi's setup.py
@@ -59,25 +63,28 @@ def use_pkg_config():
     _ask_pkg_config(extra_link_args,    '--libs-only-other')
     _ask_pkg_config(libraries,          '--libs-only-l', '-l')
 
-if isWindows:
+if isWindows or isMac:
     cmake_build = 'external/lensfun/cmake_build'
-    lensfunh_dir = os.path.join(cmake_build)
-    lensfunlib_dir = os.path.join(cmake_build, 'libs', 'lensfun')
+    install_dir = os.path.join(cmake_build, 'install')
     
-    include_dirs += ['external/stdint', lensfunh_dir]
-    library_dirs += [lensfunlib_dir]
+    include_dirs += ['external/stdint', 
+                     os.path.join(install_dir, 'include')]
+    library_dirs += [os.path.join(install_dir, 'lib')]
 else:
     use_pkg_config()
 
 # this must be after use_pkg_config()!
 include_dirs += [numpy.get_include()]
 
-def windows_lensfun_compile():
+def clone_submodules():
     # check that lensfun git submodule is cloned
     if not os.path.exists('external/lensfun/README'):
         print('lensfun git submodule is not cloned yet, will invoke "git submodule update --init" now')
         if os.system('git submodule update --init') != 0:
             raise Exception('git failed')
+
+def windows_lensfun_compile():
+    clone_submodules()
     
     # download glib2 and cmake to compile lensfun
     glib_dir = 'external/lensfun/glib-2.0'
@@ -115,9 +122,9 @@ def windows_lensfun_compile():
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
-                    '-DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ',
-            'dir',
-            'nmake'
+                    '-DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ' +\
+                    '-DCMAKE_INSTALL_PREFIX:PATH=install',
+            'nmake install'
             ]
     for cmd in cmds:
         print(cmd)
@@ -127,7 +134,7 @@ def windows_lensfun_compile():
     
     # bundle runtime dlls
     glib_bin_dir = os.path.join(glib_dir, 'bin')
-    dll_runtime_libs = [('lensfun.dll', 'external/lensfun/cmake_build/libs/lensfun'),
+    dll_runtime_libs = [('lensfun.dll', os.path.join(install_dir, 'bin')),
                         ('libglib-2.0-0.dll', glib_bin_dir),
                         ('libiconv-2.dll', glib_bin_dir),
                         ('libintl-8.dll', glib_bin_dir), # gettext
@@ -147,17 +154,40 @@ def windows_lensfun_compile():
         dest = os.path.join(db_files, os.path.basename(path))
         print('copying', path, '->', dest)
         shutil.copyfile(path, dest)
-    
+
+def mac_libraw_compile():
+    clone_submodules()
+        
+    # configure and compile libraw
+    cwd = os.getcwd()
+    if not os.path.exists(cmake_build):
+        os.mkdir(cmake_build)
+    os.chdir(cmake_build)
+    cmds = ['cmake .. -DCMAKE_BUILD_TYPE=Release ' +\
+                    '-DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ' +\
+                    '-DCMAKE_INSTALL_PREFIX:PATH=install',
+            'make',
+            'make install'
+            ]
+    for cmd in cmds:
+        print(cmd)
+        if os.system(cmd) != 0:
+            sys.exit()
+    os.chdir(cwd)
+
 package_data = {}
 
 # evil hack, check cmd line for relevant commands
 # custom cmdclasses didn't work out in this case
 cmdline = ''.join(sys.argv[1:])
-if isWindows and any(s in cmdline for s in ['install', 'bdist', 'build_ext', 'nosetests']):
+needsCompile = any(s in cmdline for s in ['install', 'bdist', 'build_ext', 'nosetests'])
+if isWindows and needsCompile:
     windows_lensfun_compile()
-        
     package_data['lensfunpy'] = ['db_files/*.xml',
                                  '*.dll']
+
+elif isMac and needsCompile:
+    mac_lensfun_compile() 
     
 if any(s in cmdline for s in ['clean', 'sdist']):
     # When running sdist after a previous run of bdist or build_ext
