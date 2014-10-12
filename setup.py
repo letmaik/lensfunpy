@@ -122,7 +122,7 @@ def windows_lensfun_compile():
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
-                    '-DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ' +\
+                    '-DGLIB2_BASE_DIR=glib-2.0 -DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX=install ' +\
                     '-DCMAKE_INSTALL_PREFIX:PATH=install',
             'nmake install'
             ]
@@ -165,7 +165,7 @@ def mac_lensfun_compile():
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
     cmds = ['cmake .. -DCMAKE_BUILD_TYPE=Release ' +\
-                    '-DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX= ' +\
+                    '-DBUILD_TESTS=off -DLENSFUN_INSTALL_PREFIX=install ' +\
                     '-DCMAKE_INSTALL_PREFIX:PATH=install',
             'make',
             'make install'
