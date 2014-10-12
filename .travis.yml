@@ -35,7 +35,7 @@ after_success:
   # change to 'pip install travispy' once 0.3 released 
   - if [ $USE_LATEST_LIBRAW == true ]; then
       pip install https://github.com/menegazzo/travispy/archive/master.zip ;
-      python -c "import os; from travispy import TravisPy; t = TravisPy.github_auth(os.environ['GITHUB_TOKEN']); t.build(t.branch('mac_wheels', 'neothemachine/lensfunpy-mac-wheels').id).restart()" ;
+      python -c "import os; from travispy import TravisPy; t = TravisPy.github_auth(os.environ['GITHUB_TOKEN']); t.build(t.branch('mac-wheels', 'neothemachine/lensfunpy-mac-wheels').id).restart()" ;
     fi
 
 deploy:
