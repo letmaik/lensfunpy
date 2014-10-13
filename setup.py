@@ -67,11 +67,13 @@ if isWindows or isMac:
     cmake_build = 'external/lensfun/cmake_build'
     install_dir = os.path.join(cmake_build, 'install')
     
-    include_dirs += ['external/stdint', 
-                     os.path.join(install_dir, 'include')]
+    include_dirs += [os.path.join(install_dir, 'include')]
     library_dirs += [os.path.join(install_dir, 'lib')]
 else:
     use_pkg_config()
+    
+if isWindows:
+    include_dirs += ['external/stdint']
 
 # this must be after use_pkg_config()!
 include_dirs += [numpy.get_include()]
