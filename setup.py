@@ -148,16 +148,8 @@ def windows_lensfun_compile():
         print('copying', src, '->', dest)
         shutil.copyfile(src, dest)
     
-    # bundle database xmls
-    import glob
-    db_files = 'lensfunpy/db_files'
-    if not os.path.exists(db_files):
-        os.makedirs(db_files)
-    for path in glob.glob('external/lensfun/data/db/*.xml'):
-        dest = os.path.join(db_files, os.path.basename(path))
-        print('copying', path, '->', dest)
-        shutil.copyfile(path, dest)
-
+    bundle_db_files()
+        
 def mac_lensfun_compile():
     clone_submodules()
         
@@ -178,6 +170,18 @@ def mac_lensfun_compile():
         if code != 0:
             sys.exit(code)
     os.chdir(cwd)
+    
+    bundle_db_files()
+    
+def bundle_db_files():
+    import glob
+    db_files = 'lensfunpy/db_files'
+    if not os.path.exists(db_files):
+        os.makedirs(db_files)
+    for path in glob.glob('external/lensfun/data/db/*.xml'):
+        dest = os.path.join(db_files, os.path.basename(path))
+        print('copying', path, '->', dest)
+        shutil.copyfile(path, dest)
 
 package_data = {}
 
@@ -191,8 +195,9 @@ if isWindows and needsCompile:
                                  '*.dll']
 
 elif isMac and needsCompile:
-    mac_lensfun_compile() 
-    
+    mac_lensfun_compile()
+    package_data['lensfunpy'] = ['db_files/*.xml']
+        
 if any(s in cmdline for s in ['clean', 'sdist']):
     # When running sdist after a previous run of bdist or build_ext
     # then even with the 'clean' command the .egg-info folder stays.

@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
-import os
+import os, sys
 
 import lensfunpy._lensfun
 globals().update(lensfunpy._lensfun.__dict__)
 
-# for Windows we wrap the Database constructor to load the bundled database files
+# for Windows and Mac we wrap the Database constructor to load the bundled database files
 # as lensfun wouldn't find any in the standard search locations like on Linux
-if os.name == 'nt':
+if os.name == 'nt' or sys.platform == 'darwin':
     _Database = Database
     del Database
     
