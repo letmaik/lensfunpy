@@ -1,12 +1,16 @@
 import numpy as np
 
-def remapOpenCv(im, undistCoords):
+from scipy.ndimage.interpolation import map_coordinates
+try:
     import cv2
+except ImportError:
+    cv2 = None
+    print 'OpenCV not available, will use scipy for remapping distorted images'
+
+def remapOpenCv(im, undistCoords):
     return cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
 
-def remapScipy(im, undistCoords):
-    from scipy.ndimage.interpolation import map_coordinates
-    
+def remapScipy(im, undistCoords):   
     height, width = im.shape[0], im.shape[1]
     
     # switch to y,x order
@@ -27,3 +31,5 @@ def remapScipy(im, undistCoords):
     undistCoords = np.rollaxis(undistCoords, 3)
         
     return map_coordinates(im, undistCoords, order=1)
+
+remap = remapOpenCv if cv2 else remapScipy
