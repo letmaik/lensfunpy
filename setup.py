@@ -67,7 +67,7 @@ if isWindows or isMac:
     cmake_build = 'external/lensfun/cmake_build'
     install_dir = os.path.join(cmake_build, 'install')
     
-    include_dirs += [os.path.join(install_dir, 'include')]
+    include_dirs += [os.path.join(install_dir, 'include', 'lensfun')]
     library_dirs += [os.path.join(install_dir, 'lib')]
 else:
     use_pkg_config()
