@@ -12,6 +12,9 @@ env:
     - USE_LATEST_LENSFUN=true
     - USE_LATEST_LENSFUN=false
 
+git:
+  submodules: false
+
 install:
   - if [ $USE_LATEST_LENSFUN == true ]; then
       cd .. ;
