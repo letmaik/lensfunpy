@@ -13,7 +13,6 @@ env:
     - USE_LATEST_LENSFUN=false
 
 install:
-  - sudo apt-get install python-numpy
   - if [ $USE_LATEST_LENSFUN == true ]; then
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
@@ -25,9 +24,9 @@ install:
       sudo ldconfig ;
       cd ../lensfunpy ;
     else
-      sudo apt-get install liblensfun0 liblensfun-dev ;
+      sudo apt-get install liblensfun-dev ;
     fi
-  - pip install cython
+  - pip install -r dev-requirements.txt
   - python setup.py sdist
   - pip install dist/*.tar.gz
 
