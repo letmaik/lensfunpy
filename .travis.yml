@@ -28,8 +28,14 @@ install:
       sudo apt-get install liblensfun0 liblensfun-dev ;
     fi
   - pip install cython
+  - python setup.py sdist
+  - pip install dist/*.tar.gz
 
-script: python setup.py nosetests --verbosity=3
+script:
+  - mkdir tmp_for_test
+  - cd tmp_for_test
+  - nosetests --verbosity=3 --nocapture ../test
+  - cd ..
 
 after_success:
   - if [ $USE_LATEST_LENSFUN == true ]; then
