@@ -153,7 +153,7 @@ def windows_lensfun_compile():
 def mac_lensfun_compile():
     clone_submodules()
         
-    # configure and compile libraw
+    # configure and compile lensfun
     cwd = os.getcwd()
     if not os.path.exists(cmake_build):
         os.mkdir(cmake_build)
