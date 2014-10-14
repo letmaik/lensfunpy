@@ -64,7 +64,7 @@ def use_pkg_config():
     _ask_pkg_config(libraries,          '--libs-only-l', '-l')
 
 if isWindows or isMac:
-    cmake_build = 'external/lensfun/cmake_build'
+    cmake_build = os.path.abspath('external/lensfun/cmake_build')
     install_dir = os.path.join(cmake_build, 'install')
     
     include_dirs += [os.path.join(install_dir, 'include', 'lensfun')]
@@ -158,9 +158,11 @@ def mac_lensfun_compile():
     if not os.path.exists(cmake_build):
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
+    install_name_dir = os.path.join(install_dir, 'lib')
     cmds = ['cmake .. -DCMAKE_BUILD_TYPE=Release ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
-                    '-DGLIB2_BASE_DIR=glib-2.0 -DLENSFUN_INSTALL_PREFIX=install',
+                    '-DGLIB2_BASE_DIR=glib-2.0 -DLENSFUN_INSTALL_PREFIX=install ' +\
+                    '-DCMAKE_MACOSX_RPATH=0 -DCMAKE_INSTALL_NAME_DIR=' + install_name_dir,
             'make',
             'make install'
             ]
