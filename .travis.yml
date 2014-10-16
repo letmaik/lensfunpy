@@ -7,7 +7,7 @@ env:
   global:
     - LENSFUN_GIT="git://git.code.sf.net/p/lensfun/code"
     # GitHub Access Token to trigger lensfunpy-mac-wheels builds
-    - secure: "l7N3ME70ltwbnQSdcTV9QiE+QtCMrnbNJthHAGpvqsGVXPS7TNrF92UhuI67e1ALeWqF+JK5lr9wml0OPn1dDnZt8aZ1R3OKQm+3eQVx1bg6csqYCu1OY9AJ+0ZRVOd0PsqZ5RU+JSrYJUPOTiDj7uZD74MFMAhcW2iAGaKm+iM="   
+    - secure: "W/oAfrVmQrtm7dO7mNbKSnFsywRdEvZdbYFksU6WmM39BgIiEeoiGoNE5oB51XvYJOps1rSHA04arjR5I2JK636M/X6GDRI76yrQ6KafsajCbciP8DZKOGs5MEf1FR8O1YfTJXc0f/4+qRXTZ7yVUbJaEeKDfXKT/fVzpfbRhhw="   
   matrix:
     - USE_LATEST_LENSFUN=true
     - USE_LATEST_LENSFUN=false
