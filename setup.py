@@ -4,6 +4,7 @@ from setuptools import setup, Extension, find_packages
 import numpy
 import subprocess
 import errno
+import re
 import os
 import shutil
 import sys
@@ -238,13 +239,24 @@ extensions = [Extension("lensfunpy._lensfun",
 if use_cython:
     extensions = cythonize(extensions)
 
+# version handling from https://stackoverflow.com/a/7071358
+VERSIONFILE="lensfunpy/_version.py"
+verstrline = open(VERSIONFILE, "rt").read()
+VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
+mo = re.search(VSRE, verstrline, re.M)
+if mo:
+    verstr = mo.group(1)
+else:
+    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
+
 setup(
       name = 'lensfunpy',
-      version = '1.0.3',
+      version = verstr,
       description = 'Python wrapper for the lensfun library',
       long_description = open('README.rst').read(),
       author = 'Maik Riechert',
       author_email = 'maik.riechert@arcor.de',
+      license = 'MIT',
       url = 'https://github.com/neothemachine/lensfunpy',
       classifiers=[
         'Development Status :: 4 - Beta',
@@ -258,6 +270,10 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Operating System :: MacOS',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX',
+        'Operating System :: Unix',
         'Topic :: Multimedia :: Graphics',
         'Topic :: Software Development :: Libraries',
       ],

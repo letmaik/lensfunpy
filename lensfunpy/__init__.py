@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from ._version import __version__, __version_info__
+
 import os, sys
 
 import lensfunpy._lensfun
