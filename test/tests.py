@@ -127,10 +127,10 @@ def testDeallocationBug():
     assert_equal(cam.Maker.lower(), camMaker.lower())
     assert_equal(lens.Maker.lower(), lensMaker.lower())
 
-def testXmlDataException():
+def testXmlFormatException():
     try:
         lensfun.Database(xml='garbage')
-    except lensfun.LensfunError:
+    except lensfun.XMLFormatError:
         pass
     else:
         assert False

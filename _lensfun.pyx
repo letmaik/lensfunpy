@@ -683,12 +683,15 @@ cdef class Modifier:
 class LensfunError(Exception):
     pass
 
+class XMLFormatError(LensfunError):
+    pass
+
 cdef handleError(int code):
     if code < 0:
         raise OSError((-code, os.strerror(-code))) 
     elif code > 0:
         if code == LF_WRONG_FORMAT:
-            raise LensfunError('Wrong XML data format')
+            raise XMLFormatError
         else:
             raise LensfunError('Unknown lensfun error (code: {}), please report an issue for lensfunpy'.format(code))
 
