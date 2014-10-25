@@ -4,6 +4,7 @@
 from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
+import os
 import numpy as np
 from collections import namedtuple
 cimport numpy as np
@@ -154,8 +155,6 @@ def enum(**enums):
     return type('Enum', (), enums)
 
 def enumKey(enu, val):
-    # cython doesn't like tuple unpacking in lambdas ("Expected ')', found ','")
-    #return filter(lambda (k,v): v == val, enu.__dict__.items())[0][0]
     return filter(lambda item: item[1] == val, enu.__dict__.items())[0][0]
 
 lensfun_version = (LF_VERSION_MAJOR, LF_VERSION_MINOR, LF_VERSION_MICRO, LF_VERSION_BUGFIX)
@@ -210,14 +209,16 @@ cdef class Database:
     
     # NOTE: when changing this constructor, it also has to be changed in lensfunpy.__init__!
     def __init__(self, filenames=None, xml=None, loadAll=True):
+        cdef char* xmlstr
         if filenames:
             for filename in filenames:
-                err = lf_db_load_file(self.lf, _chars(filename))
+                handleError(lf_db_load_file(self.lf, _chars(filename)))
         if xml:
-            err = lf_db_load_data(self.lf, 'XML', _chars(xml), len(xml))
+            xmlstr = _chars(xml)
+            handleError(lf_db_load_data(self.lf, 'XML', xmlstr, len(xmlstr)))
         
         if (not filenames and not xml) or loadAll:
-            err = lf_db_load(self.lf)
+            handleError(lf_db_load(self.lf))
         
     def __dealloc__(self):
         lf_db_destroy(self.lf)
@@ -677,7 +678,19 @@ cdef class Modifier:
         if height == -1:
             height = self.height
         return width, height
-        
+
+class LensfunError(Exception):
+    pass   
+
+cdef handleError(int code):
+    if code < 0:
+        raise OSError((-code, os.strerror(-code))) 
+    elif code > 0:
+        if code == LF_WRONG_FORMAT:
+            raise LensfunError('Wrong XML data format')
+        else:
+            raise LensfunError('Unknown lensfun error (code: {}), please report an issue for lensfunpy'.format(code))
+
 cdef char* _chars(s):
     if isinstance(s, unicode):
         # convert unicode to chars
