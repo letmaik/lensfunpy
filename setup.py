@@ -256,7 +256,6 @@ setup(
       long_description = open('README.rst').read(),
       author = 'Maik Riechert',
       author_email = 'maik.riechert@arcor.de',
-      license = 'MIT',
       url = 'https://github.com/neothemachine/lensfunpy',
       classifiers=[
         'Development Status :: 4 - Beta',
