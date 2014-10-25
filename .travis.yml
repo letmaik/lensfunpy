@@ -20,8 +20,7 @@ install:
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
       cd lensfun ;
-      git stash ;
-      git checkout `git describe --abbrev=0 --tags` ;
+      git checkout -f `git describe --abbrev=0 --tags` ;
       cmake . ;
       sudo make install ;
       echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf ;
