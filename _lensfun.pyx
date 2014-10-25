@@ -214,6 +214,7 @@ cdef class Database:
             for filename in filenames:
                 handleError(lf_db_load_file(self.lf, _chars(filename)))
         if xml:
+            xml = xml.strip() # lensfun is very strict here
             xmlstr = _chars(xml)
             handleError(lf_db_load_data(self.lf, 'XML', xmlstr, len(xmlstr)))
         
@@ -680,7 +681,7 @@ cdef class Modifier:
         return width, height
 
 class LensfunError(Exception):
-    pass   
+    pass
 
 cdef handleError(int code):
     if code < 0:
