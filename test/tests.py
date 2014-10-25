@@ -126,6 +126,14 @@ def testDeallocationBug():
     
     assert_equal(cam.Maker.lower(), camMaker.lower())
     assert_equal(lens.Maker.lower(), lensMaker.lower())
-    
+
+def testXmlDataException():
+    try:
+        lensfun.Database(xml='garbage')
+    except lensfun.LensfunError:
+        pass
+    else:
+        assert False
+
 # TODO lensfun's find* functions modify the score directly in the original db objects
 #  -> another invocation of find* will overwrite the old scores
