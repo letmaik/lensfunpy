@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 import numpy as np
 
 from scipy.ndimage.interpolation import map_coordinates
@@ -5,7 +7,7 @@ try:
     import cv2
 except ImportError:
     cv2 = None
-    print 'OpenCV not available, will use scipy for remapping distorted images'
+    print('OpenCV not available, will use scipy for remapping distorted images')
 
 def remapOpenCv(im, undistCoords):
     return cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
