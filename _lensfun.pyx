@@ -203,7 +203,7 @@ cdef class Database:
     
     # NOTE: when changing this constructor, it also has to be changed in lensfunpy.__init__!
     def __init__(self, paths=None, xml=None, load_common=True):
-        """Database.__init__(filenames=None, xml=None, load_common=True)
+        """Database.__init__(paths=None, xml=None, load_common=True)
         
         :type paths: iterable of str
         :param paths: XML files to load 
