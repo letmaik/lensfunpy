@@ -20,10 +20,10 @@ if os.name == 'nt' or sys.platform == 'darwin':
     _xml_glob = os.path.join(_ROOT, 'db_files', '*.xml')
     
     @wraps(_Database)
-    def Database(filenames=None, xml=None, loadAll=True):
-        if loadAll:
+    def Database(filenames=None, xml=None, load_all=True):
+        if load_all:
             if not filenames:
                 filenames = []
             filenames.extend(glob.glob(_xml_glob))
-        return _Database(filenames, xml, loadAll)
+        return _Database(filenames, xml, load_all)
     

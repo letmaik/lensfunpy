@@ -279,4 +279,5 @@ setup(
       packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
+      install_requires=['enum34'],
 )

@@ -6,10 +6,10 @@ import gc
 from numpy.testing.utils import assert_equal
 
 # the following strings were taken from the lensfun xml files
-camMaker = u'NIKON CORPORATION'
-camModel = u'NIKON D3S'
-lensMaker = u'Nikon'
-lensModel = u'Nikkor 28mm f/2.8D AF'
+cam_maker = u'NIKON CORPORATION'
+cam_model = u'NIKON D3S'
+lens_maker = u'Nikon'
+lens_model = u'Nikkor 28mm f/2.8D AF'
 # Note regarding u-prefix:
 # As lensfunpy returns unicode strings we declare the above
 # as unicocd strings as well to make comparison in unit tests easier.
@@ -19,22 +19,22 @@ lensModel = u'Nikkor 28mm f/2.8D AF'
 def testDatabaseLoading():
     db = lensfun.Database()
        
-    cams = db.findCameras(camMaker, camModel)
+    cams = db.find_cameras(cam_maker, cam_model)
     assert_equal(len(cams), 1)
     cam = cams[0]
-    assert_equal(cam.Maker.lower(), camMaker.lower())
-    assert_equal(cam.Model.lower(), camModel.lower())
+    assert_equal(cam.maker.lower(), cam_maker.lower())
+    assert_equal(cam.model.lower(), cam_model.lower())
     
-    lenses = db.findLenses(cam, lensMaker, lensModel)
+    lenses = db.find_lenses(cam, lens_maker, lens_model)
     assert_equal(len(lenses), 1)
     lens = lenses[0]
-    assert_equal(lens.Maker.lower(), lensMaker.lower())
+    assert_equal(lens.maker.lower(), lens_maker.lower())
     
     if lensfun.lensfun_version >= (0,3):
         # lens names were "streamlined" in lensfun 0.3
-        assert_equal(lens.Model.lower(), u'nikon af nikkor 28mm f/2.8d')
+        assert_equal(lens.model.lower(), u'nikon af nikkor 28mm f/2.8d')
     else:
-        assert_equal(lens.Model.lower(), lensModel.lower())
+        assert_equal(lens.model.lower(), lens_model.lower())
     
 def testDatabaseXMLLoading():
     xml = """
@@ -67,35 +67,35 @@ def testDatabaseXMLLoading():
     </lens>
 </lensdatabase>
     """
-    db = lensfun.Database(xml=xml, loadAll=False)
+    db = lensfun.Database(xml=xml, load_all=False)
     
-    assert_equal(len(db.getCameras()), 1)
-    assert_equal(len(db.getLenses()), 1)
-    assert_equal(len(db.getMounts()), 1)
+    assert_equal(len(db.cameras), 1)
+    assert_equal(len(db.lenses), 1)
+    assert_equal(len(db.mounts), 1)
     
-    cam = db.findCameras(camMaker, camModel)[0]
-    lens = db.findLenses(cam, lensMaker, lensModel)[0]
+    cam = db.find_cameras(cam_maker, cam_model)[0]
+    lens = db.find_lenses(cam, lens_maker, lens_model)[0]
     
-    assert_equal(cam.Maker.lower(), camMaker.lower())
-    assert_equal(cam.Model.lower(), camModel.lower())
-    assert_equal(lens.Maker.lower(), lensMaker.lower())
-    assert_equal(lens.Model.lower(), lensModel.lower())
+    assert_equal(cam.maker.lower(), cam_maker.lower())
+    assert_equal(cam.model.lower(), cam_model.lower())
+    assert_equal(lens.maker.lower(), lens_maker.lower())
+    assert_equal(lens.model.lower(), lens_model.lower())
     
 def testModifier():
     db = lensfun.Database()
-    cam = db.findCameras(camMaker, camModel)[0]
-    lens = db.findLenses(cam, lensMaker, lensModel)[0]
+    cam = db.find_cameras(cam_maker, cam_model)[0]
+    lens = db.find_lenses(cam, lens_maker, lens_model)[0]
     
-    focalLength = 28.0
+    focal_length = 28.0
     aperture = 1.4
     distance = 10
     width = 4256
     height = 2832
     
-    mod = lensfun.Modifier(lens, cam.CropFactor, width, height)
-    mod.initialize(focalLength, aperture, distance)
+    mod = lensfun.Modifier(lens, cam.crop_factor, width, height)
+    mod.initialize(focal_length, aperture, distance)
         
-    undistCoords = mod.applyGeometryDistortion()
+    undistCoords = mod.apply_geometry_distortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
     
     # check if coordinates were actually transformed
@@ -103,18 +103,18 @@ def testModifier():
     coords = np.dstack((x,y))
     assert np.any(undistCoords != coords)
     
-    undistCoords = mod.applySubpixelDistortion()
+    undistCoords = mod.apply_subpixel_distortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
     assert np.any(undistCoords[:,:,0] != coords)
     
-    undistCoords = mod.applySubpixelGeometryDistortion()
+    undistCoords = mod.apply_subpixel_geometry_distortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
     assert np.any(undistCoords[:,:,0] != coords)
     
 def testDeallocationBug():
     db = lensfun.Database()
-    cam = db.findCameras(camMaker, camModel)[0]
-    lens = db.findLenses(cam, lensMaker, lensModel)[0]
+    cam = db.find_cameras(cam_maker, cam_model)[0]
+    lens = db.find_lenses(cam, lens_maker, lens_model)[0]
     
     # By garbage collecting the database object, its queried objects
     # were deallocated as well, which is not what we want.
@@ -124,8 +124,8 @@ def testDeallocationBug():
     del db
     gc.collect()
     
-    assert_equal(cam.Maker.lower(), camMaker.lower())
-    assert_equal(lens.Maker.lower(), lensMaker.lower())
+    assert_equal(cam.maker.lower(), cam_maker.lower())
+    assert_equal(lens.maker.lower(), lens_maker.lower())
 
 def testXmlFormatException():
     try:

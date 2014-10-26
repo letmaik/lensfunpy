@@ -5,8 +5,10 @@ from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
 import os
-import numpy as np
+from enum import Enum, IntEnum
 from collections import namedtuple
+
+import numpy as np
 cimport numpy as np
 np.import_array()
 
@@ -151,56 +153,48 @@ cdef extern from "lensfun.h":
     int lf_lens_interpolate_tca (const lfLens *lens, float focal, lfLensCalibTCA *res)
     int lf_lens_interpolate_vignetting (const lfLens *lens, float focal, float aperture, float distance, lfLensCalibVignetting *res)
 
-def enum(**enums):
-    return type('Enum', (), enums)
-
-def enumKey(enu, val):
-    return filter(lambda item: item[1] == val, enu.__dict__.items())[0][0]
-
 lensfun_version = (LF_VERSION_MAJOR, LF_VERSION_MINOR, LF_VERSION_MICRO, LF_VERSION_BUGFIX)
 
-ModifyFlags = enum(
-                   TCA=LF_MODIFY_TCA,
-                   VIGNETTING=LF_MODIFY_VIGNETTING,
-                   DISTORTION=LF_MODIFY_DISTORTION,
-                   GEOMETRY=LF_MODIFY_GEOMETRY,
-                   SCALE=LF_MODIFY_SCALE,
-                   ALL=LF_MODIFY_ALL
-                   )
+class ModifyFlags(IntEnum):
+    TCA=LF_MODIFY_TCA
+    VIGNETTING=LF_MODIFY_VIGNETTING
+    DISTORTION=LF_MODIFY_DISTORTION
+    GEOMETRY=LF_MODIFY_GEOMETRY
+    SCALE=LF_MODIFY_SCALE
+    ALL=LF_MODIFY_ALL
 
-LensType = enum(
-                UNKNOWN=LF_UNKNOWN,
-                RECTILINEAR=LF_RECTILINEAR,
-                FISHEYE=LF_FISHEYE,
-                PANORAMIC=LF_PANORAMIC,
-                EQUIRECTANGULAR=LF_EQUIRECTANGULAR
-                )
+class LensType(Enum):
+    UNKNOWN=LF_UNKNOWN
+    RECTILINEAR=LF_RECTILINEAR
+    FISHEYE=LF_FISHEYE
+    PANORAMIC=LF_PANORAMIC
+    EQUIRECTANGULAR=LF_EQUIRECTANGULAR
 
-DistortionModel = enum(
-                       NONE=LF_DIST_MODEL_NONE,
-                       POLY3=LF_DIST_MODEL_POLY3,
-                       POLY5=LF_DIST_MODEL_POLY5,
-                       PTLENS=LF_DIST_MODEL_PTLENS
-                       )
+class DistortionModel(Enum):
+    NONE=LF_DIST_MODEL_NONE
+    POLY3=LF_DIST_MODEL_POLY3
+    POLY5=LF_DIST_MODEL_POLY5
+    PTLENS=LF_DIST_MODEL_PTLENS
 
 LensCalibDistortion = namedtuple('LensCalibDistortion', ['Model', 'Focal', 'Terms'])
 
-TCAModel = enum(
-                NONE=LF_TCA_MODEL_NONE,
-                LINEAR=LF_TCA_MODEL_LINEAR,
-                POLY3=LF_TCA_MODEL_POLY3
-                )
+class TCAModel(Enum):
+    NONE=LF_TCA_MODEL_NONE
+    LINEAR=LF_TCA_MODEL_LINEAR
+    POLY3=LF_TCA_MODEL_POLY3
 
 LensCalibTCA = namedtuple('LensCalibTCA', ['Model', 'Focal', 'Terms'])
 
-VignettingModel = enum(
-                       NONE=LF_VIGNETTING_MODEL_NONE,
-                       PA=LF_VIGNETTING_MODEL_PA
-                       )
+class VignettingModel(Enum):
+    NONE=LF_VIGNETTING_MODEL_NONE
+    PA=LF_VIGNETTING_MODEL_PA
 
 LensCalibVignetting = namedtuple('LensCalibVignetting', ['Model', 'Focal', 'Aperture', 'Distance', 'Terms'])
 
 cdef class Database:
+    """
+    The main entry point to use lensfunpy's functionality.
+    """
 
     cdef lfDatabase* lf
 
@@ -208,30 +202,50 @@ cdef class Database:
         self.lf = lf_db_new()
     
     # NOTE: when changing this constructor, it also has to be changed in lensfunpy.__init__!
-    def __init__(self, filenames=None, xml=None, loadAll=True):
+    def __init__(self, paths=None, xml=None, load_common=True):
+        """Database.__init__(filenames=None, xml=None, load_common=True)
+        
+        :type paths: iterable of str
+        :param paths: XML files to load 
+        :param str xml: load data from XML string
+        :param bool load_common: whether to load the system/user database files
+        """
         cdef char* xmlstr
-        if filenames:
-            for filename in filenames:
-                handleError(lf_db_load_file(self.lf, _chars(filename)))
+        if paths:
+            for path in paths:
+                handleError(lf_db_load_file(self.lf, _chars(path)))
         if xml:
             xml = xml.strip() # lensfun is very strict here
             xmlstr = _chars(xml)
             handleError(lf_db_load_data(self.lf, 'XML', xmlstr, len(xmlstr)))
         
-        if (not filenames and not xml) or loadAll:
+        if load_common:
             handleError(lf_db_load(self.lf))
         
     def __dealloc__(self):
         lf_db_destroy(self.lf)
+    
+    property cameras:
+        """
+        All loaded cameras.
         
-    def getCameras(self):
-        cdef const lfCamera *const * lfCams
-        lfCams = lf_db_get_cameras(self.lf)
-        cams = self._convertCams(<const lfCamera **>lfCams)
-        # NOTE: lfCams must not be lf_free'd! it points to an internal list (not a copy!)
-        return cams
+        :rtype: list of :class:`lensfunpy.Camera` instances
+        """
+        def __get__(self):
+            cdef const lfCamera *const * lfCams
+            lfCams = lf_db_get_cameras(self.lf)
+            cams = self._convertCams(<const lfCamera **>lfCams)
+            # NOTE: lfCams must not be lf_free'd! it points to an internal list (not a copy!)
+            return cams
         
-    def findCameras(self, maker, model, looseSearch = False):
+    def find_cameras(self, maker=None, model=None, loose_search=False):
+        """
+        
+        :param str maker: return cameras from the given manufacturer
+        :param str model: return cameras matching the given model
+        :param bool loose_search:
+        :rtype: list of :class:`lensfunpy.Camera` instances
+        """
         cdef const lfCamera ** lfCams
         cdef char* cmaker
         cdef char* cmodel
@@ -243,7 +257,7 @@ cdef class Database:
             cmodel = NULL
         else:
             cmodel = _chars(model)
-        if looseSearch:
+        if loose_search:
             lfCams = lf_db_find_cameras_ext(self.lf, cmaker, cmodel, LF_SEARCH_LOOSE)
         else:
             lfCams = lf_db_find_cameras(self.lf, cmaker, cmodel)
@@ -251,26 +265,51 @@ cdef class Database:
         lf_free(lfCams)
         return cams
     
-    def getMounts(self):
-        cdef const lfMount *const * lfMounts
-        lfMounts = lf_db_get_mounts(self.lf)
-        mounts = self._convertMounts(<const lfMount **>lfMounts)
-        # NOTE: lfMounts must not be lf_free'd! it points to an internal list (not a copy!)
-        return mounts
+    property mounts:
+        """
+        All loaded mounts.
         
-    def findMount(self, name):
+        :rtype: list of :class:`lensfunpy.Mount` instances
+        """
+        def __get__(self):
+            cdef const lfMount *const * lfMounts
+            lfMounts = lf_db_get_mounts(self.lf)
+            mounts = self._convertMounts(<const lfMount **>lfMounts)
+            # NOTE: lfMounts must not be lf_free'd! it points to an internal list (not a copy!)
+            return mounts
+        
+    def find_mount(self, name):
+        """
+        
+        :param str name:
+        :rtype: :class:`lensfunpy.Mount` instance
+        """
         cdef const lfMount * lfMoun
         lfMoun = lf_db_find_mount(self.lf, _chars(name))
         return Mount(<uintptr_t>lfMoun, self)
     
-    def getLenses(self):
-        cdef const lfLens *const * lfLenses
-        lfLenses = lf_db_get_lenses(self.lf)
-        lenses = self._convertLenses(<const lfLens **>lfLenses)
-        # NOTE: lfLenses must not be lf_free'd! it points to an internal list (not a copy!)
-        return lenses
+    property lenses:
+        """
+        All loaded lenses.
+        
+        :rtype: list of :class:`lensfunpy.Lens` instances
+        """
+        def __get__(self):
+            cdef const lfLens *const * lfLenses
+            lfLenses = lf_db_get_lenses(self.lf)
+            lenses = self._convertLenses(<const lfLens **>lfLenses)
+            # NOTE: lfLenses must not be lf_free'd! it points to an internal list (not a copy!)
+            return lenses
     
-    def findLenses(self, Camera camera not None, maker, lens, looseSearch = False):
+    def find_lenses(self, Camera camera not None, maker=None, lens=None, loose_search=False):
+        """
+        
+        :param lensfunpy.Camera camera: 
+        :param str maker:
+        :param str lens:
+        :param bool loose_search:
+        :rtype: list of :class:`lensfunpy.Lens` instances
+        """
         cdef const lfLens ** lfLenses
         cdef char* cmaker
         cdef char* clens
@@ -282,7 +321,7 @@ cdef class Database:
             clens = NULL
         else:
             clens = _chars(lens)
-        lfLenses = lf_db_find_lenses_hd(self.lf, camera.lf, cmaker, clens, LF_SEARCH_LOOSE if looseSearch else 0)
+        lfLenses = lf_db_find_lenses_hd(self.lf, camera.lf, cmaker, clens, LF_SEARCH_LOOSE if loose_search else 0)
         lenses = self._convertLenses(lfLenses)
         lf_free(lfLenses)
         return lenses
@@ -326,48 +365,78 @@ cdef class Camera:
         self.lf = <lfCamera*> lfCam
         self.db = db
     
-    property Maker:
+    property maker:
+        """
+        The camera manufacturer.
+        
+        :rtype: str
+        """
         def __get__(self):
             return self.lf.Maker
     
-    property Model:
+    property model:
+        """
+        The camera model.
+        
+        :rtype: str
+        """
         def __get__(self):
             return self.lf.Model
         
-    property Variant:
-        def __get__(self):
-            return '' if self.lf.Variant is NULL else self.lf.Variant
+    property variant:
+        """
+        The camera variant.
         
-    property Mount:
+        :rtype: str|None
+        """
         def __get__(self):
-            return '' if self.lf.Mount is NULL else self.lf.Mount
+            return None if self.lf.Variant is NULL else self.lf.Variant
         
-    property CropFactor:
+    property mount:
+        """
+        The camera mount.
+        
+        :rtype: str|None
+        """
+        def __get__(self):
+            return None if self.lf.Mount is NULL else self.lf.Mount
+        
+    property crop_factor:
+        """
+        The crop factor of the camera sensor.
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.CropFactor
 
-    property Score:
+    property score:
+        """
+        Search score. 
+        
+        :rtype: int
+        """
         def __get__(self):
             return self.lf.Score
         
     def __richcmp__(self, other, int op):
         if isinstance(other, Camera):
             if op == 2: # __eq__
-                return (self.Maker == other.Maker and
-                        self.Model == other.Model and
-                        self.Variant == other.Variant and
-                        self.Mount == other.Mount and
-                        self.CropFactor == other.CropFactor)
+                return (self.maker == other.maker and
+                        self.model == other.model and
+                        self.variant == other.variant and
+                        self.mount == other.mount and
+                        self.crop_factor == other.crop_factor)
             else:
                 return NotImplemented
         else:
             return NotImplemented
         
     def __repr__(self):
-        return ('Camera(Maker: ' + self.Maker + '; Model: ' + self.Model +
-            '; Variant: ' + self.Variant + '; Mount: ' + self.Mount + 
-            '; Crop Factor: ' + str(self.CropFactor) +
-            '; Score: ' + str(self.Score) + ')')
+        return ('Camera(Maker: ' + self.maker + '; Model: ' + self.model +
+            '; Variant: ' + self.variant + '; Mount: ' + self.mount + 
+            '; Crop Factor: ' + str(self.crop_factor) +
+            '; Score: ' + str(self.score) + ')')
 
 cdef _convertStringList(char** strings):
     if strings == NULL:
@@ -388,25 +457,36 @@ cdef class Mount:
         self.lf = <lfMount*> lfMoun
         self.db = db
         
-    property Name:
+    property name:
+        """
+        The mount name.
+        
+        :rtype: str
+        """
         def __get__(self):
             return self.lf.Name
         
-    property Compat:
+    property compat:
+        """
+        The mounts that are compatible to this one.
+        
+        :return: names of compatible mounts
+        :rtype: list of str
+        """
         def __get__(self):
             return _convertStringList(self.lf.Compat)
         
     def __richcmp__(self, other, int op):
         if isinstance(other, Mount):
             if op == 2: # __eq__
-                return self.Name == other.Name
+                return self.name == other.name
             else:
                 return NotImplemented
         else:
             return NotImplemented
         
     def __repr__(self):
-        return 'Mount(Name: ' + self.Name + '; Compat: ' + str(self.Compat) + ')'
+        return 'Mount(Name: ' + self.name + '; Compat: ' + str(self.compat) + ')'
 
 cdef class Lens:
 
@@ -417,70 +497,138 @@ cdef class Lens:
         self.lf = <lfLens*> lfLen
         self.db = db
         
-    property Maker:
+    property maker:
+        """
+        The lens manufacturer.
+        
+        :rtype: str
+        """
         def __get__(self):
             return self.lf.Maker
     
-    property Model:
+    property model:
+        """
+        The lens model.
+        
+        :rtype: str
+        """
         def __get__(self):
             return self.lf.Model
         
-    property Type:
-        def __get__(self):
-            return self.lf.Type
+    property type:
+        """
+        The lens type.
         
-    property Mounts:
+        :rtype: :class:`lensfunpy.LensType` instance
+        """
+        def __get__(self):
+            return next(t for t in LensType if t.value == self.lf.Type)
+        
+    property mounts:
+        """
+        Compatible mounts.
+        
+        :rtype: list of :class:`lensfunpy.Mount` instances
+        """
         def __get__(self):
             return _convertStringList(self.lf.Mounts)                
         
-    property MinFocal:
+    property min_focal:
+        """
+        Minimum focal length.
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.MinFocal
         
-    property MaxFocal:
+    property max_focal:
+        """
+        Maximum focal length.
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.MaxFocal
         
-    property MinAperture:
+    property min_aperture:
+        """
+        Minimum aperture.
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.MinAperture
         
-    property MaxAperture:
+    property max_aperture:
+        """
+        Maximum aperture.
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.MaxAperture
         
-    property CropFactor:
+    property crop_factor:
+        """
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.CropFactor
 
 # TODO conditionals don't have access to imported definitions
 #  see also comment in cdef extern block
 #    IF LF_VERSION >= LF_VERSION_029:
-#        property AspectRatio:
+#        property aspect_ratio:
 #            def __get__(self):
 #                return self.lf.AspectRatio
 
-    property CenterX:
+    property center_x:
+        """
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.CenterX
         
-    property CenterY:
+    property center_y:
+        """
+        
+        :rtype: float
+        """
         def __get__(self):
             return self.lf.CenterY
 
-    property CalibDistortion:
+    property calib_distortion:
+        """
+        
+        :rtype: list of :class:`lensfunpy.LensCalibDistortion` instances
+        """
         def __get__(self):
             return _convertCalibsDistortion(self.lf.CalibDistortion)
 
-    property CalibTCA:
+    property calib_tca:
+        """
+        
+        :rtype: list of :class:`lensfunpy.LensCalibTCA` instances
+        """
         def __get__(self):
             return _convertCalibsTCA(self.lf.CalibTCA)
 
-    property CalibVignetting:
+    property calib_vignetting:
+        """
+        
+        :rtype: list of :class:`lensfunpy.LensCalibTCA` instances
+        """
         def __get__(self):
             return _convertCalibsVignetting(self.lf.CalibVignetting)
         
-    def interpolateDistortion(self, float focal):
+    def interpolate_distortion(self, float focal):
+        """
+        
+        :rtype: lensfunpy.LensCalibDistortion
+        """
         cdef lfLensCalibDistortion* res = <lfLensCalibDistortion*>PyMem_Malloc(sizeof(lfLensCalibDistortion))
         if lf_lens_interpolate_distortion(self.lf, focal, res):
             calib = _convertCalibDistortion(res)
@@ -489,7 +637,11 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
     
-    def interpolateTCA(self, float focal):
+    def interpolate_tca(self, float focal):
+        """
+        
+        :rtype: lensfunpy.LensCalibTCA
+        """
         cdef lfLensCalibTCA* res = <lfLensCalibTCA*>PyMem_Malloc(sizeof(lfLensCalibTCA))
         if lf_lens_interpolate_tca(self.lf, focal, res):
             calib = _convertCalibTCA(res)
@@ -498,7 +650,11 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
     
-    def interpolateVignetting(self, float focal, float aperture, float distance):
+    def interpolate_vignetting(self, float focal, float aperture, float distance):
+        """
+        
+        :rtype: lensfunpy.LensCalibVignetting
+        """
         cdef lfLensCalibVignetting* res = <lfLensCalibVignetting*>PyMem_Malloc(sizeof(lfLensCalibVignetting))
         if lf_lens_interpolate_vignetting(self.lf, focal, aperture, distance, res):
             calib = _convertCalibVignetting(res)
@@ -507,31 +663,36 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
                             
-    property Score:
+    property score:
+        """
+        Search score. 
+        
+        :rtype: int
+        """
         def __get__(self):
             return self.lf.Score
         
     def __richcmp__(self, other, int op):
         if isinstance(other, Lens):
             if op == 2: # __eq__
-                return (self.Maker == other.Maker and
-                        self.Model == other.Model and
-                        self.MinFocal == other.MinFocal and
-                        self.MaxFocal == other.MaxFocal and
-                        self.MinAperture == other.MinAperture and
-                        self.MaxAperture == other.MaxAperture and
-                        self.CropFactor == other.CropFactor)
+                return (self.maker == other.maker and
+                        self.model == other.model and
+                        self.min_focal == other.min_focal and
+                        self.max_focal == other.max_focal and
+                        self.min_aperture == other.min_aperture and
+                        self.max_aperture == other.max_aperture and
+                        self.crop_factor == other.crop_factor)
             else:
                 return NotImplemented
         else:
             return NotImplemented
         
     def __repr__(self):
-        return ('Lens(Maker: ' + self.Maker + '; Model: ' + self.Model +
-                '; Type: ' + enumKey(LensType, self.Type) + 
-                '; Focal: ' + str(self.MinFocal) + '-' + str(self.MaxFocal) +
-                '; Aperture: ' + str(self.MinAperture) + '-' + str(self.MaxAperture) +
-                '; Crop factor: ' + str(self.CropFactor) + '; Score: ' + str(self.Score) + ')')
+        return ('Lens(Maker: ' + self.maker + '; Model: ' + self.model +
+                '; Type: ' + self.type.name + 
+                '; Focal: ' + str(self.min_focal) + '-' + str(self.max_focal) +
+                '; Aperture: ' + str(self.min_aperture) + '-' + str(self.max_aperture) +
+                '; Crop factor: ' + str(self.crop_factor) + '; Score: ' + str(self.score) + ')')
 
 cdef _convertCalibsDistortion(lfLensCalibDistortion ** lfCalibs):
     if lfCalibs == NULL:
@@ -545,7 +706,8 @@ cdef _convertCalibsDistortion(lfLensCalibDistortion ** lfCalibs):
     return calibs
 
 cdef _convertCalibDistortion(lfLensCalibDistortion * lfCalib):
-    calib = LensCalibDistortion(lfCalib.Model, lfCalib.Focal, 
+    dist_model = next(m for m in DistortionModel if m.value == lfCalib.Model)
+    calib = LensCalibDistortion(dist_model, lfCalib.Focal,
                                 [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2]])
     return calib
 
@@ -561,7 +723,8 @@ cdef _convertCalibsTCA(lfLensCalibTCA ** lfCalibs):
     return calibs
 
 cdef _convertCalibTCA(lfLensCalibTCA * lfCalib):
-    calib = LensCalibTCA(lfCalib.Model, lfCalib.Focal, 
+    tca_model = next(m for m in TCAModel if m.value == lfCalib.Model)
+    calib = LensCalibTCA(tca_model, lfCalib.Focal, 
                          [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2],
                           lfCalib.Terms[3], lfCalib.Terms[4], lfCalib.Terms[5]])
     return calib
@@ -578,7 +741,8 @@ cdef _convertCalibsVignetting(lfLensCalibVignetting ** lfCalibs):
     return calibs
 
 cdef _convertCalibVignetting(lfLensCalibVignetting * lfCalib):
-    calib = LensCalibVignetting(lfCalib.Model, lfCalib.Focal, lfCalib.Aperture, lfCalib.Distance,
+    vign_model = next(m for m in VignettingModel if m.value == lfCalib.Model)
+    calib = LensCalibVignetting(vign_model, lfCalib.Focal, lfCalib.Aperture, lfCalib.Distance,
                                 [lfCalib.Terms[0], lfCalib.Terms[1], lfCalib.Terms[2]])
     return calib
 
@@ -591,83 +755,158 @@ npPixelFormat = dict({np.uint8: LF_PF_U8,
 
 cdef class Modifier:
 
-    cdef Lens lens
-    cdef float crop
-    cdef int width, height
+    cdef Lens _lens
+    cdef float _crop
+    cdef int _width, _height
     cdef lfModifier* lf
     
     # values used for initialize
-    cdef float focal
-    cdef float aperture
-    cdef float distance
-    cdef float scale
+    cdef float _focal
+    cdef float _aperture
+    cdef float _distance
+    cdef float _scale
 
-    def __cinit__(self, Lens lens not None, float crop, int width, int height):
-        self.lens = lens
-        self.crop = crop
-        self.width = width
-        self.height = height
+    def __init__(self, Lens lens not None, float crop, int width, int height):
+        """
+        :param lensfunpy.Lens: 
+        :param float crop: crop factor of ...?
+        :param int width: width of image in pixels
+        :param int height: height of image in pixels
+        """
+        self._lens = lens
+        self._crop = crop
+        self._width = width
+        self._height = height
         self.lf = lf_modifier_new(lens.lf, crop, width, height)
         
     def __dealloc__(self):
         lf_modifier_destroy(self.lf)
 
-    def initialize(self, float focal, float aperture, float distance = 1.0, float scale = 0.0, 
-                   lfLensType targeom = LF_RECTILINEAR, pixelFormat = np.uint8, 
-                   int flags = LF_MODIFY_ALL, bint reverse = 0):
-        lf_modifier_initialize (self.lf, self.lens.lf, npPixelFormat[pixelFormat],
+    def initialize(self, float focal, float aperture, float distance=1.0, float scale=0.0, 
+                   targeom=LensType.RECTILINEAR, pixel_format=np.uint8, 
+                   int flags=ModifyFlags.ALL, bint reverse=0):
+        """
+        :param float focal: The focal length in mm at which the image was taken. 
+        :param float aperture: The aperture (f-number) at which the image was taken. 
+        :param float distance: The approximative focus distance in meters (distance > 0). 
+        :param float scale: An additional scale factor to be applied onto the image (1.0 - no scaling; 0.0 - automatic scaling).
+        :param lensfunpy.LensType targeom: Target geometry. If LF_MODIFY_GEOMETRY is set in flags and targeom
+                                           is different from lens.type, a geometry conversion will be applied on the image.
+        :param pixel_format: Pixel format of the image.
+        :param int flags: A set of flags (see :class:`lensfunpy.ModifyFlags`) telling which
+                          distortions you want corrected. 
+                          A value of `ModifyFlags.ALL` orders correction of everything possible 
+                          (will enable all correction models present in lens description).
+        :param bool reverse: If this parameter is true, a reverse transform will be prepared. 
+                             That is, you take an undistorted image as input and convert it
+                             so that it will look as if it would be a shot made with lens.
+        """
+        lf_modifier_initialize (self.lf, self._lens.lf, npPixelFormat[pixel_format],
                                 focal, aperture, distance, scale,
-                                targeom, flags, reverse)
-        self.focal = focal
-        self.aperture = aperture
-        self.distance = distance
-        self.scale = scale
+                                targeom.value, flags, reverse)
+        self._focal = focal
+        self._aperture = aperture
+        self._distance = distance
+        self._scale = scale
         
-    property Lens:
+    property lens:
+        """
+        The :class:`lensfunpy.Lens` used when creating the modifier.
+        """
         def __get__(self):
-            return self.lens
+            return self._lens
         
-    property Crop:
-        def __get__(self):
-            return self.crop
+    property crop:
+        """
+        The crop factor used when creating the modifier.
         
-    property Width:
+        :rtype: float
+        """
         def __get__(self):
-            return self.width
+            return self._crop
         
-    property Height:
-        def __get__(self):
-            return self.height
+    property width:
+        """
+        The image width used when creating the modifier.
         
-    property FocalLength:
+        :rtype: int
+        """
         def __get__(self):
-            return self.focal
+            return self._width
         
-    property Aperture:
-        def __get__(self):
-            return self.aperture
+    property height:
+        """
+        The image height used when creating the modifier.
         
-    property Distance:
+        :rtype: int
+        """
         def __get__(self):
-            return self.distance
+            return self._height
         
-    property Scale:
+    property focal_length:
+        """
+        The focal lenght used when initialising the modifier.
+        
+        :rtype: float
+        """
         def __get__(self):
-            return self.scale
+            return self._focal
+        
+    property aperture:
+        """
+        The aperture used when initialising the modifier.
+        
+        :rtype: float
+        """
+        def __get__(self):
+            return self._aperture
+        
+    property distance:
+        """
+        The subject distance used when initialising the modifier.
+        
+        :rtype: float
+        """
+        def __get__(self):
+            return self._distance
+        
+    property scale:
+        """
+        The scale used when initialising the modifier.
+        
+        :rtype: float
+        """
+        def __get__(self):
+            return self._scale
 
-    def applyGeometryDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+        """
+        
+        :return: coordinates for geometry distortion correction
+        :rtype: ndarray of shape (height, width, 2)
+        """
         width, height = self._widthHeight(width, height)
         cdef np.ndarray[DTYPE_t, ndim=3, mode='c'] res = np.empty((height, width, 2), dtype=DTYPE)
         lf_modifier_apply_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0])
         return res
     
-    def applySubpixelDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_subpixel_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+        """
+        
+        :return: per-channel coordinates for subpixel distortion correction
+        :rtype: ndarray of shape (height, width, 2, 3)
+        """
         width, height = self._widthHeight(width, height)
         cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
         lf_modifier_apply_subpixel_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
         return res
 
-    def applySubpixelGeometryDistortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_subpixel_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+        """
+        
+        :return: per-channel coordinates for combined distortion and subpixel distortion correction
+        :rtype: ndarray of shape (height, width, 2, 3)
+        """
         width, height = self._widthHeight(width, height)
         cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
         lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])

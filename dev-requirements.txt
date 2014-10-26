@@ -2,3 +2,4 @@ numpy
 cython
 nose
 wheel
+sphinx_rtd_theme
