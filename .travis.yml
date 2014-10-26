@@ -9,8 +9,8 @@ env:
     # GitHub Access Token to trigger lensfunpy-mac-wheels builds
     - secure: "W/oAfrVmQrtm7dO7mNbKSnFsywRdEvZdbYFksU6WmM39BgIiEeoiGoNE5oB51XvYJOps1rSHA04arjR5I2JK636M/X6GDRI76yrQ6KafsajCbciP8DZKOGs5MEf1FR8O1YfTJXc0f/4+qRXTZ7yVUbJaEeKDfXKT/fVzpfbRhhw="   
   matrix:
-    - USE_LATEST_LENSFUN=true
     - USE_LATEST_LENSFUN=false
+    - USE_LATEST_LENSFUN=true
 
 git:
   submodules: false
