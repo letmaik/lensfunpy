@@ -162,7 +162,7 @@ def mac_lensfun_compile():
     install_name_dir = os.path.join(install_dir, 'lib')
     cmds = ['cmake .. -DCMAKE_BUILD_TYPE=Release ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
-                    '-DGLIB2_BASE_DIR=glib-2.0 -DLENSFUN_INSTALL_PREFIX=install ' +\
+                    '-DLENSFUN_INSTALL_PREFIX=install ' +\
                     '-DCMAKE_MACOSX_RPATH=0 -DCMAKE_INSTALL_NAME_DIR=' + install_name_dir,
             'make',
             'make install'
