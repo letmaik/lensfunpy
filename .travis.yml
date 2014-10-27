@@ -29,7 +29,7 @@ install:
     else
       sudo apt-get install liblensfun-dev ;
     fi
-  - pip install -r dev-requirements.txt
+  - travis_retry pip install -r dev-requirements.txt
   - python setup.py sdist
   - pip install dist/*.tar.gz
 
