@@ -1,6 +1,8 @@
 API Reference
 =============
 
+The main entry point to lensfunpy's functionality is the :class:`lensfunpy.Database` class.
+
 Classes
 -------
 
