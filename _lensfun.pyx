@@ -176,20 +176,20 @@ class DistortionModel(Enum):
     POLY5=LF_DIST_MODEL_POLY5
     PTLENS=LF_DIST_MODEL_PTLENS
 
-LensCalibDistortion = namedtuple('LensCalibDistortion', ['Model', 'Focal', 'Terms'])
+LensCalibDistortion = namedtuple('LensCalibDistortion', ['model', 'focal', 'terms'])
 
 class TCAModel(Enum):
     NONE=LF_TCA_MODEL_NONE
     LINEAR=LF_TCA_MODEL_LINEAR
     POLY3=LF_TCA_MODEL_POLY3
 
-LensCalibTCA = namedtuple('LensCalibTCA', ['Model', 'Focal', 'Terms'])
+LensCalibTCA = namedtuple('LensCalibTCA', ['model', 'focal', 'terms'])
 
 class VignettingModel(Enum):
     NONE=LF_VIGNETTING_MODEL_NONE
     PA=LF_VIGNETTING_MODEL_PA
 
-LensCalibVignetting = namedtuple('LensCalibVignetting', ['Model', 'Focal', 'Aperture', 'Distance', 'Terms'])
+LensCalibVignetting = namedtuple('LensCalibVignetting', ['model', 'focal', 'aperture', 'distance', 'terms'])
 
 cdef class Database:
     """
