@@ -7,31 +7,54 @@ try:
     import cv2
 except ImportError:
     cv2 = None
-    print('OpenCV not available, will use scipy for remapping distorted images')
+    print('OpenCV not available, will use scipy for remapping images')
 
-def remapOpenCv(im, undistCoords):
-    return cv2.remap(im, undistCoords, None, cv2.INTER_LANCZOS4)
+def remapOpenCv(im, coords):
+    """
+    Remap an image using OpenCV. See :func:`remap` for parameters.
+    """
+    return cv2.remap(im, coords, None, cv2.INTER_LANCZOS4)
 
-def remapScipy(im, undistCoords):   
+def remapScipy(im, coords):
+    """
+    Remap an image using SciPy. See :func:`remap` for parameters.
+    """
     height, width = im.shape[0], im.shape[1]
     
     # switch to y,x order
-    undistCoords = undistCoords[:,:,::-1]
+    coords = coords[:,:,::-1]
 
     # make it (h, w, 3, 3)
-    coords = np.empty((height, width, 3, 3))
+    coords_channels = np.empty((height, width, 3, 3))
     coords_channel = np.zeros((height, width, 3))
-    coords_channel[:,:,:2] = undistCoords
-    coords[:,:,0] = coords_channel
-    coords[:,:,1] = coords_channel
-    coords[:,:,1,2] = 1
-    coords[:,:,2] = coords_channel
-    coords[:,:,2,2] = 2
-    undistCoords = coords
+    coords_channel[:,:,:2] = coords
+    coords_channels[:,:,0] = coords_channel
+    coords_channels[:,:,1] = coords_channel
+    coords_channels[:,:,1,2] = 1
+    coords_channels[:,:,2] = coords_channel
+    coords_channels[:,:,2,2] = 2
+    coords = coords_channels
     
     # (3, h, w, 3)
-    undistCoords = np.rollaxis(undistCoords, 3)
+    coords = np.rollaxis(coords, 3)
         
-    return map_coordinates(im, undistCoords, order=1)
+    return map_coordinates(im, coords, order=1)
 
-remap = remapOpenCv if cv2 else remapScipy
+def remap(im, coords):
+    """
+    Remap an RGB image using the given target coordinate array.
+    
+    If available, OpenCV is used (faster), otherwise SciPy.
+    
+    :type im: ndarray of shape (h,w,3)
+    :param im: RGB image to be remapped
+    :type coords: ndarray of shape (h,w,2)
+    :param coords: target coordinates in x,y order for each pixel
+    :return: remapped RGB image
+    :rtype: ndarray of shape (h,w,3)
+    """
+    if cv2:
+        return remapOpenCv(im, coords)
+    else:
+        return remapScipy(im, coords)
+    
