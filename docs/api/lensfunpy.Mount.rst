@@ -1,5 +1,5 @@
-lensfunpy.Mount class
-========================
+Mount class
+===========
 
 .. autoclass:: lensfunpy.Mount
    :members:

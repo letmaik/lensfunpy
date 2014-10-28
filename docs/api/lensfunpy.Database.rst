@@ -1,5 +1,5 @@
-lensfunpy.Database class
-========================
+Database class
+==============
 
 .. autoclass:: lensfunpy.Database
    :members:

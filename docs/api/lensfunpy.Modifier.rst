@@ -1,5 +1,5 @@
-lensfunpy.Modifier class
-========================
+Modifier class
+==============
 
 .. autoclass:: lensfunpy.Modifier
    :members:

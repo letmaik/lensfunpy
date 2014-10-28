@@ -4,4 +4,4 @@ Modules
 .. toctree::
    :maxdepth: 1
 
-   lensfunpy.util
+   util <lensfunpy.util>

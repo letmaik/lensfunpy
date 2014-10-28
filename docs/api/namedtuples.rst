@@ -1,17 +1,17 @@
 Named Tuples
-========================
+============
 
-lensfunpy.LensCalibDistortion
------------------------------
+LensCalibDistortion
+-------------------
 
 .. autoclass:: lensfunpy.LensCalibDistortion
 
-lensfunpy.LensCalibTCA
-----------------------
+LensCalibTCA
+------------
 
 .. autoclass:: lensfunpy.LensCalibTCA
 
-lensfunpy.LensCalibVignetting
------------------------------
+LensCalibVignetting
+-------------------
 
 .. autoclass:: lensfunpy.LensCalibVignetting

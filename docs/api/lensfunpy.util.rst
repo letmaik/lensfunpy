@@ -1,5 +1,5 @@
-lensfunpy.util module
-=====================
+util module
+===========
 
 .. automodule:: lensfunpy.util
     :members:

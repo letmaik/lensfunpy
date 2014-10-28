@@ -1,5 +1,5 @@
-lensfunpy.Camera class
-========================
+Camera class
+============
 
 .. autoclass:: lensfunpy.Camera
    :members:

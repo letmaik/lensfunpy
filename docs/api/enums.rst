@@ -4,36 +4,36 @@ Enumerations
 sphinx doesn't handle Python 3.4 enums yet
 see https://bitbucket.org/birkenfeld/sphinx/issue/1609/python-34-enum-classes-not-working
 
-lensfunpy.ModifyFlags
----------------------
+ModifyFlags
+-----------
 
 .. autoclass:: lensfunpy.ModifyFlags
    :members:
    :undoc-members:
    
-lensfunpy.LensType
-------------------
+LensType
+--------
 
 .. autoclass:: lensfunpy.LensType
    :members:
    :undoc-members:
 
-lensfunpy.DistortionModel
--------------------------
+DistortionModel
+---------------
 
 .. autoclass:: lensfunpy.DistortionModel
    :members:
    :undoc-members:
 
-lensfunpy.TCAModel
-------------------
+TCAModel
+--------
 
 .. autoclass:: lensfunpy.TCAModel
    :members:
    :undoc-members:
    
-lensfunpy.VignettingModel
--------------------------
+VignettingModel
+---------------
 
 .. autoclass:: lensfunpy.VignettingModel
    :members:

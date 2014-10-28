@@ -4,8 +4,8 @@ Classes
 .. toctree::
    :maxdepth: 1
 
-   lensfunpy.Database
-   lensfunpy.Camera
-   lensfunpy.Mount
-   lensfunpy.Lens
-   lensfunpy.Modifier
+   Database <lensfunpy.Database>
+   Camera <lensfunpy.Camera>
+   Mount <lensfunpy.Mount>
+   Lens <lensfunpy.Lens>
+   Modifier <lensfunpy.Modifier>
