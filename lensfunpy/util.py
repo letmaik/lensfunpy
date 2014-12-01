@@ -13,6 +13,8 @@ def remapOpenCv(im, coords):
     """
     Remap an image using OpenCV. See :func:`remap` for parameters.
     """
+    # required for older OpenCV versions
+    im = np.require(im, im.dtype, 'C')
     return cv2.remap(im, coords, None, cv2.INTER_LANCZOS4)
 
 def remapScipy(im, coords):
