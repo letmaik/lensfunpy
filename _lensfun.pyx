@@ -433,8 +433,10 @@ cdef class Camera:
             return NotImplemented
         
     def __repr__(self):
+        variant = '; Variant: ' + self.variant if self.variant else ''
+        mount = '; Mount: ' + self.mount if self.mount else ''
         return ('Camera(Maker: ' + self.maker + '; Model: ' + self.model +
-            '; Variant: ' + self.variant + '; Mount: ' + self.mount + 
+            variant + mount + 
             '; Crop Factor: ' + str(self.crop_factor) +
             '; Score: ' + str(self.score) + ')')
 

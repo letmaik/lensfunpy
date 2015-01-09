@@ -24,11 +24,13 @@ def testDatabaseLoading():
     cam = cams[0]
     assert_equal(cam.maker.lower(), cam_maker.lower())
     assert_equal(cam.model.lower(), cam_model.lower())
+    assert len(str(cam)) > 0
     
     lenses = db.find_lenses(cam, lens_maker, lens_model)
     assert_equal(len(lenses), 1)
     lens = lenses[0]
     assert_equal(lens.maker.lower(), lens_maker.lower())
+    assert len(str(lens)) > 0
     
     if lensfun.lensfun_version >= (0,3):
         # lens names were "streamlined" in lensfun 0.3
