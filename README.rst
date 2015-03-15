@@ -71,7 +71,7 @@ On Ubuntu, you can get (an outdated) version with:
 
     sudo apt-get install liblensfun0 liblensfun-dev
     
-Or install the latest developer version from the SVN repository:
+Or install the latest developer version from the GIT repository:
 
 .. code-block:: sh
 
