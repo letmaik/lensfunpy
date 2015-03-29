@@ -11,6 +11,8 @@ lensfunpy
 
 lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
 
+`API Documentation <http://pythonhosted.org/lensfunpy/api/>`_
+
 Sample code
 -----------
 
