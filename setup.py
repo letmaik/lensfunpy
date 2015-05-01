@@ -96,15 +96,24 @@ def windows_lensfun_compile():
     glib_dev_url = 'http://win32builder.gnome.org/packages/3.6/glib-dev_2.34.3-1_{}.zip'.format(glib_arch)
     # lensfun uses glib2 functionality that requires libiconv and gettext as runtime libraries
     libiconv_url = 'http://win32builder.gnome.org/packages/3.6/libiconv_1.13.1-1_{}.zip'.format(glib_arch)
-    gettext_url = 'http://win32builder.gnome.org/packages/3.6/gettext_0.18.2.1-1_{}.zip'.format(glib_arch)
+    gettext_url = 'http://win32builder.gnome.org/packages/3.6/gettext_0.18.2.1-1_{}.zip'.format(glib_arch)   
+    
     # the cmake zip contains a cmake-3.0.1-win32-x86 folder when extracted
     cmake_url = 'http://www.cmake.org/files/v3.0/cmake-3.0.1-win32-x86.zip'
     cmake = os.path.abspath('external/cmake-3.0.1-win32-x86/bin/cmake.exe')
+    
     files = [(glib_libs_url, glib_dir, glib_dir + '/bin/libglib-2.0-0.dll'), 
              (glib_dev_url, glib_dir, glib_dir + '/lib/glib-2.0.lib'),
              (libiconv_url, glib_dir, glib_dir + '/bin/libiconv-2.dll'),
              (gettext_url, glib_dir, glib_dir + '/bin/libintl-8.dll'),
              (cmake_url, 'external', cmake)]
+    
+    if not is64Bit:
+        # the 32bit version of gettext's libintl-8.dll requires pthreadgc2.dll
+        pthreads_dir = 'external/pthreads'
+        pthreads_url = 'http://mirrors.kernel.org/sourceware/pthreads-win32/pthreads-w32-2-9-1-release.zip'
+        files.extend([(pthreads_url, pthreads_dir, pthreads_dir + '/Pre-built.2')])
+        
     for url, extractdir, extractcheck in files:
         if not os.path.exists(extractcheck):
             path = 'external/' + os.path.basename(url)
@@ -147,6 +156,11 @@ def windows_lensfun_compile():
                         ('libiconv-2.dll', glib_bin_dir),
                         ('libintl-8.dll', glib_bin_dir), # gettext
                         ]
+    if not is64Bit:
+        dll_runtime_libs.extend([
+            ('pthreadGC2.dll', os.path.join(pthreads_dir, 'Pre-built.2', 'dll', 'x86'))
+            ])
+    
     for filename, folder in dll_runtime_libs:
         src = os.path.join(folder, filename)
         dest = 'lensfunpy/' + filename
