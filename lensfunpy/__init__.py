@@ -5,7 +5,7 @@ from ._version import __version__, __version_info__
 import os, sys
 
 import lensfunpy._lensfun
-globals().update(lensfunpy._lensfun.__dict__)
+globals().update({k:v for k,v in lensfunpy._lensfun.__dict__.items() if not k.startswith('_')})
 
 # for Windows and Mac we wrap the Database constructor to load the bundled database files
 # as lensfun wouldn't find any in the standard search locations like on Linux
