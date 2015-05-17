@@ -95,8 +95,8 @@ when trying to use lensfunpy, then do the following:
 The lensfun library is installed in /usr/local/lib and apparently this folder is not searched
 for libraries by default in some Linux distributions.
 
-Installation on Windows
------------------------
+Installation on Windows and Mac OS X
+------------------------------------
 
 Binaries are provided for Python 2.7, 3.3 and 3.4 for both 32 and 64 bit.
 These can be installed with a simple ``pip install --use-wheel lensfunpy`` 
