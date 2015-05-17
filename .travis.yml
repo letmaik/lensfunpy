@@ -21,7 +21,7 @@ install:
       git clone $LENSFUN_GIT lensfun ;
       cd lensfun ;
       git checkout -f `git describe --abbrev=0 --tags` ;
-      cmake . ;
+      cmake . -DBUILD_TESTS=off ;
       sudo make install ;
       echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf ;
       sudo ldconfig ;
