@@ -267,6 +267,11 @@ if mo:
 else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
+install_requires = []
+if sys.version_info < (3, 4):
+    # Backport of Python 3.4 enums to earlier versions
+    install_requires.append('enum34')
+
 setup(
       name = 'lensfunpy',
       version = verstr,
@@ -297,5 +302,5 @@ setup(
       packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
-      install_requires=['enum34'],
+      install_requires=install_requires
 )
