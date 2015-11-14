@@ -1,5 +1,5 @@
 numpy
 cython
 nose
-wheel
+wheel>=0.25
 sphinx_rtd_theme
