@@ -13,11 +13,19 @@ environment:
   # Note that we use miniconda, so the minor versions are irrelevant here
   matrix:
     - PYTHON: "C:\\Python27_32"
-      PYTHON_VERSION: "2.7.9"
+      PYTHON_VERSION: "2.7.10"
       PYTHON_ARCH: "32"
 
     - PYTHON: "C:\\Python27_64"
-      PYTHON_VERSION: "2.7.9"
+      PYTHON_VERSION: "2.7.10"
+      PYTHON_ARCH: "64"
+
+    - PYTHON: "C:\\Python33_32"
+      PYTHON_VERSION: "3.3.5"
+      PYTHON_ARCH: "32"
+
+    - PYTHON: "C:\\Python33_64"
+      PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "64"
 
     - PYTHON: "C:\\Python34_32"
@@ -46,14 +54,17 @@ install:
   - ECHO "Installed SDKs:"
   - ps: "ls \"C:/Program Files/Microsoft SDKs/Windows\""
 
-  # Install Python (from the official .msi of http://python.org) and pip when
-  # not already installed.
+  # Install Python and pip
   - "powershell ./appveyor/install.ps1"
 
   # Prepend newly installed Python to the PATH of this build (this cannot be
   # done from inside the powershell script as it would require to restart
   # the parent CMD process).
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  
+  # create conda environment
+  - "conda create --yes --name pyenv python=%PYTHON_VERSION%"
+  - "activate pyenv"
 
   # Check that we have the expected version and architecture for Python
   - "python --version"
@@ -62,6 +73,13 @@ install:
   # we use conda to prevent compiling numpy and cython
   - "conda install --yes numpy cython"
   - "pip install -r dev-requirements.txt"
+  
+  # force nose reinstall (not using possibly existing conda package)
+  # see https://github.com/conda/conda/issues/1183
+  - "pip install -U nose"
+  
+  # output what's installed
+  - "pip freeze"
   
   # Install the build dependencies of the project. If some dependencies contain
   # compiled extensions and are not provided as pre-built wheel packages,
@@ -90,6 +108,3 @@ test_script:
 
 deploy_script:
   - "powershell ./appveyor/pypi_deploy.ps1"
-
-matrix:
-  fast_finish: true
