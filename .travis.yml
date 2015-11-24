@@ -16,11 +16,13 @@ git:
   submodules: false
 
 install:
+  # checkout master, see https://sourceforge.net/p/lensfun/bugs/36/
+  # git checkout -f `git describe --abbrev=0 --tags` ;
   - if [ $USE_LATEST_LENSFUN == true ]; then
       cd .. ;
       git clone $LENSFUN_GIT lensfun ;
       cd lensfun ;
-      git checkout -f `git describe --abbrev=0 --tags` ;
+      git checkout 75a845abf ;
       cmake . -DBUILD_TESTS=off ;
       sudo make install ;
       echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf ;
