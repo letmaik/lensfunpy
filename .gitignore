@@ -43,3 +43,6 @@ nosetests.xml
 *.dll
 /lensfunpy/db_files/*.xml
 /external/cmake*
+/_lensfun.html
+/cover/
+/coverage.xml
