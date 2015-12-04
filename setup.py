@@ -230,8 +230,8 @@ if any(s in cmdline for s in ['clean', 'sdist']):
     print('removing', egg_info)
     shutil.rmtree(egg_info, ignore_errors=True)
 
-pyx_path = '_lensfun.pyx'
-c_path = '_lensfun.c'
+pyx_path = os.path.join('lensfunpy', '_lensfun.pyx')
+c_path = os.path.join('lensfunpy', '_lensfun.c')
 if not os.path.exists(pyx_path):
     # we are running from a source dist which doesn't include the .pyx
     use_cython = False
