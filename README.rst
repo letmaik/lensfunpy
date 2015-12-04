@@ -62,6 +62,10 @@ How to correct lens distortion:
     im_undistorted = cv2.remap(im, undist_coords, None, cv2.INTER_LANCZOS4)
     cv2.imwrite(undistorted_image_path, im_undistorted)
     
+It is also possible to apply the correction via [SciPy](http://www.scipy.org) instead of OpenCV.
+The [lensfunpy.util](http://pythonhosted.org/lensfunpy/api/lensfunpy.util.html) module
+contains convenience functions for RGB images which handle both OpenCV and SciPy.
+    
 Installation on Linux
 ---------------------
 
