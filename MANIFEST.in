@@ -1,2 +1,2 @@
 include README.rst
-include version_helper.h
+include lensfunpy/version_helper.h
