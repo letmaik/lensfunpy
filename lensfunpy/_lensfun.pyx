@@ -566,21 +566,23 @@ cdef class Lens:
         
     property min_aperture:
         """
-        Minimum aperture.
+        Minimum aperture. Returns None if unknown.
         
-        :rtype: float
+        :rtype: float|None
         """
         def __get__(self):
-            return self.lf.MinAperture
+            val = self.lf.MinAperture
+            return val if val != 0.0 else None
         
     property max_aperture:
         """
-        Maximum aperture.
+        Maximum aperture. Returns None if unknown.
         
-        :rtype: float
+        :rtype: float|None
         """
         def __get__(self):
-            return self.lf.MaxAperture
+            val = self.lf.MaxAperture
+            return val if val != 0.0 else None
         
     property crop_factor:
         """
@@ -701,6 +703,8 @@ cdef class Lens:
             return NotImplemented
         
     def __repr__(self):
+        min_ap = self.min_aperture if self.min_aperture is not None else 'unknown'
+        max_ap = self.max_aperture if self.max_aperture is not None else 'unknown'
         return ('Lens(Maker: ' + self.maker + '; Model: ' + self.model +
                 '; Type: ' + self.type.name + 
                 '; Focal: ' + str(self.min_focal) + '-' + str(self.max_focal) +
