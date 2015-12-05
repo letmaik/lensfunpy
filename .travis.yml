@@ -29,6 +29,7 @@ install:
       sudo ldconfig ;
       cd ../lensfunpy ;
     else
+      sudo apt-get update ;
       sudo apt-get install liblensfun-dev ;
     fi
   - travis_retry pip install -r dev-requirements.txt
