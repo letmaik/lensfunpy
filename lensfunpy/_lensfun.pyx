@@ -25,12 +25,17 @@ cdef extern from "version_helper.h":
     cdef int LF_VERSION_MICRO
     cdef int LF_VERSION_BUGFIX
 
+# added in 0.3.2 to lfError enum
+# we need to handle it, so we define it manually here
+LF_NO_DATABASE = 2
+
 cdef extern from "lensfun.h":   
     ctypedef char *lfMLstr
     
     enum lfError:
         LF_NO_ERROR
         LF_WRONG_FORMAT
+        # LF_NO_DATABASE (=2) available in >= 0.3.2
         
     enum lfPixelFormat:
         LF_PF_U8
@@ -220,7 +225,13 @@ cdef class Database:
             handleError(lf_db_load_data(self.lf, 'XML', xmlstr, len(xmlstr)))
         
         if load_common:
-            handleError(lf_db_load(self.lf))
+            code = lf_db_load(self.lf)
+            if code == LF_NO_DATABASE:
+                # no global db files were found (could be loaded)
+                # ignore this since for Windows/Mac we load db files manually anyway
+                pass
+            else:
+                handleError(code)
         
     def __dealloc__(self):
         lf_db_destroy(self.lf)
@@ -933,6 +944,8 @@ cdef handleError(int code):
     elif code > 0:
         if code == LF_WRONG_FORMAT:
             raise XMLFormatError
+        elif code == LF_NO_DATABASE:
+            raise LensfunError('Database file(s) could not be loaded')
         else:
             raise LensfunError('Unknown lensfun error (code: {}), please report an issue for lensfunpy'.format(code))
 
