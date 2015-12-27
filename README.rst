@@ -65,7 +65,31 @@ How to correct lens distortion:
 It is also possible to apply the correction via [SciPy](http://www.scipy.org) instead of OpenCV.
 The [lensfunpy.util](http://pythonhosted.org/lensfunpy/api/lensfunpy.util.html) module
 contains convenience functions for RGB images which handle both OpenCV and SciPy.
-    
+
+NumPy Dependency
+----------------
+
+Before installing lensfunpy, you need to have *numpy* installed.
+You can check your numpy version with ``pip freeze``.
+
+The minimum supported numpy version depends on your Python version:
+
+========== =========
+Python     numpy
+---------- ---------
+2.7 - 3.4  >= 1.7.1
+3.5        >= 1.9.3
+========== =========
+
+You can install numpy with ``pip install numpy``.
+
+Installation on Windows and Mac OS X
+------------------------------------
+
+Binaries are provided for Python 2.7, 3.3 and 3.4 for both 32 and 64 bit.
+These can be installed with a simple ``pip install --use-wheel lensfunpy`` 
+(or just ``pip install lensfunpy`` if using pip >= 1.5).
+
 Installation on Linux
 ---------------------
 
@@ -98,16 +122,6 @@ when trying to use lensfunpy, then do the following:
 
 The lensfun library is installed in /usr/local/lib and apparently this folder is not searched
 for libraries by default in some Linux distributions.
-
-Installation on Windows and Mac OS X
-------------------------------------
-
-Binaries are provided for Python 2.7, 3.3 and 3.4 for both 32 and 64 bit.
-These can be installed with a simple ``pip install --use-wheel lensfunpy`` 
-(or just ``pip install lensfunpy`` if using pip >= 1.5).
-
-Binaries for other Python versions are currently not produced but if there is a need
-then this is possible as well. In that case, just contact me.
 
 
 .. _lensfun: http://lensfun.sourceforge.net
