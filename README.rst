@@ -91,7 +91,7 @@ You can install numpy with ``pip install numpy``.
 Installation on Windows and Mac OS X
 ------------------------------------
 
-Binaries are provided for Python 2.7, 3.3 and 3.4 for both 32 and 64 bit.
+Binaries are provided for Python 2.7, 3.3, 3.4, and 3.5 for both 32 and 64 bit.
 These can be installed with a simple ``pip install --use-wheel lensfunpy`` 
 (or just ``pip install lensfunpy`` if using pip >= 1.5).
 
