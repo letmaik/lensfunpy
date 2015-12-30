@@ -3,11 +3,15 @@ lensfunpy
 
 .. image:: https://travis-ci.org/neothemachine/lensfunpy.svg?branch=master
     :target: https://travis-ci.org/neothemachine/lensfunpy
-    :alt: Build Status
+    :alt: Linux Build Status
+    
+.. image:: https://travis-ci.org/neothemachine/lensfunpy.svg?branch=master
+    :target: https://travis-ci.org/neothemachine/lensfunpy
+    :alt: Mac Build Status
     
 .. image:: https://ci.appveyor.com/api/projects/status/qg6tssjvx5xjb3xd/branch/master
     :target: https://ci.appveyor.com/project/neothemachine/lensfunpy/branch/master
-    :alt: Build Status
+    :alt: Windows Build Status
 
 lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
 
@@ -31,11 +35,11 @@ How to find cameras and lenses:
     cam = db.find_cameras(cam_maker, cam_model)[0]
     lens = db.find_lenses(cam, lens_maker, lens_model)[0]
     
-    print cam
+    print(cam)
     # Camera(Maker: NIKON CORPORATION; Model: NIKON D3S; Variant: ; 
     #        Mount: Nikon F AF; Crop Factor: 1.0; Score: 0)
     
-    print lens
+    print(lens)
     # Lens(Maker: Nikon; Model: Nikkor 28mm f/2.8D AF; Type: RECTILINEAR;
     #      Focal: 28.0-28.0; Aperture: 2.79999995232-2.79999995232; 
     #      Crop factor: 1.0; Score: 110)    
