@@ -125,8 +125,8 @@ when trying to use lensfunpy, then do the following:
     echo "/usr/local/lib" | sudo tee /etc/ld.so.conf.d/99local.conf
     sudo ldconfig
 
-The lensfun library is installed in /usr/local/lib and apparently this folder is not searched
-for libraries by default in some Linux distributions.
+The lensfun library is installed in ``/usr/local/lib`` when compiled from source, and apparently this folder is not searched
+for libraries by default in some Linux distributions. Note that on some systems the installation path may be slightly different, such as ``/usr/local/lib/x86_64-linux-gnu``.
 
 
 .. _lensfun: http://lensfun.sourceforge.net
