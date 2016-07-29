@@ -1,16 +1,16 @@
 lensfunpy
 =========
 
-.. image:: https://travis-ci.org/neothemachine/lensfunpy.svg?branch=master
-    :target: https://travis-ci.org/neothemachine/lensfunpy
+.. image:: https://travis-ci.org/letmaik/lensfunpy.svg?branch=master
+    :target: https://travis-ci.org/letmaik/lensfunpy
     :alt: Linux Build Status
     
-.. image:: https://travis-ci.org/neothemachine/lensfunpy.svg?branch=master
-    :target: https://travis-ci.org/neothemachine/lensfunpy
+.. image:: https://travis-ci.org/letmaik/lensfunpy.svg?branch=master
+    :target: https://travis-ci.org/letmaik/lensfunpy
     :alt: Mac Build Status
     
-.. image:: https://ci.appveyor.com/api/projects/status/qg6tssjvx5xjb3xd/branch/master
-    :target: https://ci.appveyor.com/project/neothemachine/lensfunpy/branch/master
+.. image:: https://ci.appveyor.com/api/projects/status/qg6tssjvx5xjb3xd?svg=true
+    :target: https://ci.appveyor.com/project/letmaik/lensfunpy
     :alt: Windows Build Status
 
 lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
