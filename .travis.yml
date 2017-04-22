@@ -52,6 +52,7 @@ after_success:
 before_deploy:
   # otherwise sphinx would fail
   - python setup.py build_ext --inplace
+  - pip install sphinx
 
 deploy:
   provider: pypi
