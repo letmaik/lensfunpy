@@ -137,5 +137,17 @@ def testXmlFormatException():
     else:
         assert False
 
+def testNewLensType():
+    # https://github.com/letmaik/lensfunpy/issues/10
+    # lensfun added new lens types which were not supported yet by lensfunpy.
+    # This test accesses one such lens type and was raising an exception previously.
+    db = lensfun.Database()
+    cam = db.find_cameras('NIKON CORPORATION', 'NIKON D3S')[0]
+    lenses = db.find_lenses(cam, 'Sigma', 'Sigma 8mm f/3.5 EX DG circular fisheye')
+    if lenses: # newer lens, only run test if lens actually exists
+        assert_equal(lenses[0].type, lensfun.LensType.FISHEYE_EQUISOLID)
+    else:
+        print('Skipping testNewLensType as lens not found')
+
 # TODO lensfun's find* functions modify the score directly in the original db objects
 #  -> another invocation of find* will overwrite the old scores

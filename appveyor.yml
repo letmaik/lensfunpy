@@ -7,11 +7,9 @@ environment:
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
     
-    PYPI_PASS:
-      secure: K/M1K0yykepbIoiNCP/exSrT+Vqd3BGabL2B2zS94Mo=
-
-  # Note that we use miniconda, so the minor versions are irrelevant here
   matrix:
+    # Note: numpy binary wheels for Windows are only available from 1.10.4 onwards.
+    # That is why this script uses Conda instead of the pre-installed Python versions in AppVeyor.
     - PYTHON: "C:\\Python27_32"
       PYTHON_VERSION: "2.7.10"
       PYTHON_ARCH: "32"
@@ -19,16 +17,6 @@ environment:
 
     - PYTHON: "C:\\Python27_64"
       PYTHON_VERSION: "2.7.10"
-      PYTHON_ARCH: "64"
-      NUMPY_VERSION: "1.7"
-
-    - PYTHON: "C:\\Python33_32"
-      PYTHON_VERSION: "3.3.5"
-      PYTHON_ARCH: "32"
-      NUMPY_VERSION: "1.7"
-
-    - PYTHON: "C:\\Python33_64"
-      PYTHON_VERSION: "3.3.5"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.7"
 
@@ -51,6 +39,16 @@ environment:
       PYTHON_VERSION: "3.5.0"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.9"
+
+    - PYTHON: "C:\\Python36_32"
+      PYTHON_VERSION: "3.6.1"
+      PYTHON_ARCH: "32"
+      NUMPY_VERSION: "1.11"
+
+    - PYTHON: "C:\\Python36_64"
+      PYTHON_VERSION: "3.6.1"
+      PYTHON_ARCH: "64"
+      NUMPY_VERSION: "1.11"
 
 install:
   - ECHO "Powershell version:"

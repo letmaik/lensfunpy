@@ -50,6 +50,11 @@ cdef extern from "lensfun.h":
         LF_FISHEYE
         LF_PANORAMIC
         LF_EQUIRECTANGULAR
+        # available in >= 0.2.6 (Ubuntu 12.04 is on 0.2.5)
+        #LF_FISHEYE_ORTHOGRAPHIC
+        #LF_FISHEYE_STEREOGRAPHIC
+        #LF_FISHEYE_EQUISOLID
+        #LF_FISHEYE_THOBY
         
     enum lfDistortionModel:
         LF_DIST_MODEL_NONE
@@ -174,6 +179,11 @@ class LensType(Enum):
     FISHEYE=LF_FISHEYE
     PANORAMIC=LF_PANORAMIC
     EQUIRECTANGULAR=LF_EQUIRECTANGULAR
+    # LF_FISHEYE_* enum names available in >= 0.2.6 only (Ubuntu 12.04 is on 0.2.5)
+    FISHEYE_ORTHOGRAPHIC=5 # LF_FISHEYE_ORTHOGRAPHIC
+    FISHEYE_STEREOGRAPHIC=6 # LF_FISHEYE_STEREOGRAPHIC
+    FISHEYE_EQUISOLID=7 # LF_FISHEYE_EQUISOLID
+    FISHEYE_THOBY=8 # LF_FISHEYE_THOBY
 
 class DistortionModel(Enum):
     NONE=LF_DIST_MODEL_NONE
@@ -535,7 +545,10 @@ cdef class Lens:
         :rtype: :class:`lensfunpy.LensType` instance
         """
         def __get__(self):
-            return next(t for t in LensType if t.value == self.lf.Type)
+            try:
+                return next(t for t in LensType if t.value == self.lf.Type)
+            except StopIteration:
+                raise NotImplementedError("Unknown lens type ({}), please report an issue for lensfunpy".format(self.lf.Type))
         
     property mounts:
         """
