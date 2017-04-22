@@ -52,7 +52,9 @@ after_success:
 before_deploy:
   # otherwise sphinx would fail
   - python setup.py build_ext --inplace
-  - pip install sphinx
+  # scipy is imported by lensfunpy.util, but because the util module is not unit-tested scipy is not installed earlier
+  # sphinx needs scipy in order to import the util module, otherwise it can't generate docs
+  - pip install sphinx scipy
 
 deploy:
   provider: pypi
