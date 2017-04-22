@@ -8,6 +8,8 @@ environment:
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
     
   matrix:
+    # Note: numpy binary wheels for Windows are only available from 1.10.4 onwards.
+    # That is why this script uses Conda instead of the pre-installed Python versions in AppVeyor.
     - PYTHON: "C:\\Python27_32"
       PYTHON_VERSION: "2.7.10"
       PYTHON_ARCH: "32"
