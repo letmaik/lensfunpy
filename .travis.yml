@@ -44,7 +44,7 @@ script:
   - cd ..
 
 after_success:
-  - if [ $USE_LATEST_LENSFUN == true && $TRAVIS_PYTHON_VERSION == 3* ]; then
+  - if [[ $USE_LATEST_LENSFUN == false && $TRAVIS_PYTHON_VERSION == '2.7' ]]; then
       pip install travispy ;
       travis_retry python -c "import os; from travispy import TravisPy; t = TravisPy.github_auth(os.environ['GITHUB_TOKEN']); t.build(t.branch('mac-wheels', 'letmaik/lensfunpy').id).restart()" ;
     fi
@@ -61,4 +61,4 @@ deploy:
   on:
     tags: true
     all_branches: true
-    condition: $USE_LATEST_LENSFUN = false && $TRAVIS_PYTHON_VERSION == 2*
+    condition: $USE_LATEST_LENSFUN = false && $TRAVIS_PYTHON_VERSION == '2.7'
