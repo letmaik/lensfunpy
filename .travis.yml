@@ -57,8 +57,7 @@ deploy:
   provider: pypi
   user: letmaik
   password:
-    secure: xkeMUQH24m9yfkf0cj8HKcafDPVkbQX/KsWT6QuUq9Nwo9C1wTa9Y0ptb81e4bhCMeCnUS5z7QNjWPk/fNZuXmkYzAKxo6A3ZVyWUwnQTU7Tc04E3q0QVwGdZT3kGHgh0509nqRCB314d90Bd2ByEPHluX/nInwII6x8Rk9i6Hw=
+    secure: GW2vr0X3tka3QQT4MiqPIt1aJ++HxI7bwbpSBj5zURvjGQQ/IKWJp1HBVkdFD+skpnctZyLxh97SprGZXLGtcbXLTDi7u+bkzW30Mv2FR4zHFb5dWCdf5mutinZG5dCmWmxvMx0GhNGpVsxo4Y/LDt+r0tPyT6DtmDs/9B01dLs=
   on:
     tags: true
-    all_branches: true
     condition: $USE_LATEST_LENSFUN = false && $TRAVIS_PYTHON_VERSION == '2.7'
