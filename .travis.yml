@@ -1,7 +1,8 @@
 language: python
 
-dist: trusty
 sudo: required
+
+python: "3.4"
 
 virtualenv:
   system_site_packages: true
