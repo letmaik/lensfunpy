@@ -41,12 +41,12 @@ environment:
     - PYTHON: "C:\\Python36_32"
       PYTHON_VERSION: "3.6.1"
       PYTHON_ARCH: "32"
-      NUMPY_VERSION: "1.9"
+      NUMPY_VERSION: "1.11"
 
     - PYTHON: "C:\\Python36_64"
       PYTHON_VERSION: "3.6.1"
       PYTHON_ARCH: "64"
-      NUMPY_VERSION: "1.9"
+      NUMPY_VERSION: "1.11"
 
 install:
   - ECHO "Powershell version:"
