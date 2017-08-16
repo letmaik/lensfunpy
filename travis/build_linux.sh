@@ -18,7 +18,8 @@ PYBINS=(
   )
 
 # Install build tools
-travis_retry yum install -y cmake
+travis_retry yum install -y cmake28 # CentOS cmake is 2.6, we need >= 2.8 which is available from EPEL as cmake28
+ln -s /usr/bin/cmake28 /usr/bin/cmake
 
 # Install liblensfun
 pushd external/lensfun
