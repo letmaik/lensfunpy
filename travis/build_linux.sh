@@ -44,7 +44,7 @@ for PYBIN in ${PYBINS[@]}; do
     # install compile-time dependencies
     travis_retry ${PYBIN}/pip install numpy==${NUMPY_VERSION} cython
 
-    travis_retry ${PYBIN}/pip wheel . -w wheelhouse
+    travis_retry ${PYBIN}/pip wheel . -w wheelhouse -v
 done
 
 # Bundle external shared libraries into the wheels
