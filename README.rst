@@ -3,19 +3,15 @@ lensfunpy
 
 .. image:: https://travis-ci.org/letmaik/lensfunpy.svg?branch=master
     :target: https://travis-ci.org/letmaik/lensfunpy
-    :alt: Linux Build Status
-    
-.. image:: https://travis-ci.org/letmaik/lensfunpy.svg?branch=master
-    :target: https://travis-ci.org/letmaik/lensfunpy
-    :alt: Mac Build Status
-    
+    :alt: Linux/macOS Build Status
+
 .. image:: https://ci.appveyor.com/api/projects/status/qg6tssjvx5xjb3xd?svg=true
     :target: https://ci.appveyor.com/project/letmaik/lensfunpy
     :alt: Windows Build Status
 
 lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
 
-`API Documentation <http://pythonhosted.org/lensfunpy/api/>`_
+`API Documentation <https://letmaik.github.io/lensfunpy/api/>`_
 
 Sample code
 -----------
@@ -70,42 +66,26 @@ It is also possible to apply the correction via `SciPy <http://www.scipy.org>`_ 
 The `lensfunpy.util <http://pythonhosted.org/lensfunpy/api/lensfunpy.util.html>`_ module
 contains convenience functions for RGB images which handle both OpenCV and SciPy.
 
-NumPy Dependency
-----------------
+Installation
+------------
 
-Before installing lensfunpy, you need to have *numpy* installed.
-You can check your numpy version with ``pip freeze``.
+Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, and 3.6.
+These can be installed with a simple ``pip install rawpy``.
+Currently, Linux and macOS wheels are only available as 64 bit versions.
 
-The minimum supported numpy version depends on your Python version:
+Installation from source on Linux/macOS
+---------------------------------------
 
-========== =========
-Python     numpy
----------- ---------
-2.7        >= 1.7
-3.4        >= 1.8
-3.5        >= 1.9
-3.6        >= 1.11
-========== =========
+If you have the need to use a specific lensfun version or you can't use the provided binary wheels
+then follow the steps in this section to build lensfunpy from source.
 
-You can install numpy with ``pip install numpy``.
-
-Installation on Windows and Mac OS X
-------------------------------------
-
-Binaries are provided for Python 2.7, 3.4, 3.5, and 3.6 for both 32 and 64 bit.
-These can be installed with a simple ``pip install lensfunpy``
-(or ``pip install --use-wheel lensfunpy`` if using pip < 1.5).
-
-Installation on Linux
----------------------
-
-You need to have the lensfun_ library installed to use this wrapper.
+First, install the lensfun_ library on your system.
 
 On Ubuntu, you can get (an outdated) version with:
 
 .. code-block:: sh
 
-    sudo apt-get install liblensfun0 liblensfun-dev
+    sudo apt-get install liblensfun-dev
     
 Or install the latest developer version from the GIT repository:
 
@@ -116,7 +96,7 @@ Or install the latest developer version from the GIT repository:
     cmake .
     sudo make install
     
-After that, it's the usual ``pip install lensfunpy``.
+After that, install lensfunpy using ``pip install lensfunpy --no-binary :all:``.
     
 If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:
@@ -129,5 +109,18 @@ when trying to use lensfunpy, then do the following:
 The lensfun library is installed in ``/usr/local/lib`` when compiled from source, and apparently this folder is not searched
 for libraries by default in some Linux distributions. Note that on some systems the installation path may be slightly different, such as ``/usr/local/lib/x86_64-linux-gnu``.
 
+NumPy Dependency
+----------------
+
+lensfunpy depends on NumPy. The minimum supported NumPy version depends on your Python version:
+
+========== =========
+Python     numpy
+---------- ---------
+2.7        >= 1.7
+3.4        >= 1.8
+3.5        >= 1.9
+3.6        >= 1.11
+========== =========
 
 .. _lensfun: http://lensfun.sourceforge.net
