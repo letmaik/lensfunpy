@@ -25,8 +25,9 @@ ln -s /usr/bin/cmake28 /usr/bin/cmake
 pushd external/lensfun
 cmake . -DBUILD_TESTS=off
 make install
-echo "/usr/local/lib" | tee /etc/ld.so.conf.d/99local.conf
+echo "/usr/local/lib64" | tee /etc/ld.so.conf.d/99local.conf
 ldconfig
+export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig
 popd
 
 # Install numpy/scipy deps
@@ -44,7 +45,7 @@ for PYBIN in ${PYBINS[@]}; do
     # install compile-time dependencies
     travis_retry ${PYBIN}/pip install numpy==${NUMPY_VERSION} cython
 
-    travis_retry ${PYBIN}/pip wheel . -w wheelhouse -v
+    travis_retry ${PYBIN}/pip wheel . -w wheelhouse
 done
 
 # Bundle external shared libraries into the wheels
