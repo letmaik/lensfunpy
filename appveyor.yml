@@ -6,7 +6,9 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
-    
+
+    PYPI_USER: letmaik
+
   matrix:
     # Note: numpy binary wheels for Windows are only available from 1.10.4 onwards.
     # That is why this script uses Conda instead of the pre-installed Python versions in AppVeyor.
@@ -76,8 +78,8 @@ install:
   - "python --version"
   - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
 
-  # we use conda to prevent compiling numpy and cython
-  - "conda install --yes numpy=%NUMPY_VERSION% cython"
+  # we use conda to prevent compiling numpy, scipy, and cython
+  - "conda install --yes numpy=%NUMPY_VERSION% cython scipy"
   - "pip install -r dev-requirements.txt"
   
   # force nose reinstall (not using possibly existing conda package)
@@ -106,11 +108,6 @@ test_script:
   - cd tmp_for_test
   - nosetests --verbosity=3 --nocapture ../test
   - cd ..
-
-# artifacts are big, and we don't really need to store them
-#artifacts:
-  # Archive the generated wheel package in the ci.appveyor.com build report.
-#  - path: dist\*
 
 deploy_script:
   - "powershell ./appveyor/pypi_deploy.ps1"
