@@ -107,7 +107,9 @@ when trying to use lensfunpy, then do the following:
     sudo ldconfig
 
 The lensfun library is installed in ``/usr/local/lib`` when compiled from source, and apparently this folder is not searched
-for libraries by default in some Linux distributions. Note that on some systems the installation path may be slightly different, such as ``/usr/local/lib/x86_64-linux-gnu``.
+for libraries by default in some Linux distributions.
+Note that on some systems the installation path may be slightly different, such as ``/usr/local/lib/x86_64-linux-gnu``
+or ``/usr/local/lib64``.
 
 NumPy Dependency
 ----------------
