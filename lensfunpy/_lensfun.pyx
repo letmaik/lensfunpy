@@ -225,11 +225,9 @@ cdef class Database:
         :param str xml: load data from XML string
         :param bool load_common: whether to load the system/user database files
         """
-        cdef char* xmlstr
         if paths:
             for path in paths:
-                path = _chars(path) # keep reference to avoid GC
-                handleError(lf_db_load_file(self.lf, path))
+                handleError(lf_db_load_file(self.lf, _chars(path)))
         if xml:
             xml = _chars(xml.strip()) # stripping as lensfun is very strict here
             handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
@@ -273,6 +271,7 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
+            # direct assignment to cmaker is NOT possible (as the C string is tied to the lifetime of the Python string)
             maker = _chars(maker)
             cmaker = maker
         if model is None:
