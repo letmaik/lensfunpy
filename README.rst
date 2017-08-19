@@ -70,7 +70,7 @@ Installation
 ------------
 
 Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, and 3.6.
-These can be installed with a simple ``pip install rawpy``.
+These can be installed with a simple ``pip install lensfunpy``.
 Currently, Linux and macOS wheels are only available as 64 bit versions.
 
 Installation from source on Linux/macOS
