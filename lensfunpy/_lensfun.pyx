@@ -225,14 +225,12 @@ cdef class Database:
         :param str xml: load data from XML string
         :param bool load_common: whether to load the system/user database files
         """
-        cdef char* xmlstr
         if paths:
             for path in paths:
                 handleError(lf_db_load_file(self.lf, _chars(path)))
         if xml:
-            xml = xml.strip() # lensfun is very strict here
-            xmlstr = _chars(xml)
-            handleError(lf_db_load_data(self.lf, 'XML', xmlstr, len(xmlstr)))
+            xml = _chars(xml.strip()) # stripping as lensfun is very strict here
+            handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
         
         if load_common:
             code = lf_db_load(self.lf)
@@ -273,11 +271,14 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            cmaker = _chars(maker)
+            # direct assignment to cmaker is NOT possible (as the C string is tied to the lifetime of the Python string)
+            maker = _chars(maker)
+            cmaker = maker
         if model is None:
             cmodel = NULL
         else:
-            cmodel = _chars(model)
+            model = _chars(model)
+            cmodel = model
         if loose_search:
             lfCams = lf_db_find_cameras_ext(self.lf, cmaker, cmodel, LF_SEARCH_LOOSE)
         else:
@@ -337,11 +338,13 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            cmaker = _chars(maker)
+            maker = _chars(maker)
+            cmaker = maker
         if lens is None:
             clens = NULL
         else:
-            clens = _chars(lens)
+            lens = _chars(lens)
+            clens = lens
         lfLenses = lf_db_find_lenses_hd(self.lf, camera.lf, cmaker, clens, LF_SEARCH_LOOSE if loose_search else 0)
         lenses = self._convertLenses(lfLenses)
         lf_free(lfLenses)
@@ -966,7 +969,7 @@ cdef handleError(int code):
         else:
             raise LensfunError('Unknown lensfun error (code: {}), please report an issue for lensfunpy'.format(code))
 
-cdef char* _chars(s):
+def _chars(s):
     if isinstance(s, unicode):
         # convert unicode to chars
         s = (<unicode>s).encode('UTF-8')
