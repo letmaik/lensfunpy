@@ -11,6 +11,7 @@ travis_retry get_python_environment macports $PYTHON_VERSION venv
 set -x
 travis_retry pip install numpy==$NUMPY_VERSION cython wheel delocate
 pip freeze
+brew update
 brew install glib
 brew link --force gettext
 export CC=clang
