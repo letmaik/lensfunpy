@@ -5,6 +5,7 @@ from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
 import os
+import glob
 from enum import Enum, IntEnum
 from collections import namedtuple
 
@@ -215,32 +216,40 @@ cdef class Database:
 
     def __cinit__(self):
         self.lf = lf_db_new()
-    
-    # NOTE: when changing this constructor, it also has to be changed in lensfunpy.__init__!
-    def __init__(self, paths=None, xml=None, load_common=True):
-        """Database.__init__(paths=None, xml=None, load_common=True)
+
+    def __init__(self, paths=None, xml=None, load_common=True, load_bundled=True):
+        """Database.__init__(paths=None, xml=None, load_common=True, load_bundled=True)
         
         :type paths: iterable of str
         :param paths: XML files to load 
         :param str xml: load data from XML string
         :param bool load_common: whether to load the system/user database files
+        :param bool load_bundled: whether to load the bundled database files
         """
-        if paths:
-            for path in paths:
-                handleError(lf_db_load_file(self.lf, _chars(path)))
+        if paths is None:
+            paths = []
+
+        if load_bundled:
+            root = os.path.abspath(os.path.dirname(__file__))
+            xml_glob = os.path.join(root, 'db_files', '*.xml')
+            paths += glob.glob(xml_glob)
+
+        for path in paths:
+            handleError(lf_db_load_file(self.lf, _chars(path)))
+
         if xml:
             xml = _chars(xml.strip()) # stripping as lensfun is very strict here
             handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
-        
+
         if load_common:
             code = lf_db_load(self.lf)
             if code == LF_NO_DATABASE:
                 # no global db files were found (could be loaded)
-                # ignore this since for Windows/Mac we load db files manually anyway
+                # ignore this since we bundle db files
                 pass
             else:
                 handleError(code)
-        
+
     def __dealloc__(self):
         lf_db_destroy(self.lf)
     

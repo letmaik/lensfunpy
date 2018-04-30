@@ -169,9 +169,8 @@ def windows_lensfun_compile():
         dest = 'lensfunpy/' + filename
         print('copying', src, '->', dest)
         shutil.copyfile(src, dest)
-    
-    bundle_db_files()
-        
+
+
 def mac_lensfun_compile():
     clone_submodules()
         
@@ -194,9 +193,7 @@ def mac_lensfun_compile():
         if code != 0:
             sys.exit(code)
     os.chdir(cwd)
-    
-    bundle_db_files()
-    
+
 def bundle_db_files():
     import glob
     db_files = 'lensfunpy/db_files'
@@ -207,21 +204,19 @@ def bundle_db_files():
         print('copying', path, '->', dest)
         shutil.copyfile(path, dest)
 
-package_data = {}
+package_data = {'lensfunpy': []}
 
 # evil hack, check cmd line for relevant commands
 # custom cmdclasses didn't work out in this case
 cmdline = ''.join(sys.argv[1:])
-needsCompile = any(s in cmdline for s in ['install', 'bdist', 'build_ext', 'nosetests'])
+needsCompile = any(s in cmdline for s in ['install', 'bdist', 'build_ext', 'wheel', 'nosetests'])
 if isWindows and needsCompile:
     windows_lensfun_compile()
-    package_data['lensfunpy'] = ['db_files/*.xml',
-                                 '*.dll']
+    package_data['lensfunpy'].append('*.dll')
 
 elif isMac and needsCompile:
     mac_lensfun_compile()
-    package_data['lensfunpy'] = ['db_files/*.xml']
-        
+
 if any(s in cmdline for s in ['clean', 'sdist']):
     # When running sdist after a previous run of bdist or build_ext
     # then even with the 'clean' command the .egg-info folder stays.
@@ -245,6 +240,15 @@ else:
         use_cython = False
     else:
         use_cython = True
+
+    # This assumes that the lensfun version from external/lensfun was used.
+    # If that's not the case, the bundled files may fail to load, for example,
+    # if lensfunpy was linked against an older lensfun version already on
+    # the system (Linux mostly) and the database format changed in an incompatible way.
+    # In that case, loading of bundled files can still be disabled
+    # with Database(load_bundled=False).
+    package_data['lensfunpy'].append('db_files/*.xml')
+    bundle_db_files()
 
 source_path = pyx_path if use_cython else c_path
 

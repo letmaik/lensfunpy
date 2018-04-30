@@ -53,6 +53,12 @@ for whl in wheelhouse/lensfunpy*.whl; do
     auditwheel repair $whl -w wheelhouse
 done
 
+# Remove lensfun lib again to verify it works without
+pushd external/lensfun
+# CMake stores install_manifest.txt, see https://stackoverflow.com/a/44649542.
+xargs rm < install_manifest.txt
+popd
+
 # Build sdist
 ${PYBINS[0]}/python setup.py sdist
 
