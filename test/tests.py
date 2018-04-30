@@ -69,7 +69,7 @@ def testDatabaseXMLLoading():
     </lens>
 </lensdatabase>
     """
-    db = lensfun.Database(xml=xml, load_common=False)
+    db = lensfun.Database(xml=xml, load_common=False, load_bundled=False)
     
     assert_equal(len(db.cameras), 1)
     assert_equal(len(db.lenses), 1)
