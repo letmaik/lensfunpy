@@ -96,7 +96,7 @@ Or install the latest developer version from the GIT repository:
     cmake .
     sudo make install
     
-After that, install lensfunpy using ``pip install lensfunpy --no-binary :all:``.
+After that, install lensfunpy using ``pip install lensfunpy --no-binary lensfunpy``.
     
 If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:
