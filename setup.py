@@ -241,14 +241,15 @@ else:
     else:
         use_cython = True
 
-    # This assumes that the lensfun version from external/lensfun was used.
-    # If that's not the case, the bundled files may fail to load, for example,
-    # if lensfunpy was linked against an older lensfun version already on
-    # the system (Linux mostly) and the database format changed in an incompatible way.
-    # In that case, loading of bundled files can still be disabled
-    # with Database(load_bundled=False).
-    package_data['lensfunpy'].append('db_files/*.xml')
-    bundle_db_files()
+    if 'sdist' not in cmdline:
+        # This assumes that the lensfun version from external/lensfun was used.
+        # If that's not the case, the bundled files may fail to load, for example,
+        # if lensfunpy was linked against an older lensfun version already on
+        # the system (Linux mostly) and the database format changed in an incompatible way.
+        # In that case, loading of bundled files can still be disabled
+        # with Database(load_bundled=False).
+        package_data['lensfunpy'].append('db_files/*.xml')
+        bundle_db_files()
 
 source_path = pyx_path if use_cython else c_path
 
