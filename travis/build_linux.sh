@@ -56,7 +56,9 @@ done
 # Remove lensfun lib again to verify it works without
 pushd external/lensfun
 # CMake stores install_manifest.txt, see https://stackoverflow.com/a/44649542.
+cat install_manifest.txt
 xargs rm < install_manifest.txt
+ls -al /usr/local/lib64/liblensfun*
 popd
 
 # Build sdist
