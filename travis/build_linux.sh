@@ -3,7 +3,7 @@ set -e -x
 
 bash --version
 
-cd /io
+cd /lensfunpy
 
 source travis/travis_retry.sh
 
@@ -22,12 +22,16 @@ travis_retry yum install -y cmake28 # CentOS cmake is 2.6, we need >= 2.8 which 
 ln -s /usr/bin/cmake28 /usr/bin/cmake
 
 # Install liblensfun
-pushd external/lensfun
-cmake . -DBUILD_TESTS=off
+lf_dir=/lensfunpy/external/lensfun
+lf_install_dir=$lf_dir/build/install
+pushd $lf_dir
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$lf_install_dir -DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ..
 make install
-echo "/usr/local/lib64" | tee /etc/ld.so.conf.d/99local.conf
+echo "$lf_install_dir/lib64" | tee /etc/ld.so.conf.d/99local.conf
 ldconfig
-export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig
+export PKG_CONFIG_PATH=$lf_install_dir/lib64/pkgconfig
 popd
 
 # Install numpy/scipy deps
@@ -54,12 +58,7 @@ for whl in wheelhouse/lensfunpy*.whl; do
 done
 
 # Remove lensfun lib again to verify it works without
-pushd external/lensfun
-# CMake stores install_manifest.txt, see https://stackoverflow.com/a/44649542.
-cat install_manifest.txt
-xargs rm < install_manifest.txt
-ls -al /usr/local/lib64/liblensfun*
-popd
+rm -rf $lf_install_dir
 
 # Build sdist
 ${PYBINS[0]}/python setup.py sdist
@@ -72,7 +71,7 @@ for PYBIN in ${PYBINS[@]}; do
     travis_retry ${PYBIN}/pip install numpy -U # scipy should trigger an update, but that doesn't happen
 
     pushd $HOME
-    ${PYBIN}/nosetests --verbosity=3 --nocapture /io/test
+    ${PYBIN}/nosetests --verbosity=3 --nocapture /lensfunpy/test
     popd
 done
 
