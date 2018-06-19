@@ -824,7 +824,7 @@ cdef class Modifier:
     def __dealloc__(self):
         lf_modifier_destroy(self.lf)
 
-    def initialize(self, float focal, float aperture, float distance=1.0, float scale=0.0, 
+    def initialize(self, float focal, float aperture, float distance=1000.0, float scale=0.0, 
                    targeom=LensType.RECTILINEAR, pixel_format=np.uint8, 
                    int flags=ModifyFlags.ALL, bint reverse=0):
         """
