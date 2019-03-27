@@ -11,54 +11,54 @@ environment:
 
   matrix:
     # Note: numpy binary wheels for Windows are only available from 1.10.4 onwards.
-    # That is why this script uses Conda instead of the pre-installed Python versions in AppVeyor.
-    - PYTHON: "C:\\Python27_32"
-      PYTHON_VERSION: "2.7.10"
+    # That is why this script uses Conda instead.
+    - PYTHON: C:\Miniconda
+      PYTHON_VERSION: "2.7"
       PYTHON_ARCH: "32"
       NUMPY_VERSION: "1.7"
 
-    - PYTHON: "C:\\Python27_64"
-      PYTHON_VERSION: "2.7.10"
+    - PYTHON: C:\Miniconda-x64
+      PYTHON_VERSION: "2.7"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.7"
 
-    - PYTHON: "C:\\Python34_32"
-      PYTHON_VERSION: "3.4.3"
+    - PYTHON: C:\Miniconda34
+      PYTHON_VERSION: "3.4"
       PYTHON_ARCH: "32"
       NUMPY_VERSION: "1.8"
 
-    - PYTHON: "C:\\Python34_64"
-      PYTHON_VERSION: "3.4.3"
+    - PYTHON: C:\Miniconda34-x64
+      PYTHON_VERSION: "3.4"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.8"
       
-    - PYTHON: "C:\\Python35_32"
-      PYTHON_VERSION: "3.5.0"
+    - PYTHON: C:\Miniconda35
+      PYTHON_VERSION: "3.5"
       PYTHON_ARCH: "32"
       NUMPY_VERSION: "1.9"
 
-    - PYTHON: "C:\\Python35_64"
-      PYTHON_VERSION: "3.5.0"
+    - PYTHON: C:\Miniconda35-x64
+      PYTHON_VERSION: "3.5"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.9"
 
-    - PYTHON: "C:\\Python36_32"
-      PYTHON_VERSION: "3.6.1"
+    - PYTHON: C:\Miniconda36
+      PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "32"
       NUMPY_VERSION: "1.11"
 
-    - PYTHON: "C:\\Python36_64"
-      PYTHON_VERSION: "3.6.1"
+    - PYTHON: C:\Miniconda36-x64
+      PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.11"
 
-    - PYTHON: C:\Python37_32
-      PYTHON_VERSION: "3.7.1"
+    - PYTHON: C:\Miniconda37
+      PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "32"
       NUMPY_VERSION: "1.14"
 
-    - PYTHON: C:\Python37_64
-      PYTHON_VERSION: "3.7.1"
+    - PYTHON: C:\Miniconda37-x64
+      PYTHON_VERSION: "3.7"
       PYTHON_ARCH: "64"
       NUMPY_VERSION: "1.14"
 
