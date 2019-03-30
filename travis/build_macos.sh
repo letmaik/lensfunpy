@@ -32,7 +32,7 @@ pip install dist/*.whl
 travis_retry pip install numpy -U # scipy should trigger an update, but that doesn't happen
 travis_retry pip install -r dev-requirements.txt
 # make sure it's working without any required libraries installed
-brew rm glib
+brew uninstall --ignore-dependencies glib
 mkdir tmp_for_test
 pushd tmp_for_test
 nosetests --verbosity=3 --nocapture ../test
