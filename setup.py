@@ -147,6 +147,7 @@ def windows_lensfun_compile():
     os.chdir(cmake_build)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
+                    '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
                     '-DGLIB2_BASE_DIR={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir),
             'nmake install'
             ]

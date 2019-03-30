@@ -1,7 +1,3 @@
-_lensfun.c
-
-.mypy_cache
-
 *.py[cod]
 
 # C extensions
@@ -34,20 +30,20 @@ nosetests.xml
 # Translations
 *.mo
 
-# Mr Developer
-.mr.developer.cfg
+# IDE
+.mypy_cache
+.vscode/
 .project
 .pydevproject
 .settings
 /MANIFEST
 
-.vscode/
-
 *.zip
 *.dll
+_lensfun.c
 /lensfunpy/db_files/*.xml
 /external/cmake*
-/external/vcpkg*
+/external/vcpkg-*
 /_lensfun.html
 /cover/
 /coverage.xml
