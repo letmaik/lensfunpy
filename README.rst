@@ -63,13 +63,13 @@ How to correct lens distortion:
     cv2.imwrite(undistorted_image_path, im_undistorted)
     
 It is also possible to apply the correction via `SciPy <http://www.scipy.org>`_ instead of OpenCV.
-The `lensfunpy.util <http://pythonhosted.org/lensfunpy/api/lensfunpy.util.html>`_ module
+The `lensfunpy.util <https://letmaik.github.io/lensfunpy/api/lensfunpy.util.html>`_ module
 contains convenience functions for RGB images which handle both OpenCV and SciPy.
 
 Installation
 ------------
 
-Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, and 3.6.
+Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, 3.6, and 3.7.
 These can be installed with a simple ``pip install lensfunpy``.
 Currently, Linux and macOS wheels are only available as 64 bit versions.
 
@@ -87,7 +87,7 @@ On Ubuntu, you can get (an outdated) version with:
 
     sudo apt-get install liblensfun-dev
     
-Or install the latest developer version from the GIT repository:
+Or install the latest developer version from the Git repository:
 
 .. code-block:: sh
 
@@ -123,6 +123,7 @@ Python     numpy
 3.4        >= 1.8
 3.5        >= 1.9
 3.6        >= 1.11
+3.7        >= 1.14
 ========== =========
 
 .. _lensfun: http://lensfun.sourceforge.net
