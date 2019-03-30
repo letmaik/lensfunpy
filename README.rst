@@ -70,7 +70,7 @@ Installation
 ------------
 
 Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, and 3.6.
-These can be installed with a simple ``pip install rawpy``.
+These can be installed with a simple ``pip install lensfunpy``.
 Currently, Linux and macOS wheels are only available as 64 bit versions.
 
 Installation from source on Linux/macOS
@@ -96,7 +96,7 @@ Or install the latest developer version from the GIT repository:
     cmake .
     sudo make install
     
-After that, install lensfunpy using ``pip install lensfunpy --no-binary :all:``.
+After that, install lensfunpy using ``pip install lensfunpy --no-binary lensfunpy``.
     
 If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:

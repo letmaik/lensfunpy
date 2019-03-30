@@ -15,6 +15,7 @@ PYBINS=(
   "/opt/python/cp34-cp34m/bin"
   "/opt/python/cp35-cp35m/bin"
   "/opt/python/cp36-cp36m/bin"
+  "/opt/python/cp37-cp37m/bin"
   )
 
 # Install build tools
@@ -40,6 +41,7 @@ for PYBIN in ${PYBINS[@]}; do
         *34*) NUMPY_VERSION="1.8.*";;
         *35*) NUMPY_VERSION="1.9.*";;
         *36*) NUMPY_VERSION="1.11.*";;
+        *37*) NUMPY_VERSION="1.14.*";;
     esac
 
     # install compile-time dependencies
