@@ -3,7 +3,7 @@ set -e -x
 
 source .github/scripts/retry.sh
 
-brew install pkg-config
+brew install pkg-config meson
 
 # General note:
 # Apple guarantees forward, but not backward ABI compatibility unless
@@ -78,10 +78,12 @@ make install
 popd
 
 # Install glib (lensfun dependency)
-curl -L --retry 3 https://ftp.gnome.org/pub/gnome/sources/glib/2.52/glib-2.52.3.tar.xz | tar xz
-pushd glib-2.52.3
-./configure --prefix=$LIB_INSTALL_PREFIX
-make install -j
+curl -L --retry 3 https://download.gnome.org/sources/glib/2.62/glib-2.62.0.tar.xz | tar xz
+pushd glib-2.62.0
+mkdir build
+cd build
+meson --prefix=$LIB_INSTALL_PREFIX ..
+ninja install
 popd
 
 ls -al $LIB_INSTALL_PREFIX/lib
