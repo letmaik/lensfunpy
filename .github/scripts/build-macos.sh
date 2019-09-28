@@ -62,6 +62,16 @@ export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/lib/pkgconfig
 # Install libffi (glib dependency)
 curl -L --retry 3 https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz | tar xz
 pushd libffi-3.2.1
+./configure --prefix=$LIB_INSTALL_PREFIX \
+    --disable-debug \
+    --disable-java --disable-csharp \
+    --without-git --without-cvs --without-xz
+make install
+popd
+
+# Install gettext (glib dependency)
+curl -L --retry 3 https://ftp.gnu.org/gnu/gettext/gettext-0.20.1.tar.xz | tar xz
+pushd gettext-0.20.1
 ./configure --disable-debug --prefix=$LIB_INSTALL_PREFIX
 make install -j
 popd
