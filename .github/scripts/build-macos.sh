@@ -74,6 +74,15 @@ pushd gettext-0.20.1
     --disable-debug \
     --disable-java --disable-csharp \
     --without-git --without-cvs --without-xz
+make -j
+make install
+popd
+
+# Install pcre (glib dependency)
+curl -L --retry 3 https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.bz2 | tar xz
+pushd pcre-8.43
+./configure --prefix=$LIB_INSTALL_PREFIX
+make -j
 make install
 popd
 
