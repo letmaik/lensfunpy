@@ -3,6 +3,8 @@ set -e -x
 
 source .github/scripts/retry.sh
 
+brew install pkg-config
+
 # General note:
 # Apple guarantees forward, but not backward ABI compatibility unless
 # the deployment target is set for the oldest supported OS. 
@@ -55,12 +57,17 @@ pip freeze
 # See https://discourse.brew.sh/t/it-is-possible-to-build-packages-that-are-compatible-with-older-macos-versions/4421
 
 LIB_INSTALL_PREFIX=$(pwd)/external/libs
+export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/pkgconfig
 
-# Install glib:
-# - lensfun dependency
+# Install libffi (glib dependency)
+curl -L --retry 3 https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz | tar xz
+pushd libffi-3.2.1
+./configure --disable-debug --prefix=$LIB_INSTALL_PREFIX
+make install -j
+popd
+
+# Install glib (lensfun dependency)
 curl -L --retry 3 https://ftp.gnome.org/pub/gnome/sources/glib/2.52/glib-2.52.3.tar.xz | tar xz
-#xz -d glib.tar.xz
-#tar -zxvf glib.tar
 pushd glib-2.52.3
 ./configure --prefix=$LIB_INSTALL_PREFIX
 make install -j
