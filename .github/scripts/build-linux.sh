@@ -31,6 +31,7 @@ make
 make install -j$(nproc)
 echo "/usr/local/lib64" | tee /etc/ld.so.conf.d/99local.conf
 ldconfig
+export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig
 popd
 
 # Install numpy/scipy deps

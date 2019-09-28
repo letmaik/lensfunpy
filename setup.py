@@ -89,8 +89,16 @@ def windows_lensfun_compile():
     cmake_version = '3.13.4'
     cmake_url = 'https://github.com/Kitware/CMake/releases/download/v{v}/cmake-{v}-win32-x86.zip'.format(v=cmake_version)
     cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
+
+    # Download vcpkg to build dependencies of lensfun
+    vcpkg_commit = 'd82f37b4bfc1422d4601fbb63cbd553c925f7014'
+    vcpkg_url = 'https://github.com/Microsoft/vcpkg/archive/{}.zip'.format(vcpkg_commit)
+    vcpkg_dir = os.path.abspath('external/vcpkg-{}'.format(vcpkg_commit))
+    vcpkg_bootstrap = os.path.join(vcpkg_dir, 'bootstrap-vcpkg.bat')
+    vcpkg = os.path.join(vcpkg_dir, 'vcpkg.exe')
     
-    files = [(cmake_url, 'external', cmake)]
+    files = [(cmake_url, 'external', cmake),
+             (vcpkg_url, 'external', vcpkg_bootstrap)]
 
     for url, extractdir, extractcheck in files:
         if not os.path.exists(extractcheck):
@@ -110,15 +118,31 @@ def windows_lensfun_compile():
             if not os.path.exists(path):
                 raise RuntimeError(path + ' not found!')
 
+    # Bootstrap vcpkg
+    os.chdir(vcpkg_dir)
+    if not os.path.exists(vcpkg):
+        code = os.system(vcpkg_bootstrap)
+        if code != 0:
+            sys.exit(code) 
+
+    # lensfun depends on glib2, so let's build it with vcpkg
+    vcpkg_arch = 'x64' if is64Bit else 'x86'
+    vcpkg_triplet = '{}-windows'.format(vcpkg_arch)
+    code = os.system(vcpkg + ' install glib:' + vcpkg_triplet)
+    if code != 0:
+        sys.exit(code)
+    vcpkg_install_dir = os.path.join(vcpkg_dir, 'installed', vcpkg_triplet)
+    
     # configure and compile lensfun
     if not os.path.exists(cmake_build):
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
-                    '-DBUILD_TESTS=OFF -DINSTALL_HELPER_SCRIPTS=OFF ' +\
-                    '-DCMAKE_INSTALL_PREFIX=install',
-            'cmake --build .',
-            'cmake --build . --target install',
+                    '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
+                    '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
+                    '-DGLIB2_BASE_DIR={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir),
+            cmake + ' --build .',
+            cmake + ' --build . --target install',
             ]
     for cmd in cmds:
         print(cmd)
@@ -128,7 +152,16 @@ def windows_lensfun_compile():
     os.chdir(cwd)
     
     # bundle runtime dlls
-    dll_runtime_libs = [('lensfun.dll', os.path.join(install_dir, 'bin'))]
+    vcpkg_bin_dir = os.path.join(vcpkg_install_dir, 'bin')
+
+    dll_runtime_libs = [('lensfun.dll', os.path.join(install_dir, 'bin')),
+                        ('glib-2.dll', vcpkg_bin_dir),
+                        # dependencies of glib
+                        ('pcre.dll', vcpkg_bin_dir),
+                        ('libiconv.dll', vcpkg_bin_dir),
+                        ('libcharset.dll', vcpkg_bin_dir),
+                        ('libintl.dll', vcpkg_bin_dir),
+                        ]
     
     for filename, folder in dll_runtime_libs:
         src = os.path.join(folder, filename)
