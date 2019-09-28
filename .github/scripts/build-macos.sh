@@ -58,6 +58,7 @@ pip freeze
 
 LIB_INSTALL_PREFIX=$(pwd)/external/libs
 export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/lib/pkgconfig
+export PATH=$LIB_INSTALL_PREFIX/bin:$PATH
 
 # Install libffi (glib dependency)
 curl -L --retry 3 https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz | tar xz
