@@ -57,7 +57,7 @@ pip freeze
 # See https://discourse.brew.sh/t/it-is-possible-to-build-packages-that-are-compatible-with-older-macos-versions/4421
 
 LIB_INSTALL_PREFIX=$(pwd)/external/libs
-export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/pkgconfig
+export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/lib/pkgconfig
 
 # Install libffi (glib dependency)
 curl -L --retry 3 https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz | tar xz
