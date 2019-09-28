@@ -29,7 +29,7 @@ pushd external/lensfun
 cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off .
 make
 make install -j$(nproc)
-echo "/usr/local/lib" | tee /etc/ld.so.conf.d/99local.conf
+echo "/usr/local/lib64" | tee /etc/ld.so.conf.d/99local.conf
 ldconfig
 popd
 

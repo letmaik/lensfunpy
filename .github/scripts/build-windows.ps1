@@ -104,7 +104,7 @@ $env:CONDA_ROOT = $pwd.Path + "\external\miniconda_$env:PYTHON_ARCH"
 
 exec { conda update --yes -n base -c defaults conda }
 
-exec { conda create --yes --name pyenv_build python=$env:PYTHON_VERSION numpy=$env:NUMPY_VERSION cython glib --force }
+exec { conda create --yes --name pyenv_build -c conda-forge python=$env:PYTHON_VERSION numpy=$env:NUMPY_VERSION cython glib --force }
 exec { conda activate pyenv_build }
 
 # Check that we have the expected version and architecture for Python
