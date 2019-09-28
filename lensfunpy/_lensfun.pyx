@@ -142,7 +142,8 @@ cdef extern from "lensfun.h":
     void lf_db_destroy (lfDatabase *db)
     lfError lf_db_load (lfDatabase *db)
     lfError lf_db_load_file (lfDatabase *db, const char *filename)
-    lfError lf_db_load_data (lfDatabase *db, const char *errcontext, const char *data, size_t data_size)
+    # FIXME enable once https://github.com/lensfun/lensfun/issues/502 fixed
+    #lfError lf_db_load_data (lfDatabase *db, const char *errcontext, const char *data, size_t data_size)
     const lfCamera *const *lf_db_get_cameras (const lfDatabase *db)
     const lfLens *const *lf_db_get_lenses (const lfDatabase *db)
     const lfMount *const *lf_db_get_mounts (const lfDatabase *db)
@@ -240,7 +241,9 @@ cdef class Database:
 
         if xml:
             xml = _chars(xml.strip()) # stripping as lensfun is very strict here
-            handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
+            # FIXME enable once https://github.com/lensfun/lensfun/issues/502 fixed
+            #handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
+            raise NotImplementedError
 
         if load_common:
             code = lf_db_load(self.lf)

@@ -58,9 +58,9 @@ LIB_INSTALL_PREFIX=$(pwd)/external/libs
 
 # Install glib:
 # - lensfun dependency
-curl --retry 3 https://ftp.gnome.org/pub/gnome/sources/glib/2.52/glib-2.52.3.tar.xz > glib.tar.xz
-xz -d glib.tar.xz
-tar -zxvf glib.tar
+curl -L --retry 3 https://ftp.gnome.org/pub/gnome/sources/glib/2.52/glib-2.52.3.tar.xz | tar xz
+#xz -d glib.tar.xz
+#tar -zxvf glib.tar
 pushd glib-2.52.3
 ./configure --prefix=$LIB_INSTALL_PREFIX
 make install -j
