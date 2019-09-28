@@ -78,20 +78,18 @@ make -j
 make install
 popd
 
-# Install pcre (glib dependency)
-curl -L --retry 3 https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.bz2 | tar xz
-pushd pcre-8.43
-./configure --prefix=$LIB_INSTALL_PREFIX
-make -j
-make install
-popd
-
 # Install glib (lensfun dependency)
 curl -L --retry 3 https://download.gnome.org/sources/glib/2.62/glib-2.62.0.tar.xz | tar xz
 pushd glib-2.62.0
 mkdir build
 cd build
-meson --prefix=$LIB_INSTALL_PREFIX ..
+meson --prefix=$LIB_INSTALL_PREFIX \
+  -Dinternal_pcre=true \
+  -Dselinux=disabled \
+  -Ddtrace=false \
+  -Dman=false \
+  -Dgtk_doc=false \
+  ..
 ninja install
 popd
 
