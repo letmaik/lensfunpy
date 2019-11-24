@@ -65,9 +65,6 @@ if isWindows or isMac:
 else:
     use_pkg_config()
     
-if isWindows:
-    include_dirs += ['external/stdint']
-
 # this must be after use_pkg_config()!
 include_dirs += [numpy.get_include()]
 
@@ -281,6 +278,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
