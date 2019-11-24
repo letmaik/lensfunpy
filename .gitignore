@@ -44,6 +44,7 @@ _lensfun.c
 /lensfunpy/db_files/*.xml
 /external/cmake*
 /external/vcpkg-*
+/external/miniconda*
 /_lensfun.html
 /cover/
 /coverage.xml
