@@ -126,4 +126,4 @@ Python     numpy
 3.7        >= 1.14
 ========== =========
 
-.. _lensfun: http://lensfun.sourceforge.net
+.. _lensfun: https://lensfun.github.io/
