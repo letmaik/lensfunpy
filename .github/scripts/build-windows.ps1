@@ -121,6 +121,8 @@ exec { python -m pip freeze }
 # when the external tools were started  
 exec { python -u setup.py bdist_wheel }
 
+exec { conda deactivate }
+
 # Test
 exec { conda create --yes --name pyenv_test python=$env:PYTHON_VERSION numpy scipy --force }
 exec { conda activate pyenv_test }
