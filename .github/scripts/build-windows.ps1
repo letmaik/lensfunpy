@@ -128,6 +128,9 @@ exec { conda create --yes --name pyenv_test python=$env:PYTHON_VERSION numpy sci
 exec { conda activate pyenv_test }
 exec { conda info }
 
+New-Item -Force -ItemType directory tmp_for_test | out-null
+cd tmp_for_test
+
 # Check that we have the expected version and architecture for Python
 exec { python --version }
 exec { python -c "import struct; assert struct.calcsize('P') * 8 == $env:PYTHON_ARCH" }
@@ -137,9 +140,7 @@ exec { python -c "import sys; print(sys.prefix)" }
 exec { python -m pip freeze }
 
 python -m pip uninstall -y lensfunpy
-ls dist\*.whl | % { exec { python -m pip install $_ } }
-exec { python -m pip install -r dev-requirements.txt }
-New-Item -Force -ItemType directory tmp_for_test | out-null
-cd tmp_for_test
+ls ..\dist\*.whl | % { exec { python -m pip install $_ } }
+exec { python -m pip install -r ..\dev-requirements.txt }
 exec { nosetests --verbosity=3 --nocapture ../test }
 cd ..
