@@ -106,10 +106,12 @@ exec { conda update --yes -n base -c defaults conda }
 
 exec { conda create --yes --name pyenv_build python=$env:PYTHON_VERSION numpy=$env:NUMPY_VERSION cython --force }
 exec { conda activate pyenv_build }
+exec { conda info }
 
 # Check that we have the expected version and architecture for Python
 exec { python --version }
 exec { python -c "import struct; assert struct.calcsize('P') * 8 == $env:PYTHON_ARCH" }
+exec { python -c "import sys; print(sys.prefix)" }
 
 # output what's installed
 exec { python -m pip freeze }
@@ -122,10 +124,12 @@ exec { python -u setup.py bdist_wheel }
 # Test
 exec { conda create --yes --name pyenv_test python=$env:PYTHON_VERSION numpy scipy --force }
 exec { conda activate pyenv_test }
+exec { conda info }
 
 # Check that we have the expected version and architecture for Python
 exec { python --version }
 exec { python -c "import struct; assert struct.calcsize('P') * 8 == $env:PYTHON_ARCH" }
+exec { python -c "import sys; print(sys.prefix)" }
 
 # output what's installed
 exec { python -m pip freeze }
