@@ -112,7 +112,7 @@ exec { python --version }
 exec { python -c "import struct; assert struct.calcsize('P') * 8 == $env:PYTHON_ARCH" }
 
 # output what's installed
-exec { pip freeze }
+exec { python -m pip freeze }
 
 # Build the compiled extension.
 # -u disables output buffering which caused intermixing of lines
@@ -122,9 +122,18 @@ exec { python -u setup.py bdist_wheel }
 # Test
 exec { conda create --yes --name pyenv_test python=$env:PYTHON_VERSION numpy scipy --force }
 exec { conda activate pyenv_test }
-ls dist\*.whl | % { exec { pip install $_ } }
-exec { pip install -r dev-requirements.txt }
-mkdir tmp_for_test | out-null
+
+# Check that we have the expected version and architecture for Python
+exec { python --version }
+exec { python -c "import struct; assert struct.calcsize('P') * 8 == $env:PYTHON_ARCH" }
+
+# output what's installed
+exec { python -m pip freeze }
+
+python -m pip uninstall -y lensfunpy
+ls dist\*.whl | % { exec { python -m pip install $_ } }
+exec { python -m pip install -r dev-requirements.txt }
+New-Item -Force -ItemType directory tmp_for_test | out-null
 cd tmp_for_test
 exec { nosetests --verbosity=3 --nocapture ../test }
 cd ..
