@@ -106,7 +106,6 @@ exec { conda update --yes -n base -c defaults conda }
 
 exec { conda create --yes --name pyenv_build python=$env:PYTHON_VERSION numpy=$env:NUMPY_VERSION cython --force }
 exec { conda activate pyenv_build }
-exec { conda info }
 
 # Check that we have the expected version and architecture for Python
 exec { python --version }
@@ -121,13 +120,14 @@ exec { python -m pip freeze }
 # when the external tools were started  
 exec { python -u setup.py bdist_wheel }
 
+# Necessary to avoid bug when switching to test env.
 exec { conda deactivate }
 
 # Test
 exec { conda create --yes --name pyenv_test python=$env:PYTHON_VERSION numpy scipy --force }
 exec { conda activate pyenv_test }
-exec { conda info }
 
+# Avoid using in-source package
 New-Item -Force -ItemType directory tmp_for_test | out-null
 cd tmp_for_test
 
