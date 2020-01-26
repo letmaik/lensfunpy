@@ -1,4 +1,4 @@
 [submodule "external/lensfun"]
 	path = external/lensfun
-	url = git://git.code.sf.net/p/lensfun/code
+	url = https://github.com/lensfun/lensfun.git
 	ignore = dirty
