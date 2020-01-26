@@ -21,10 +21,10 @@ DTYPE = np.float32
 ctypedef np.float32_t DTYPE_t
 
 cdef extern from "version_helper.h":
-    cdef int LF_VERSION_MAJOR
-    cdef int LF_VERSION_MINOR
-    cdef int LF_VERSION_MICRO
-    cdef int LF_VERSION_BUGFIX
+    int LF_VERSION_MAJOR
+    int LF_VERSION_MINOR
+    int LF_VERSION_MICRO
+    int LF_VERSION_BUGFIX
 
 # added in 0.3.2 to lfError enum
 # we need to handle it, so we define it manually here
@@ -160,9 +160,10 @@ cdef extern from "lensfun.h":
     int lf_modifier_apply_subpixel_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
     int lf_modifier_apply_subpixel_geometry_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
     
-    int lf_lens_interpolate_distortion (const lfLens *lens, float focal, lfLensCalibDistortion *res)
-    int lf_lens_interpolate_tca (const lfLens *lens, float focal, lfLensCalibTCA *res)
-    int lf_lens_interpolate_vignetting (const lfLens *lens, float focal, float aperture, float distance, lfLensCalibVignetting *res)
+cdef extern from "back_compat.h":
+    int lf_lens_interpolate_distortion_ (const lfLens *lens, float focal, lfLensCalibDistortion *res)
+    int lf_lens_interpolate_tca_ (const lfLens *lens, float focal, lfLensCalibTCA *res)
+    int lf_lens_interpolate_vignetting_ (const lfLens *lens, float focal, float aperture, float distance, lfLensCalibVignetting *res)
 
 lensfun_version = (LF_VERSION_MAJOR, LF_VERSION_MINOR, LF_VERSION_MICRO, LF_VERSION_BUGFIX)
 
@@ -670,7 +671,7 @@ cdef class Lens:
         :rtype: lensfunpy.LensCalibDistortion
         """
         cdef lfLensCalibDistortion* res = <lfLensCalibDistortion*>PyMem_Malloc(sizeof(lfLensCalibDistortion))
-        if lf_lens_interpolate_distortion(self.lf, focal, res):
+        if lf_lens_interpolate_distortion_(self.lf, focal, res):
             calib = _convertCalibDistortion(res)
         else:
             calib = None
@@ -683,7 +684,7 @@ cdef class Lens:
         :rtype: lensfunpy.LensCalibTCA
         """
         cdef lfLensCalibTCA* res = <lfLensCalibTCA*>PyMem_Malloc(sizeof(lfLensCalibTCA))
-        if lf_lens_interpolate_tca(self.lf, focal, res):
+        if lf_lens_interpolate_tca_(self.lf, focal, res):
             calib = _convertCalibTCA(res)
         else:
             calib = None
@@ -696,7 +697,7 @@ cdef class Lens:
         :rtype: lensfunpy.LensCalibVignetting
         """
         cdef lfLensCalibVignetting* res = <lfLensCalibVignetting*>PyMem_Malloc(sizeof(lfLensCalibVignetting))
-        if lf_lens_interpolate_vignetting(self.lf, focal, aperture, distance, res):
+        if lf_lens_interpolate_vignetting_(self.lf, focal, aperture, distance, res):
             calib = _convertCalibVignetting(res)
         else:
             calib = None

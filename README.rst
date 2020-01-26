@@ -69,7 +69,7 @@ contains convenience functions for RGB images which handle both OpenCV and SciPy
 Installation
 ------------
 
-Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, and 3.6.
+Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, 3.6, and 3.7.
 These can be installed with a simple ``pip install lensfunpy``.
 Currently, Linux and macOS wheels are only available as 64 bit versions.
 
@@ -123,6 +123,7 @@ Python     numpy
 3.4        >= 1.8
 3.5        >= 1.9
 3.6        >= 1.11
+3.7        >= 1.14
 ========== =========
 
-.. _lensfun: http://lensfun.sourceforge.net
+.. _lensfun: https://lensfun.github.io/

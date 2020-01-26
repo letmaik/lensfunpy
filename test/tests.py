@@ -20,6 +20,7 @@ def testDatabaseLoading():
     db = lensfun.Database()
        
     cams = db.find_cameras(cam_maker, cam_model)
+    print(cams)
     assert_equal(len(cams), 1)
     cam = cams[0]
     assert_equal(cam.maker.lower(), cam_maker.lower())

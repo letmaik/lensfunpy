@@ -1,7 +1,4 @@
-from __future__ import print_function
-
 from setuptools import setup, Extension, find_packages
-import numpy
 import subprocess
 import errno
 import re
@@ -9,16 +6,11 @@ import os
 import shutil
 import sys
 import zipfile
-try:
-    # Python 3
-    from urllib.request import urlretrieve
-except ImportError:
-    # Python 2
-    from urllib import urlretrieve
-    
-if sys.version_info < (2, 7):
-    raise NotImplementedError('Minimum supported Python version is 2.7')
+from urllib.request import urlretrieve
 
+import numpy
+from Cython.Build import cythonize
+   
 isWindows = os.name == 'nt'
 isMac = sys.platform == 'darwin'
 is64Bit = sys.maxsize > 2**32
@@ -65,7 +57,7 @@ def use_pkg_config():
     _ask_pkg_config(libraries,          '--libs-only-l', '-l')
 
 if isWindows or isMac:
-    cmake_build = os.path.abspath('external/lensfun/cmake_build')
+    cmake_build = os.path.abspath('external/lensfun/build')
     install_dir = os.path.join(cmake_build, 'install')
     
     include_dirs += [os.path.join(install_dir, 'include', 'lensfun')]
@@ -73,9 +65,6 @@ if isWindows or isMac:
 else:
     use_pkg_config()
     
-if isWindows:
-    include_dirs += ['external/stdint']
-
 # this must be after use_pkg_config()!
 include_dirs += [numpy.get_include()]
 
@@ -83,40 +72,31 @@ include_dirs += [numpy.get_include()]
 include_dirs += [os.path.abspath('lensfunpy')]
 
 def clone_submodules():
-    # check that lensfun git submodule is cloned
-    if not os.path.exists('external/lensfun/README'):
-        print('lensfun git submodule is not cloned yet, will invoke "git submodule update --init" now')
+    if not os.path.exists('external/lensfun/README.md'):
+        print('lensfun git submodule not cloned yet, will invoke "git submodule update --init" now')
         if os.system('git submodule update --init') != 0:
             raise Exception('git failed')
 
 def windows_lensfun_compile():
     clone_submodules()
+
+    cwd = os.getcwd()
     
-    # download glib2 and cmake to compile lensfun
-    glib_dir = 'external/lensfun/glib-2.0'
-    glib_arch = 'win64' if is64Bit else 'win32'
-    glib_libs_url = 'http://win32builder.gnome.org/packages/3.6/glib_2.34.3-1_{}.zip'.format(glib_arch)
-    glib_dev_url = 'http://win32builder.gnome.org/packages/3.6/glib-dev_2.34.3-1_{}.zip'.format(glib_arch)
-    # lensfun uses glib2 functionality that requires libiconv and gettext as runtime libraries
-    libiconv_url = 'http://win32builder.gnome.org/packages/3.6/libiconv_1.13.1-1_{}.zip'.format(glib_arch)
-    gettext_url = 'http://win32builder.gnome.org/packages/3.6/gettext_0.18.2.1-1_{}.zip'.format(glib_arch)   
+    # Download cmake to build lensfun
+    cmake_version = '3.13.4'
+    cmake_url = 'https://github.com/Kitware/CMake/releases/download/v{v}/cmake-{v}-win32-x86.zip'.format(v=cmake_version)
+    cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
+
+    # Download vcpkg to build dependencies of lensfun
+    vcpkg_commit = 'd82f37b4bfc1422d4601fbb63cbd553c925f7014'
+    vcpkg_url = 'https://github.com/Microsoft/vcpkg/archive/{}.zip'.format(vcpkg_commit)
+    vcpkg_dir = os.path.abspath('external/vcpkg-{}'.format(vcpkg_commit))
+    vcpkg_bootstrap = os.path.join(vcpkg_dir, 'bootstrap-vcpkg.bat')
+    vcpkg = os.path.join(vcpkg_dir, 'vcpkg.exe')
     
-    # the cmake zip contains a cmake-3.0.1-win32-x86 folder when extracted
-    cmake_url = 'http://www.cmake.org/files/v3.3/cmake-3.3.2-win32-x86.zip'
-    cmake = os.path.abspath('external/cmake-3.3.2-win32-x86/bin/cmake.exe')
-    
-    files = [(glib_libs_url, glib_dir, glib_dir + '/bin/libglib-2.0-0.dll'), 
-             (glib_dev_url, glib_dir, glib_dir + '/lib/glib-2.0.lib'),
-             (libiconv_url, glib_dir, glib_dir + '/bin/libiconv-2.dll'),
-             (gettext_url, glib_dir, glib_dir + '/bin/libintl-8.dll'),
-             (cmake_url, 'external', cmake)]
-    
-    if not is64Bit:
-        # the 32bit version of gettext's libintl-8.dll requires pthreadgc2.dll
-        pthreads_dir = 'external/pthreads'
-        pthreads_url = 'http://mirrors.kernel.org/sourceware/pthreads-win32/pthreads-w32-2-9-1-release.zip'
-        files.extend([(pthreads_url, pthreads_dir, pthreads_dir + '/Pre-built.2')])
-        
+    files = [(cmake_url, 'external', cmake),
+             (vcpkg_url, 'external', vcpkg_bootstrap)]
+
     for url, extractdir, extractcheck in files:
         if not os.path.exists(extractcheck):
             path = 'external/' + os.path.basename(url)
@@ -134,16 +114,32 @@ def windows_lensfun_compile():
                 
             if not os.path.exists(path):
                 raise RuntimeError(path + ' not found!')
+
+    # Bootstrap vcpkg
+    os.chdir(vcpkg_dir)
+    if not os.path.exists(vcpkg):
+        code = os.system(vcpkg_bootstrap)
+        if code != 0:
+            sys.exit(code) 
+
+    # lensfun depends on glib2, so let's build it with vcpkg
+    vcpkg_arch = 'x64' if is64Bit else 'x86'
+    vcpkg_triplet = '{}-windows'.format(vcpkg_arch)
+    code = os.system(vcpkg + ' install glib:' + vcpkg_triplet)
+    if code != 0:
+        sys.exit(code)
+    vcpkg_install_dir = os.path.join(vcpkg_dir, 'installed', vcpkg_triplet)
     
     # configure and compile lensfun
-    cwd = os.getcwd()
     if not os.path.exists(cmake_build):
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
-                    '-DGLIB2_BASE_DIR=glib-2.0 -DCMAKE_INSTALL_PREFIX=install',
-            'nmake install'
+                    '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
+                    '-DGLIB2_BASE_DIR={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir),
+            cmake + ' --build .',
+            cmake + ' --build . --target install',
             ]
     for cmd in cmds:
         print(cmd)
@@ -153,16 +149,16 @@ def windows_lensfun_compile():
     os.chdir(cwd)
     
     # bundle runtime dlls
-    glib_bin_dir = os.path.join(glib_dir, 'bin')
+    vcpkg_bin_dir = os.path.join(vcpkg_install_dir, 'bin')
+
     dll_runtime_libs = [('lensfun.dll', os.path.join(install_dir, 'bin')),
-                        ('libglib-2.0-0.dll', glib_bin_dir),
-                        ('libiconv-2.dll', glib_bin_dir),
-                        ('libintl-8.dll', glib_bin_dir), # gettext
+                        ('glib-2.dll', vcpkg_bin_dir),
+                        # dependencies of glib
+                        ('pcre.dll', vcpkg_bin_dir),
+                        ('libiconv.dll', vcpkg_bin_dir),
+                        ('libcharset.dll', vcpkg_bin_dir),
+                        ('libintl.dll', vcpkg_bin_dir),
                         ]
-    if not is64Bit:
-        dll_runtime_libs.extend([
-            ('pthreadGC2.dll', os.path.join(pthreads_dir, 'Pre-built.2', 'dll', 'x86'))
-            ])
     
     for filename, folder in dll_runtime_libs:
         src = os.path.join(folder, filename)
@@ -183,9 +179,9 @@ def mac_lensfun_compile():
     cmds = ['cmake .. -DCMAKE_BUILD_TYPE=Release ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_INSTALL_PREFIX=install ' +\
-                    '-DCMAKE_MACOSX_RPATH=0 -DCMAKE_INSTALL_NAME_DIR=' + install_name_dir,
-            'make',
-            'make install'
+                    '-DCMAKE_INSTALL_NAME_DIR=' + install_name_dir,
+            'cmake --build .',
+            'cmake --build . --target install',
             ]
     for cmd in cmds:
         print(cmd)
@@ -228,30 +224,15 @@ if any(s in cmdline for s in ['clean', 'sdist']):
     print('removing', egg_info)
     shutil.rmtree(egg_info, ignore_errors=True)
 
-pyx_path = os.path.join('lensfunpy', '_lensfun.pyx')
-c_path = os.path.join('lensfunpy', '_lensfun.c')
-if not os.path.exists(pyx_path):
-    # we are running from a source dist which doesn't include the .pyx
-    use_cython = False
-else:
-    try:
-        from Cython.Build import cythonize
-    except ImportError:
-        use_cython = False
-    else:
-        use_cython = True
-
-    if 'sdist' not in cmdline:
-        # This assumes that the lensfun version from external/lensfun was used.
-        # If that's not the case, the bundled files may fail to load, for example,
-        # if lensfunpy was linked against an older lensfun version already on
-        # the system (Linux mostly) and the database format changed in an incompatible way.
-        # In that case, loading of bundled files can still be disabled
-        # with Database(load_bundled=False).
-        package_data['lensfunpy'].append('db_files/*.xml')
-        bundle_db_files()
-
-source_path = pyx_path if use_cython else c_path
+if 'sdist' not in cmdline:
+    # This assumes that the lensfun version from external/lensfun was used.
+    # If that's not the case, the bundled files may fail to load, for example,
+    # if lensfunpy was linked against an older lensfun version already on
+    # the system (Linux mostly) and the database format changed in an incompatible way.
+    # In that case, loading of bundled files can still be disabled
+    # with Database(load_bundled=False).
+    package_data['lensfunpy'].append('db_files/*.xml')
+    bundle_db_files()
 
 # Support for optional Cython line tracing
 # run the following to generate a test coverage report:
@@ -264,26 +245,19 @@ if (os.environ.get('LINETRACE', False)):
     compdirectives['linetrace'] = True
     macros.append(('CYTHON_TRACE', '1'))
 
-extensions = [Extension("lensfunpy._lensfun",
+extensions = cythonize([Extension("lensfunpy._lensfun",
               include_dirs=include_dirs,
-              sources=[source_path],
+              sources=[os.path.join('lensfunpy', '_lensfun.pyx')],
               libraries=libraries,
               library_dirs=library_dirs,
               extra_compile_args=extra_compile_args,
               extra_link_args=extra_link_args,
               define_macros=macros
-             )]
-
-if use_cython:
-    extensions = cythonize(extensions, compiler_directives=compdirectives)
+             )],
+             compiler_directives=compdirectives)
 
 # make __version__ available (https://stackoverflow.com/a/16084844)
 exec(open('lensfunpy/_version.py').read())
-
-install_requires = ['numpy']
-if sys.version_info < (3, 4):
-    # Backport of Python 3.4 enums to earlier versions
-    install_requires.append('enum34')
 
 setup(
       name = 'lensfunpy',
@@ -300,12 +274,11 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Cython',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
@@ -316,5 +289,5 @@ setup(
       packages = find_packages(),
       ext_modules = extensions,
       package_data = package_data,
-      install_requires=install_requires
+      install_requires=['numpy']
 )

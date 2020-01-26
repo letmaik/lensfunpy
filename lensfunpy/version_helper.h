@@ -11,4 +11,5 @@ the actual version may be lower than that.
 #define LF_VERSION_MINOR	2
 #define LF_VERSION_MICRO	5
 #define LF_VERSION_BUGFIX	0
+#define LF_VERSION	((LF_VERSION_MAJOR << 24) | (LF_VERSION_MINOR << 16) | (LF_VERSION_MICRO << 8) | LF_VERSION_BUGFIX)
 #endif

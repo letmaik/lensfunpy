@@ -1,7 +1,17 @@
-numpy
+# build dependencies
+wheel>=0.31.0
+delocate;sys.platform == 'darwin'
 cython
-nose
-wheel>=0.25
-sphinx
-sphinx_rtd_theme
+
+# build and runtime dependencies
+numpy
+
+# optional runtime dependencies
 scipy
+
+# test dependencies
+nose
+
+# documentation dependencies
+sphinx_rtd_theme
+sphinx
