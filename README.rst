@@ -1,14 +1,6 @@
 lensfunpy
 =========
 
-.. image:: https://travis-ci.org/letmaik/lensfunpy.svg?branch=master
-    :target: https://travis-ci.org/letmaik/lensfunpy
-    :alt: Linux/macOS Build Status
-
-.. image:: https://ci.appveyor.com/api/projects/status/qg6tssjvx5xjb3xd?svg=true
-    :target: https://ci.appveyor.com/project/letmaik/lensfunpy
-    :alt: Windows Build Status
-
 lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
 
 `API Documentation <https://letmaik.github.io/lensfunpy/api/>`_
@@ -69,7 +61,7 @@ contains convenience functions for RGB images which handle both OpenCV and SciPy
 Installation
 ------------
 
-Binary wheels for Linux, macOS, and Windows are provided for Python 2.7, 3.4, 3.5, 3.6, and 3.7.
+Binary wheels for Linux, macOS, and Windows are provided for Python 3.5 - 3.8.
 These can be installed with a simple ``pip install lensfunpy``.
 Currently, Linux and macOS wheels are only available as 64 bit versions.
 
@@ -91,14 +83,21 @@ Or install the latest developer version from the Git repository:
 
 .. code-block:: sh
 
-    git clone git://git.code.sf.net/p/lensfun/code lensfun
+    git clone https://github.com/lensfun/lensfun
     cd lensfun
     cmake .
     sudo make install
     
-After that, install lensfunpy using ``pip install lensfunpy --no-binary lensfunpy``.
+After that, install lensfunpy using:
+
+.. code-block:: sh
+
+    git clone https://github.com/letmaik/lensfunpy
+    cd lensfunpy
+    pip install numpy cython
+    pip install .
     
-If you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
+On Linux, if you get the error "ImportError: liblensfun.so.0: cannot open shared object file: No such file or directory"
 when trying to use lensfunpy, then do the following:
 
 .. code-block:: sh
@@ -119,11 +118,10 @@ lensfunpy depends on NumPy. The minimum supported NumPy version depends on your 
 ========== =========
 Python     numpy
 ---------- ---------
-2.7        >= 1.7
-3.4        >= 1.8
 3.5        >= 1.9
 3.6        >= 1.11
 3.7        >= 1.14
+3.8        >= 1.17 
 ========== =========
 
 .. _lensfun: https://lensfun.github.io/
