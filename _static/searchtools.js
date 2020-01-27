@@ -75,6 +75,16 @@ var Search = {
       }
   },
 
+  loadIndex : function(url) {
+    $.ajax({type: "GET", url: url, data: null,
+            dataType: "script", cache: true,
+            complete: function(jqxhr, textstatus) {
+              if (textstatus != "success") {
+                document.getElementById("searchindexloader").src = url;
+              }
+            }});
+  },
+
   setIndex : function(index) {
     var q;
     this._index = index;
@@ -235,7 +245,7 @@ var Search = {
       if (results.length) {
         var item = results.pop();
         var listItem = $('<li style="display:none"></li>');
-        if (DOCUMENTATION_OPTIONS.FILE_SUFFIX === '') {
+        if (DOCUMENTATION_OPTIONS.BUILDER === 'dirhtml') {
           // dirhtml builder
           var dirname = item[0] + '/';
           if (dirname.match(/\/index\/$/)) {
@@ -309,12 +319,13 @@ var Search = {
     for (var prefix in objects) {
       for (var name in objects[prefix]) {
         var fullname = (prefix ? prefix + '.' : '') + name;
-        if (fullname.toLowerCase().indexOf(object) > -1) {
+        var fullnameLower = fullname.toLowerCase()
+        if (fullnameLower.indexOf(object) > -1) {
           var score = 0;
-          var parts = fullname.split('.');
+          var parts = fullnameLower.split('.');
           // check for different match types: exact matches of full name or
           // "last name" (i.e. last dotted part)
-          if (fullname == object || parts[parts.length - 1] == object) {
+          if (fullnameLower == object || parts[parts.length - 1] == object) {
             score += Scorer.objNameMatch;
           // matches in last name
           } else if (parts[parts.length - 1].indexOf(object) > -1) {
@@ -413,7 +424,7 @@ var Search = {
         for (j = 0; j < _files.length; j++) {
           file = _files[j];
           if (!(file in scoreMap))
-            scoreMap[file] = {}
+            scoreMap[file] = {};
           scoreMap[file][word] = o.score;
         }
       });
@@ -421,7 +432,7 @@ var Search = {
       // create the mapping
       for (j = 0; j < files.length; j++) {
         file = files[j];
-        if (file in fileMap)
+        if (file in fileMap && fileMap[file].indexOf(word) === -1)
           fileMap[file].push(word);
         else
           fileMap[file] = [word];
