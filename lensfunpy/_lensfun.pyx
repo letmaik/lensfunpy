@@ -20,17 +20,16 @@ np.import_array()
 DTYPE = np.float32
 ctypedef np.float32_t DTYPE_t
 
-cdef extern from "version_helper.h":
-    int LF_VERSION_MAJOR
-    int LF_VERSION_MINOR
-    int LF_VERSION_MICRO
-    int LF_VERSION_BUGFIX
-
 # added in 0.3.2 to lfError enum
 # we need to handle it, so we define it manually here
 LF_NO_DATABASE = 2
 
 cdef extern from "lensfun.h":   
+    int LF_VERSION_MAJOR
+    int LF_VERSION_MINOR
+    int LF_VERSION_MICRO
+    int LF_VERSION_BUGFIX
+
     ctypedef char *lfMLstr
     
     enum lfError:
@@ -51,11 +50,10 @@ cdef extern from "lensfun.h":
         LF_FISHEYE
         LF_PANORAMIC
         LF_EQUIRECTANGULAR
-        # available in >= 0.2.6 (Ubuntu 12.04 is on 0.2.5)
-        #LF_FISHEYE_ORTHOGRAPHIC
-        #LF_FISHEYE_STEREOGRAPHIC
-        #LF_FISHEYE_EQUISOLID
-        #LF_FISHEYE_THOBY
+        LF_FISHEYE_ORTHOGRAPHIC
+        LF_FISHEYE_STEREOGRAPHIC
+        LF_FISHEYE_EQUISOLID
+        LF_FISHEYE_THOBY
         
     enum lfDistortionModel:
         LF_DIST_MODEL_NONE
@@ -114,8 +112,6 @@ cdef extern from "lensfun.h":
         
         # calibration data
         float CropFactor
-        # AspectRatio added in 0.2.9, but there's no easy way to include this conditionally (limitation of Cython)
-        # float AspectRatio
         float CenterX
         float CenterY
         lfLensCalibDistortion **CalibDistortion
@@ -181,11 +177,10 @@ class LensType(Enum):
     FISHEYE=LF_FISHEYE
     PANORAMIC=LF_PANORAMIC
     EQUIRECTANGULAR=LF_EQUIRECTANGULAR
-    # LF_FISHEYE_* enum names available in >= 0.2.6 only (Ubuntu 12.04 is on 0.2.5)
-    FISHEYE_ORTHOGRAPHIC=5 # LF_FISHEYE_ORTHOGRAPHIC
-    FISHEYE_STEREOGRAPHIC=6 # LF_FISHEYE_STEREOGRAPHIC
-    FISHEYE_EQUISOLID=7 # LF_FISHEYE_EQUISOLID
-    FISHEYE_THOBY=8 # LF_FISHEYE_THOBY
+    FISHEYE_ORTHOGRAPHIC=LF_FISHEYE_ORTHOGRAPHIC
+    FISHEYE_STEREOGRAPHIC=LF_FISHEYE_STEREOGRAPHIC
+    FISHEYE_EQUISOLID=LF_FISHEYE_EQUISOLID
+    FISHEYE_THOBY=LF_FISHEYE_THOBY
 
 class DistortionModel(Enum):
     NONE=LF_DIST_MODEL_NONE
@@ -617,13 +612,6 @@ cdef class Lens:
         """
         def __get__(self):
             return self.lf.CropFactor
-
-# TODO conditionals don't have access to imported definitions
-#  see also comment in cdef extern block
-#    IF LF_VERSION >= LF_VERSION_029:
-#        property aspect_ratio:
-#            def __get__(self):
-#                return self.lf.AspectRatio
 
     property center_x:
         """
