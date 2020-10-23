@@ -30,6 +30,11 @@ cdef extern from "lensfun.h":
     int LF_VERSION_MICRO
     int LF_VERSION_BUGFIX
 
+    int RED
+    int GREEN
+    int BLUE
+    int LF_CR_3(int a, int b, int c)
+
     ctypedef char *lfMLstr
     
     enum lfError:
@@ -155,11 +160,20 @@ cdef extern from "lensfun.h":
     int lf_modifier_apply_geometry_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
     int lf_modifier_apply_subpixel_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
     int lf_modifier_apply_subpixel_geometry_distortion (lfModifier *modifier, float xu, float yu, int width, int height, float *res)
+    int lf_modifier_apply_color_modification (lfModifier *modifier, void *pixels, float x, float y, int width, int height, int comp_role, int row_stride)
     
 cdef extern from "back_compat.h":
     int lf_lens_interpolate_distortion_ (const lfLens *lens, float focal, lfLensCalibDistortion *res)
     int lf_lens_interpolate_tca_ (const lfLens *lens, float focal, lfLensCalibTCA *res)
     int lf_lens_interpolate_vignetting_ (const lfLens *lens, float focal, float aperture, float distance, lfLensCalibVignetting *res)
+
+ctypedef fused img_dtypes:
+    unsigned char
+    unsigned int
+    unsigned long
+    unsigned long long
+    float
+    double
 
 lensfun_version = (LF_VERSION_MAJOR, LF_VERSION_MINOR, LF_VERSION_MICRO, LF_VERSION_BUGFIX)
 
@@ -943,6 +957,22 @@ cdef class Modifier:
         lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
         return res
     
+    def apply_color_modification(self, img_dtypes[:,:,::1] img):
+        """
+
+        :param ndarray img: Image (h,w,3) for which to apply the vignetting correction, in place.
+        :return: true if vignetting correction was applied, otherwise false
+        :rtype: bool
+        """
+        cdef int comp_role = LF_CR_3(RED, GREEN, BLUE)
+        
+        if img.ndim != 3 or img.shape[0] != self.height or img.shape[1] != self.width or img.shape[2] != 3:
+            raise ValueError(f"image must be of shape ({self.height}, {self.width}, 3)")
+        
+        row_stride = img.shape[1] * 3 * img.itemsize
+        return bool(lf_modifier_apply_color_modification(
+            self.lf, &img[0,0,0], 0, 0, self.width, self.height, comp_role, row_stride))
+
     def _widthHeight(self, width, height):
         if width == -1:
             width = self.width

@@ -113,7 +113,30 @@ def testModifier():
     undistCoords = mod.apply_subpixel_geometry_distortion()
     assert undistCoords.shape[0] == height and undistCoords.shape[1] == width
     assert np.any(undistCoords[:,:,0] != coords)
-    
+
+def testVignettingCorrection():
+    cam_maker = 'NIKON CORPORATION'
+    cam_model = 'NIKON D3S'
+    lens_maker = 'Nikon'
+    lens_model = 'Nikkor AF 20mm f/2.8D'
+    focal_length = 20
+    aperture = 4
+    distance = 10
+    width = 4256
+    height = 2832
+
+    db = lensfun.Database()
+    cam = db.find_cameras(cam_maker, cam_model)[0]
+    lens = db.find_lenses(cam, lens_maker, lens_model)[0]
+
+    mod = lensfun.Modifier(lens, cam.crop_factor, width, height)
+    mod.initialize(focal_length, aperture, distance)
+
+    img = np.zeros((height, width, 3), np.uint8)
+    img[:] = 127
+    mod.apply_color_modification(img)
+    assert img.mean() > 127
+
 def testDeallocationBug():
     db = lensfun.Database()
     cam = db.find_cameras(cam_maker, cam_model)[0]
