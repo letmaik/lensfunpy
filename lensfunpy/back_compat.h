@@ -1,5 +1,4 @@
 #include "lensfun.h"
-#include "version_helper.h"
 
 #define LF_VERSION_0_3_95 0x00035F00
 #if (LF_VERSION < LF_VERSION_0_3_95)
