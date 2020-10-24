@@ -58,6 +58,35 @@ It is also possible to apply the correction via `SciPy <http://www.scipy.org>`_ 
 The `lensfunpy.util <https://letmaik.github.io/lensfunpy/api/lensfunpy.util.html>`_ module
 contains convenience functions for RGB images which handle both OpenCV and SciPy.
 
+How to correct lens vignetting:
+
+.. code-block:: python
+
+    import lensfunpy
+    import imageio
+
+    db = lensfun.Database()
+    cam = db.find_cameras('NIKON CORPORATION', 'NIKON D3S')[0]
+    lens = db.find_lenses(cam, 'Nikon', 'Nikkor AF 20mm f/2.8D')[0]
+
+    img = imageio.imread('/path/to/image.tiff')
+
+    focal_length = 20
+    aperture = 4
+    distance = 10
+    width = img.shape[1]
+    height = img.shape[0]
+
+    mod = lensfun.Modifier(lens, cam.crop_factor, width, height)
+    mod.initialize(focal_length, aperture, distance)
+
+    did_apply = mod.apply_color_modification(img)
+    if did_apply:
+        imageio.imwrite('corrected.tiff', img)
+    else:
+        print('vignetting not corrected, calibration data missing?')
+
+
 Installation
 ------------
 
