@@ -58,6 +58,7 @@ pip freeze
 
 LIB_INSTALL_PREFIX=$(pwd)/external/libs
 export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/lib/pkgconfig
+export LIBRARY_PATH=$LIB_INSTALL_PREFIX/lib
 export PATH=$LIB_INSTALL_PREFIX/bin:$PATH
 
 # Install libffi (glib dependency)
@@ -94,6 +95,7 @@ ninja install
 popd
 
 ls -al $LIB_INSTALL_PREFIX/lib
+ls -al $LIB_INSTALL_PREFIX/lib/pkgconfig
 
 export CC=clang
 export CXX=clang++
@@ -112,7 +114,15 @@ if [ $PYTHON_VERSION == "3.5" ]; then
     mv -v "$filename" "${filename/macosx_10_6_intel/macosx_10_9_x86_64}"
 fi
 
-delocate-listdeps --all dist/*.whl # lists library dependencies
+# List direct and indirect library dependencies
+mkdir tmp_wheel
+pushd tmp_wheel
+unzip ../dist/*.whl
+python ../.github/scripts/otooltree.py lensfunpy/*.so
+popd
+rm -rf tmp_wheel
+
+delocate-listdeps --all dist/*.whl # lists direct library dependencies
 delocate-wheel --require-archs=x86_64 dist/*.whl # copies library dependencies into wheel
 delocate-listdeps --all dist/*.whl # verify
 
