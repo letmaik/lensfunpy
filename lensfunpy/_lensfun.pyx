@@ -927,35 +927,44 @@ cdef class Modifier:
     def apply_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         """
         
-        :return: coordinates for geometry distortion correction
-        :rtype: ndarray of shape (height, width, 2)
+        :return: coordinates for geometry distortion correction,
+                 or None if calibration data missing
+        :rtype: ndarray of shape (height, width, 2) or None
         """
         width, height = self._widthHeight(width, height)
         cdef np.ndarray[DTYPE_t, ndim=3, mode='c'] res = np.empty((height, width, 2), dtype=DTYPE)
-        lf_modifier_apply_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0])
-        return res
+        if lf_modifier_apply_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0]):
+            return res
+        else:
+            return None
     
     def apply_subpixel_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         """
         
-        :return: per-channel coordinates for subpixel distortion correction
-        :rtype: ndarray of shape (height, width, 2, 3)
+        :return: per-channel coordinates for subpixel distortion correction,
+                 or None if calibration data missing
+        :rtype: ndarray of shape (height, width, 2, 3) or None
         """
         width, height = self._widthHeight(width, height)
         cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
-        lf_modifier_apply_subpixel_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
-        return res
+        if lf_modifier_apply_subpixel_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0]):
+            return res
+        else:
+            return None
 
     def apply_subpixel_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
         """
         
-        :return: per-channel coordinates for combined distortion and subpixel distortion correction
-        :rtype: ndarray of shape (height, width, 2, 3)
+        :return: per-channel coordinates for combined distortion and subpixel distortion correction,
+                 or None if calibration data missing
+        :rtype: ndarray of shape (height, width, 2, 3) or None
         """
         width, height = self._widthHeight(width, height)
         cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
-        lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0])
-        return res
+        if lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0]):
+            return res
+        else:
+            return None
     
     def apply_color_modification(self, img_dtypes[:,:,::1] img):
         """

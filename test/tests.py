@@ -1,20 +1,13 @@
-from __future__ import division, print_function
-
 import numpy as np
 import lensfunpy as lensfun
 import gc
 from numpy.testing.utils import assert_equal
 
 # the following strings were taken from the lensfun xml files
-cam_maker = u'NIKON CORPORATION'
-cam_model = u'NIKON D3S'
-lens_maker = u'Nikon'
-lens_model = u'Nikkor 28mm f/2.8D AF'
-# Note regarding u-prefix:
-# As lensfunpy returns unicode strings we declare the above
-# as unicocd strings as well to make comparison in unit tests easier.
-# (Python 2 would default to byte, Python 3 to unicode and comparing byte
-#  with unicode fails without en/decoding)
+cam_maker = 'NIKON CORPORATION'
+cam_model = 'NIKON D3S'
+lens_maker = 'Nikon'
+lens_model = 'Nikon AI-S Nikkor 28mm f/2.8'
 
 def testDatabaseLoading():
     db = lensfun.Database()
@@ -33,11 +26,7 @@ def testDatabaseLoading():
     assert_equal(lens.maker.lower(), lens_maker.lower())
     assert len(str(lens)) > 0
     
-    if lensfun.lensfun_version >= (0,3):
-        # lens names were "streamlined" in lensfun 0.3
-        assert_equal(lens.model.lower(), u'nikon af nikkor 28mm f/2.8d')
-    else:
-        assert_equal(lens.model.lower(), lens_model.lower())
+    assert_equal(lens.model.lower(), lens_model.lower())
     
 def testDatabaseXMLLoading():
     xml = """
@@ -61,11 +50,14 @@ def testDatabaseXMLLoading():
     </camera>
     <lens>
         <maker>Nikon</maker>
-        <model>Nikkor 28mm f/2.8D AF</model>
-        <mount>Nikon F AF</mount>
-        <cropfactor>1.0</cropfactor>
+        <model>Nikon AI-S Nikkor 28mm f/2.8</model>
+        <model lang="en">Nikkor AI-S 28mm f/2.8</model>
+        <mount>Nikon F AI-S</mount>
+        <cropfactor>1</cropfactor>
         <calibration>
-            <distortion model="ptlens" focal="28" a="0" b="0.025773" c="-0.085777" />
+            <!-- Taken with Nikon D600 -->
+            <distortion model="ptlens" focal="28" a="0.00929" b="-0.02155" c="0.0021"/>
+            <tca model="poly3" focal="28" br="-0.0002306" vr="1.0006860" bb="0.0002350" vb="0.9995614"/>
         </calibration>
     </lens>
 </lensdatabase>
