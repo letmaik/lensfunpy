@@ -1,38 +1,39 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Lens class &mdash; lensfunpy 1.7.0 documentation</title>
+  <title>Lens class &mdash; lensfunpy 1.8.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Modifier class" href="lensfunpy.Modifier.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lensfunpy
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lensfunpy
           
 
           
@@ -60,7 +61,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.8.0
               </div>
             
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -104,6 +106,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -142,7 +145,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="index.html">API Reference</a> &raquo;</li>
         
@@ -169,10 +172,10 @@
             
   <div class="section" id="lens-class">
 <h1>Lens class<a class="headerlink" href="#lens-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="lensfunpy.Lens">
 <em class="property">class </em><code class="sig-prename descclassname">lensfunpy.</code><code class="sig-name descname">Lens</code><a class="headerlink" href="#lensfunpy.Lens" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><dl class="py method">
 <dt id="lensfunpy.Lens.interpolate_distortion">
 <code class="sig-name descname">interpolate_distortion</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -182,7 +185,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lensfunpy.Lens.interpolate_tca">
 <code class="sig-name descname">interpolate_tca</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_tca" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -192,7 +195,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lensfunpy.Lens.interpolate_vignetting">
 <code class="sig-name descname">interpolate_vignetting</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em>, <em class="sig-param">float aperture</em>, <em class="sig-param">float distance</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_vignetting" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -202,7 +205,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.calib_distortion">
 <code class="sig-name descname">calib_distortion</code><a class="headerlink" href="#lensfunpy.Lens.calib_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -212,7 +215,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.calib_tca">
 <code class="sig-name descname">calib_tca</code><a class="headerlink" href="#lensfunpy.Lens.calib_tca" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -222,7 +225,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.calib_vignetting">
 <code class="sig-name descname">calib_vignetting</code><a class="headerlink" href="#lensfunpy.Lens.calib_vignetting" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -232,7 +235,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.center_x">
 <code class="sig-name descname">center_x</code><a class="headerlink" href="#lensfunpy.Lens.center_x" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -242,7 +245,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.center_y">
 <code class="sig-name descname">center_y</code><a class="headerlink" href="#lensfunpy.Lens.center_y" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -252,7 +255,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.crop_factor">
 <code class="sig-name descname">crop_factor</code><a class="headerlink" href="#lensfunpy.Lens.crop_factor" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -262,7 +265,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.maker">
 <code class="sig-name descname">maker</code><a class="headerlink" href="#lensfunpy.Lens.maker" title="Permalink to this definition">¶</a></dt>
 <dd><p>The lens manufacturer.</p>
@@ -273,7 +276,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.max_aperture">
 <code class="sig-name descname">max_aperture</code><a class="headerlink" href="#lensfunpy.Lens.max_aperture" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximum aperture. Returns None if unknown.</p>
@@ -284,7 +287,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.max_focal">
 <code class="sig-name descname">max_focal</code><a class="headerlink" href="#lensfunpy.Lens.max_focal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximum focal length.</p>
@@ -295,7 +298,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.min_aperture">
 <code class="sig-name descname">min_aperture</code><a class="headerlink" href="#lensfunpy.Lens.min_aperture" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimum aperture. Returns None if unknown.</p>
@@ -306,7 +309,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.min_focal">
 <code class="sig-name descname">min_focal</code><a class="headerlink" href="#lensfunpy.Lens.min_focal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimum focal length.</p>
@@ -317,7 +320,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#lensfunpy.Lens.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>The lens model.</p>
@@ -328,7 +331,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.mounts">
 <code class="sig-name descname">mounts</code><a class="headerlink" href="#lensfunpy.Lens.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compatible mounts.</p>
@@ -339,7 +342,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.score">
 <code class="sig-name descname">score</code><a class="headerlink" href="#lensfunpy.Lens.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search score.</p>
@@ -350,7 +353,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Lens.type">
 <code class="sig-name descname">type</code><a class="headerlink" href="#lensfunpy.Lens.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>The lens type.</p>
@@ -385,11 +388,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2014, Maik Riechert
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -400,7 +411,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

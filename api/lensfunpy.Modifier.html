@@ -1,38 +1,39 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Modifier class &mdash; lensfunpy 1.7.0 documentation</title>
+  <title>Modifier class &mdash; lensfunpy 1.8.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Enumerations" href="enums.html" />
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> lensfunpy
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lensfunpy
           
 
           
@@ -60,7 +61,7 @@
             
             
               <div class="version">
-                1.7.0
+                1.8.0
               </div>
             
           
@@ -77,6 +78,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -104,6 +106,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -142,7 +145,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="index.html">API Reference</a> &raquo;</li>
         
@@ -169,7 +172,7 @@
             
   <div class="section" id="modifier-class">
 <h1>Modifier class<a class="headerlink" href="#modifier-class" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="lensfunpy.Modifier">
 <em class="property">class </em><code class="sig-prename descclassname">lensfunpy.</code><code class="sig-name descname">Modifier</code><span class="sig-paren">(</span><em class="sig-param">Lens lens</em>, <em class="sig-param">float crop</em>, <em class="sig-param">int width</em>, <em class="sig-param">int height</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Modifier" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -182,7 +185,7 @@
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="lensfunpy.Modifier.apply_geometry_distortion">
 <code class="sig-name descname">apply_geometry_distortion</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float xu=0</em>, <em class="sig-param">float yu=0</em>, <em class="sig-param">int width=-1</em>, <em class="sig-param">int height=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Modifier.apply_geometry_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -195,7 +198,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lensfunpy.Modifier.apply_subpixel_distortion">
 <code class="sig-name descname">apply_subpixel_distortion</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float xu=0</em>, <em class="sig-param">float yu=0</em>, <em class="sig-param">int width=-1</em>, <em class="sig-param">int height=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Modifier.apply_subpixel_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -208,7 +211,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lensfunpy.Modifier.apply_subpixel_geometry_distortion">
 <code class="sig-name descname">apply_subpixel_geometry_distortion</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float xu=0</em>, <em class="sig-param">float yu=0</em>, <em class="sig-param">int width=-1</em>, <em class="sig-param">int height=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Modifier.apply_subpixel_geometry_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -221,7 +224,7 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lensfunpy.Modifier.initialize">
 <code class="sig-name descname">initialize</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em>, <em class="sig-param">float aperture</em>, <em class="sig-param">float distance=1000.0</em>, <em class="sig-param">float scale=0.0</em>, <em class="sig-param">targeom=LensType.RECTILINEAR</em>, <em class="sig-param">pixel_format=np.uint8</em>, <em class="sig-param">int flags=ModifyFlags.ALL</em>, <em class="sig-param">bool reverse=0</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Modifier.initialize" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -246,7 +249,7 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.aperture">
 <code class="sig-name descname">aperture</code><a class="headerlink" href="#lensfunpy.Modifier.aperture" title="Permalink to this definition">¶</a></dt>
 <dd><p>The aperture used when initialising the modifier.</p>
@@ -257,7 +260,23 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
+<dt id="lensfunpy.Modifier.apply_color_modification">
+<code class="sig-name descname">apply_color_modification</code><a class="headerlink" href="#lensfunpy.Modifier.apply_color_modification" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>img</strong> (<em>ndarray</em>) – Image (h,w,3) for which to apply the vignetting correction, in place.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if vignetting correction was applied, otherwise false</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.crop">
 <code class="sig-name descname">crop</code><a class="headerlink" href="#lensfunpy.Modifier.crop" title="Permalink to this definition">¶</a></dt>
 <dd><p>The crop factor used when creating the modifier.</p>
@@ -268,7 +287,7 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.distance">
 <code class="sig-name descname">distance</code><a class="headerlink" href="#lensfunpy.Modifier.distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>The subject distance used when initialising the modifier.</p>
@@ -279,7 +298,7 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.focal_length">
 <code class="sig-name descname">focal_length</code><a class="headerlink" href="#lensfunpy.Modifier.focal_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>The focal lenght used when initialising the modifier.</p>
@@ -290,7 +309,7 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.height">
 <code class="sig-name descname">height</code><a class="headerlink" href="#lensfunpy.Modifier.height" title="Permalink to this definition">¶</a></dt>
 <dd><p>The image height used when creating the modifier.</p>
@@ -301,13 +320,13 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.lens">
 <code class="sig-name descname">lens</code><a class="headerlink" href="#lensfunpy.Modifier.lens" title="Permalink to this definition">¶</a></dt>
 <dd><p>The <a class="reference internal" href="lensfunpy.Lens.html#lensfunpy.Lens" title="lensfunpy.Lens"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Lens</span></code></a> used when creating the modifier.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.scale">
 <code class="sig-name descname">scale</code><a class="headerlink" href="#lensfunpy.Modifier.scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>The scale used when initialising the modifier.</p>
@@ -318,7 +337,7 @@ so that it will look as if it would be a shot made with lens.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lensfunpy.Modifier.width">
 <code class="sig-name descname">width</code><a class="headerlink" href="#lensfunpy.Modifier.width" title="Permalink to this definition">¶</a></dt>
 <dd><p>The image width used when creating the modifier.</p>
@@ -353,11 +372,19 @@ so that it will look as if it would be a shot made with lens.</p></li>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2014, Maik Riechert
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -368,7 +395,6 @@ so that it will look as if it would be a shot made with lens.</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
