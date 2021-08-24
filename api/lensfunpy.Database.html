@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Database class &mdash; lensfunpy 1.8.0 documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -51,7 +56,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lensfunpy
+            <a href="../index.html" class="icon icon-home"> lensfunpy
           
 
           
@@ -141,6 +146,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -156,7 +163,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/lensfunpy.Database.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -173,8 +180,8 @@
   <div class="section" id="database-class">
 <h1>Database class<a class="headerlink" href="#database-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="lensfunpy.Database">
-<em class="property">class </em><code class="sig-prename descclassname">lensfunpy.</code><code class="sig-name descname">Database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paths</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xml</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">load_common</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">load_bundled</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lensfunpy.</span></span><span class="sig-name descname"><span class="pre">Database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_common</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_bundled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database" title="Permalink to this definition">¶</a></dt>
 <dd><p>The main entry point to use lensfunpy’s functionality.</p>
 <p>Database.__init__(paths=None, xml=None, load_common=True, load_bundled=True)</p>
 <dl class="field-list simple">
@@ -188,8 +195,8 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt id="lensfunpy.Database.find_cameras">
-<code class="sig-name descname">find_cameras</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">maker</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">loose_search</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_cameras" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database.find_cameras">
+<span class="sig-name descname"><span class="pre">find_cameras</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loose_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_cameras" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -205,8 +212,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lensfunpy.Database.find_lenses">
-<code class="sig-name descname">find_lenses</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">Camera camera</em>, <em class="sig-param">maker=None</em>, <em class="sig-param">lens=None</em>, <em class="sig-param">loose_search=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_lenses" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database.find_lenses">
+<span class="sig-name descname"><span class="pre">find_lenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">Camera</span> <span class="pre">camera</span></em>, <em class="sig-param"><span class="pre">maker=None</span></em>, <em class="sig-param"><span class="pre">lens=None</span></em>, <em class="sig-param"><span class="pre">loose_search=False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_lenses" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -223,8 +230,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lensfunpy.Database.find_mount">
-<code class="sig-name descname">find_mount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_mount" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database.find_mount">
+<span class="sig-name descname"><span class="pre">find_mount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_mount" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – </p>
@@ -236,8 +243,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Database.cameras">
-<code class="sig-name descname">cameras</code><a class="headerlink" href="#lensfunpy.Database.cameras" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database.cameras">
+<span class="sig-name descname"><span class="pre">cameras</span></span><a class="headerlink" href="#lensfunpy.Database.cameras" title="Permalink to this definition">¶</a></dt>
 <dd><p>All loaded cameras.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -247,8 +254,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Database.lenses">
-<code class="sig-name descname">lenses</code><a class="headerlink" href="#lensfunpy.Database.lenses" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database.lenses">
+<span class="sig-name descname"><span class="pre">lenses</span></span><a class="headerlink" href="#lensfunpy.Database.lenses" title="Permalink to this definition">¶</a></dt>
 <dd><p>All loaded lenses.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -258,8 +265,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Database.mounts">
-<code class="sig-name descname">mounts</code><a class="headerlink" href="#lensfunpy.Database.mounts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Database.mounts">
+<span class="sig-name descname"><span class="pre">mounts</span></span><a class="headerlink" href="#lensfunpy.Database.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>All loaded mounts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -277,37 +284,29 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="lensfunpy.Camera.html" class="btn btn-neutral float-right" title="Camera class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="classes.html" class="btn btn-neutral float-left" title="Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="lensfunpy.Camera.html" class="btn btn-neutral float-right" title="Camera class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="classes.html" class="btn btn-neutral float-left" title="Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2014, Maik Riechert
+        &#169; Copyright 2014, Maik Riechert.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 

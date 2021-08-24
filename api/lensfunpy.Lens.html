@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Lens class &mdash; lensfunpy 1.8.0 documentation</title>
   
@@ -13,10 +13,15 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
 
   
   
+
   
+  
+
   
 
   
@@ -26,10 +31,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -51,7 +56,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> lensfunpy
+            <a href="../index.html" class="icon icon-home"> lensfunpy
           
 
           
@@ -141,6 +146,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -156,7 +163,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/api/lensfunpy.Lens.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -173,11 +180,11 @@
   <div class="section" id="lens-class">
 <h1>Lens class<a class="headerlink" href="#lens-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="lensfunpy.Lens">
-<em class="property">class </em><code class="sig-prename descclassname">lensfunpy.</code><code class="sig-name descname">Lens</code><a class="headerlink" href="#lensfunpy.Lens" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">lensfunpy.</span></span><span class="sig-name descname"><span class="pre">Lens</span></span><a class="headerlink" href="#lensfunpy.Lens" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
-<dt id="lensfunpy.Lens.interpolate_distortion">
-<code class="sig-name descname">interpolate_distortion</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_distortion" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.interpolate_distortion">
+<span class="sig-name descname"><span class="pre">interpolate_distortion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">float</span> <span class="pre">focal</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="namedtuples.html#lensfunpy.LensCalibDistortion" title="lensfunpy.LensCalibDistortion">lensfunpy.LensCalibDistortion</a></p>
@@ -186,8 +193,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lensfunpy.Lens.interpolate_tca">
-<code class="sig-name descname">interpolate_tca</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_tca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.interpolate_tca">
+<span class="sig-name descname"><span class="pre">interpolate_tca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">float</span> <span class="pre">focal</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_tca" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="namedtuples.html#lensfunpy.LensCalibTCA" title="lensfunpy.LensCalibTCA">lensfunpy.LensCalibTCA</a></p>
@@ -196,8 +203,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lensfunpy.Lens.interpolate_vignetting">
-<code class="sig-name descname">interpolate_vignetting</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">float focal</em>, <em class="sig-param">float aperture</em>, <em class="sig-param">float distance</em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_vignetting" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.interpolate_vignetting">
+<span class="sig-name descname"><span class="pre">interpolate_vignetting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">float</span> <span class="pre">focal</span></em>, <em class="sig-param"><span class="pre">float</span> <span class="pre">aperture</span></em>, <em class="sig-param"><span class="pre">float</span> <span class="pre">distance</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Lens.interpolate_vignetting" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="namedtuples.html#lensfunpy.LensCalibVignetting" title="lensfunpy.LensCalibVignetting">lensfunpy.LensCalibVignetting</a></p>
@@ -206,8 +213,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.calib_distortion">
-<code class="sig-name descname">calib_distortion</code><a class="headerlink" href="#lensfunpy.Lens.calib_distortion" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.calib_distortion">
+<span class="sig-name descname"><span class="pre">calib_distortion</span></span><a class="headerlink" href="#lensfunpy.Lens.calib_distortion" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list of <a class="reference internal" href="namedtuples.html#lensfunpy.LensCalibDistortion" title="lensfunpy.LensCalibDistortion"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.LensCalibDistortion</span></code></a> instances</p>
@@ -216,8 +223,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.calib_tca">
-<code class="sig-name descname">calib_tca</code><a class="headerlink" href="#lensfunpy.Lens.calib_tca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.calib_tca">
+<span class="sig-name descname"><span class="pre">calib_tca</span></span><a class="headerlink" href="#lensfunpy.Lens.calib_tca" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list of <a class="reference internal" href="namedtuples.html#lensfunpy.LensCalibTCA" title="lensfunpy.LensCalibTCA"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.LensCalibTCA</span></code></a> instances</p>
@@ -226,8 +233,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.calib_vignetting">
-<code class="sig-name descname">calib_vignetting</code><a class="headerlink" href="#lensfunpy.Lens.calib_vignetting" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.calib_vignetting">
+<span class="sig-name descname"><span class="pre">calib_vignetting</span></span><a class="headerlink" href="#lensfunpy.Lens.calib_vignetting" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list of <a class="reference internal" href="namedtuples.html#lensfunpy.LensCalibTCA" title="lensfunpy.LensCalibTCA"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.LensCalibTCA</span></code></a> instances</p>
@@ -236,8 +243,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.center_x">
-<code class="sig-name descname">center_x</code><a class="headerlink" href="#lensfunpy.Lens.center_x" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.center_x">
+<span class="sig-name descname"><span class="pre">center_x</span></span><a class="headerlink" href="#lensfunpy.Lens.center_x" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
@@ -246,8 +253,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.center_y">
-<code class="sig-name descname">center_y</code><a class="headerlink" href="#lensfunpy.Lens.center_y" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.center_y">
+<span class="sig-name descname"><span class="pre">center_y</span></span><a class="headerlink" href="#lensfunpy.Lens.center_y" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
@@ -256,8 +263,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.crop_factor">
-<code class="sig-name descname">crop_factor</code><a class="headerlink" href="#lensfunpy.Lens.crop_factor" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.crop_factor">
+<span class="sig-name descname"><span class="pre">crop_factor</span></span><a class="headerlink" href="#lensfunpy.Lens.crop_factor" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
@@ -266,8 +273,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.maker">
-<code class="sig-name descname">maker</code><a class="headerlink" href="#lensfunpy.Lens.maker" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.maker">
+<span class="sig-name descname"><span class="pre">maker</span></span><a class="headerlink" href="#lensfunpy.Lens.maker" title="Permalink to this definition">¶</a></dt>
 <dd><p>The lens manufacturer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -277,8 +284,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.max_aperture">
-<code class="sig-name descname">max_aperture</code><a class="headerlink" href="#lensfunpy.Lens.max_aperture" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.max_aperture">
+<span class="sig-name descname"><span class="pre">max_aperture</span></span><a class="headerlink" href="#lensfunpy.Lens.max_aperture" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximum aperture. Returns None if unknown.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -288,8 +295,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.max_focal">
-<code class="sig-name descname">max_focal</code><a class="headerlink" href="#lensfunpy.Lens.max_focal" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.max_focal">
+<span class="sig-name descname"><span class="pre">max_focal</span></span><a class="headerlink" href="#lensfunpy.Lens.max_focal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximum focal length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -299,8 +306,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.min_aperture">
-<code class="sig-name descname">min_aperture</code><a class="headerlink" href="#lensfunpy.Lens.min_aperture" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.min_aperture">
+<span class="sig-name descname"><span class="pre">min_aperture</span></span><a class="headerlink" href="#lensfunpy.Lens.min_aperture" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimum aperture. Returns None if unknown.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -310,8 +317,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.min_focal">
-<code class="sig-name descname">min_focal</code><a class="headerlink" href="#lensfunpy.Lens.min_focal" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.min_focal">
+<span class="sig-name descname"><span class="pre">min_focal</span></span><a class="headerlink" href="#lensfunpy.Lens.min_focal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimum focal length.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -321,8 +328,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.model">
-<code class="sig-name descname">model</code><a class="headerlink" href="#lensfunpy.Lens.model" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#lensfunpy.Lens.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>The lens model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -332,8 +339,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.mounts">
-<code class="sig-name descname">mounts</code><a class="headerlink" href="#lensfunpy.Lens.mounts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.mounts">
+<span class="sig-name descname"><span class="pre">mounts</span></span><a class="headerlink" href="#lensfunpy.Lens.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compatible mounts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -343,8 +350,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.score">
-<code class="sig-name descname">score</code><a class="headerlink" href="#lensfunpy.Lens.score" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.score">
+<span class="sig-name descname"><span class="pre">score</span></span><a class="headerlink" href="#lensfunpy.Lens.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search score.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -354,8 +361,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="lensfunpy.Lens.type">
-<code class="sig-name descname">type</code><a class="headerlink" href="#lensfunpy.Lens.type" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="lensfunpy.Lens.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#lensfunpy.Lens.type" title="Permalink to this definition">¶</a></dt>
 <dd><p>The lens type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -373,37 +380,29 @@
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="lensfunpy.Modifier.html" class="btn btn-neutral float-right" title="Modifier class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="lensfunpy.Mount.html" class="btn btn-neutral float-left" title="Mount class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="lensfunpy.Modifier.html" class="btn btn-neutral float-right" title="Modifier class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lensfunpy.Mount.html" class="btn btn-neutral float-left" title="Mount class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2014, Maik Riechert
+        &#169; Copyright 2014, Maik Riechert.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
