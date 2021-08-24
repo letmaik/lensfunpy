@@ -88,7 +88,7 @@ def windows_lensfun_compile():
     cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
 
     # Download vcpkg to build dependencies of lensfun
-    vcpkg_commit = 'd82f37b4bfc1422d4601fbb63cbd553c925f7014'
+    vcpkg_commit = '2021.05.12'
     vcpkg_url = 'https://github.com/Microsoft/vcpkg/archive/{}.zip'.format(vcpkg_commit)
     vcpkg_dir = os.path.abspath('external/vcpkg-{}'.format(vcpkg_commit))
     vcpkg_bootstrap = os.path.join(vcpkg_dir, 'bootstrap-vcpkg.bat')
@@ -130,14 +130,26 @@ def windows_lensfun_compile():
         sys.exit(code)
     vcpkg_install_dir = os.path.join(vcpkg_dir, 'installed', vcpkg_triplet)
     
+    # bundle runtime dlls
+    vcpkg_bin_dir = os.path.join(vcpkg_install_dir, 'bin')
+    glib2_dll = os.path.join(vcpkg_bin_dir, 'glib-2.0-0.dll')
+
     # configure and compile lensfun
     if not os.path.exists(cmake_build):
         os.mkdir(cmake_build)
     os.chdir(cmake_build)
+    # temporary hack to avoid https://stackoverflow.com/a/53547931
+    # (python module not needed here anyway)
+    patch_path = '../apps/CMakeLists.txt'
+    with open(patch_path) as f:
+        content = f.read()
+    content = content.replace('IF(PYTHON)', 'IF(FALSE)')
+    with open(patch_path, 'w') as f:
+        f.write(content)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
-                    '-DGLIB2_BASE_DIR={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir),
+                    '-DGLIB2_BASE_DIR={} -DGLIB2_DLL={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir, glib2_dll),
             cmake + ' --build .',
             cmake + ' --build . --target install',
             ]
@@ -147,17 +159,14 @@ def windows_lensfun_compile():
         if code != 0:
             sys.exit(code) 
     os.chdir(cwd)
-    
-    # bundle runtime dlls
-    vcpkg_bin_dir = os.path.join(vcpkg_install_dir, 'bin')
 
     dll_runtime_libs = [('lensfun.dll', os.path.join(install_dir, 'bin')),
-                        ('glib-2.dll', vcpkg_bin_dir),
+                        ('glib-2.0-0.dll', vcpkg_bin_dir),
                         # dependencies of glib
                         ('pcre.dll', vcpkg_bin_dir),
-                        ('libiconv.dll', vcpkg_bin_dir),
-                        ('libcharset.dll', vcpkg_bin_dir),
-                        ('libintl.dll', vcpkg_bin_dir),
+                        ('iconv-2.dll', vcpkg_bin_dir),
+                        ('charset-1.dll', vcpkg_bin_dir),
+                        ('intl-8.dll', vcpkg_bin_dir),
                         ]
     
     for filename, folder in dll_runtime_libs:
