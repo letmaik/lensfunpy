@@ -3,6 +3,8 @@ set -e -x
 
 source .github/scripts/retry.sh
 
+CHECK_SHA256=.github/scripts/check_sha256.sh
+
 brew install pkg-config meson
 
 # General note:
@@ -15,17 +17,6 @@ export MACOSX_DEPLOYMENT_TARGET=$MACOS_MIN_VERSION
 
 # The Python variant to install, see exception below.
 export PYTHON_INSTALLER_MACOS_VERSION=$MACOS_MIN_VERSION
-
-# Work-around issue building on newer XCode versions.
-# https://github.com/pandas-dev/pandas/issues/23424#issuecomment-446393981
-if [ $PYTHON_VERSION == "3.5" ]; then
-    # No 10.9 installer available, use 10.6.
-    # The resulting wheel platform tags still have 10.6 (=target of Python itself),
-    # even though technically the wheel should only be run on 10.9 upwards.
-    # This is fixed manually below by renaming the wheel.
-    # See https://github.com/pypa/wheel/issues/312.
-    export PYTHON_INSTALLER_MACOS_VERSION=10.6
-fi
 
 # Install Python
 # Note: The GitHub Actions supplied Python versions are not used
@@ -57,19 +48,24 @@ pip freeze
 # See https://discourse.brew.sh/t/it-is-possible-to-build-packages-that-are-compatible-with-older-macos-versions/4421
 
 LIB_INSTALL_PREFIX=$(pwd)/external/libs
+export CMAKE_PREFIX_PATH=$LIB_INSTALL_PREFIX
 export PKG_CONFIG_PATH=$LIB_INSTALL_PREFIX/lib/pkgconfig
 export LIBRARY_PATH=$LIB_INSTALL_PREFIX/lib
 export PATH=$LIB_INSTALL_PREFIX/bin:$PATH
 
 # Install libffi (glib dependency)
-curl -L --retry 3 https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz | tar xz
+curl -L --retry 3 -o libffi.tar.gz https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
+$CHECK_SHA256 libffi.tar.gz d06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37
+tar xzf libffi.tar.gz
 pushd libffi-3.2.1
 ./configure --prefix=$LIB_INSTALL_PREFIX --disable-debug
 make install -j
 popd
 
 # Install gettext (glib dependency)
-curl -L --retry 3 https://ftp.gnu.org/gnu/gettext/gettext-0.20.1.tar.xz | tar xz
+curl -L --retry 3 -o gettext.tar.xz https://ftp.gnu.org/gnu/gettext/gettext-0.20.1.tar.xz
+$CHECK_SHA256 gettext.tar.xz 53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800
+tar xzf gettext.tar.xz
 pushd gettext-0.20.1
 ./configure --prefix=$LIB_INSTALL_PREFIX \
     --disable-debug \
@@ -80,12 +76,13 @@ make install
 popd
 
 # Install glib (lensfun dependency)
-curl -L --retry 3 https://download.gnome.org/sources/glib/2.69/glib-2.69.2.tar.xz | tar xz
+curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.69/glib-2.69.2.tar.xz
+$CHECK_SHA256 glib.tar.xz a62249e35a8635175a697b3215f1df2b89e0fbb4adb520dcbe21a3ae1ebb8882
+tar xzf glib.tar.xz
 pushd glib-2.69.2
 mkdir build
 cd build
 meson --prefix=$LIB_INSTALL_PREFIX \
-  -Dinternal_pcre=true \
   -Dselinux=disabled \
   -Ddtrace=false \
   -Dman=false \
@@ -105,14 +102,7 @@ export LDFLAGS=$CFLAGS
 export ARCHFLAGS=$CFLAGS
 
 # Build wheel
-export CMAKE_PREFIX_PATH=$LIB_INSTALL_PREFIX
 python setup.py bdist_wheel
-
-# Fix wheel platform tag, see above for details.
-if [ $PYTHON_VERSION == "3.5" ]; then
-    filename=$(ls dist/*.whl)
-    mv -v "$filename" "${filename/macosx_10_6_intel/macosx_10_9_x86_64}"
-fi
 
 # List direct and indirect library dependencies
 mkdir tmp_wheel
@@ -155,5 +145,5 @@ retry pip install -r dev-requirements.txt
 rm -rf $LIB_INSTALL_PREFIX
 mkdir tmp_for_test
 pushd tmp_for_test
-nosetests --verbosity=3 --nocapture ../test
+pytest --verbosity=3 -s ../test
 popd

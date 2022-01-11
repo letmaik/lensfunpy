@@ -90,9 +90,12 @@ How to correct lens vignetting:
 Installation
 ------------
 
-Binary wheels for Linux, macOS, and Windows are provided for Python 3.5 - 3.8.
-These can be installed with a simple ``pip install lensfunpy``.
-Currently, Linux and macOS wheels are only available as 64 bit versions.
+Install lensfunpy by running:
+```sh
+pip install lensfunpy
+```
+
+64-bit binary wheels are provided for Linux, macOS, and Windows.
 
 Installation from source on Linux/macOS
 ---------------------------------------
@@ -139,6 +142,30 @@ for libraries by default in some Linux distributions.
 Note that on some systems the installation path may be slightly different, such as ``/usr/local/lib/x86_64-linux-gnu``
 or ``/usr/local/lib64``.
 
+Installation from source on Windows
+-----------------------------------
+
+These instructions are experimental and support is not provided for them.
+Typically, there should be no need to build manually since wheels are hosted on PyPI.
+
+You need to have Visual Studio installed to build lensfunpy.
+
+In a PowerShell window:
+
+.. code-block:: sh
+
+    $env:USE_CONDA = '1'
+    $env:PYTHON_VERSION = '3.7'
+    $env:PYTHON_ARCH = '64'
+    $env:NUMPY_VERSION = '1.14.*'
+    git clone https://github.com/letmaik/lensfunpy
+    cd lensfunpy
+    .github/scripts/build-windows.ps1
+
+The above will download all build dependencies (including a Python installation)
+and is fully configured through the four environment variables.
+Set ``USE_CONDA = '0'`` to build within an existing Python environment.
+
 NumPy Dependency
 ----------------
 
@@ -147,10 +174,10 @@ lensfunpy depends on NumPy. The minimum supported NumPy version depends on your 
 ========== =========
 Python     numpy
 ---------- ---------
-3.5        >= 1.9
-3.6        >= 1.11
 3.7        >= 1.14
 3.8        >= 1.17 
+3.9        >= 1.19
+3.10       >= 1.21
 ========== =========
 
 .. _lensfun: https://lensfun.github.io/

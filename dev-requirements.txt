@@ -10,7 +10,7 @@ numpy
 scipy
 
 # test dependencies
-nose
+pytest
 
 # documentation dependencies
 sphinx_rtd_theme

@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e -x
 
-bash --version
-
 cd /io
 
 source .github/scripts/retry.sh
@@ -10,9 +8,7 @@ source .github/scripts/retry.sh
 # List python versions
 ls /opt/python
 
-if [ $PYTHON_VERSION == "3.5" ]; then
-    PYBIN="/opt/python/cp35-cp35m/bin"
-elif [ $PYTHON_VERSION == "3.6" ]; then
+if [ $PYTHON_VERSION == "3.6" ]; then
     PYBIN="/opt/python/cp36-cp36m/bin"
 elif [ $PYTHON_VERSION == "3.7" ]; then
     PYBIN="/opt/python/cp37-cp37m/bin"
@@ -20,13 +16,12 @@ elif [ $PYTHON_VERSION == "3.8" ]; then
     PYBIN="/opt/python/cp38-cp38/bin"
 elif [ $PYTHON_VERSION == "3.9" ]; then
     PYBIN="/opt/python/cp39-cp39/bin"
+elif [ $PYTHON_VERSION == "3.10" ]; then
+    PYBIN="/opt/python/cp310-cp310/bin"
 else
     echo "Unsupported Python version $PYTHON_VERSION"
     exit 1
 fi
-
-# Install build tools
-retry yum install -y cmake
 
 # Install liblensfun
 pushd external/lensfun
@@ -61,7 +56,7 @@ retry ${PYBIN}/pip install -r dev-requirements.txt
 retry ${PYBIN}/pip install -U numpy # scipy should trigger an update, but that doesn't happen
 
 pushd $HOME
-${PYBIN}/nosetests --verbosity=3 --nocapture /io/test
+${PYBIN}/pytest --verbosity=3 -s /io/test
 popd
 
 # Move wheel to dist/ folder for easier deployment
