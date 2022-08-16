@@ -77,7 +77,7 @@ How to correct lens vignetting:
     width = img.shape[1]
     height = img.shape[0]
 
-    mod = lensfun.Modifier(lens, cam.crop_factor, width, height)
+    mod = lensfunpy.Modifier(lens, cam.crop_factor, width, height)
     mod.initialize(focal_length, aperture, distance)
 
     did_apply = mod.apply_color_modification(img)
