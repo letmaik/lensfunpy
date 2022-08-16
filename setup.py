@@ -88,7 +88,7 @@ def windows_lensfun_compile():
     cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
 
     # Download vcpkg to build dependencies of lensfun
-    vcpkg_commit = '2021.05.12'
+    vcpkg_commit = '2022.08.15'
     vcpkg_url = 'https://github.com/Microsoft/vcpkg/archive/{}.zip'.format(vcpkg_commit)
     vcpkg_dir = os.path.abspath('external/vcpkg-{}'.format(vcpkg_commit))
     vcpkg_bootstrap = os.path.join(vcpkg_dir, 'bootstrap-vcpkg.bat')
