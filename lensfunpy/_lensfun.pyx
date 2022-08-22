@@ -236,20 +236,18 @@ cdef class Database:
         :param bool load_common: whether to load the system/user database files
         :param bool load_bundled: whether to load the bundled database files
         """
+        # Note: Matching entries in files loaded later override entries loaded earlier.
+
         if paths is None:
             paths = []
 
         if load_bundled:
             root = os.path.abspath(os.path.dirname(__file__))
             xml_glob = os.path.join(root, 'db_files', '*.xml')
-            paths += glob.glob(xml_glob)
+            bundled_paths = glob.glob(xml_glob)
 
-        for path in paths:
-            handleError(lf_db_load_file(self.lf, _chars(path)))
-
-        if xml:
-            xml = _chars(xml.strip()) # stripping as lensfun is very strict here
-            handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
+            for path in bundled_paths:
+                handleError(lf_db_load_file(self.lf, _chars(path)))
 
         if load_common:
             code = lf_db_load(self.lf)
@@ -259,6 +257,14 @@ cdef class Database:
                 pass
             else:
                 handleError(code)
+
+        for path in paths:
+            handleError(lf_db_load_file(self.lf, _chars(path)))
+
+        if xml:
+            xml = _chars(xml.strip()) # stripping as lensfun is very strict here
+            handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
+
 
     def __dealloc__(self):
         lf_db_destroy(self.lf)
