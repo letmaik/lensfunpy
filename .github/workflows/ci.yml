@@ -118,8 +118,11 @@ jobs:
 
     - name: Remove pre-installed vcpkg
       if: matrix.config.os-name == 'windows'
-      run: rm -rf "$VCPKG_INSTALLATION_ROOT"
-      shell: bash
+      run: |
+        vcpkg.exe integrate remove
+        Remove-Item -Recurse -Force "$env:VCPKG_INSTALLATION_ROOT"
+        [Environment]::SetEnvironmentVariable('VCPKG_INSTALLATION_ROOT', $null, 'Machine')
+      shell: pwsh
 
     - name: Build wheels (Windows)
       if: matrix.config.os-name == 'windows'
