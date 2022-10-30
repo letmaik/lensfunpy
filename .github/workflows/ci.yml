@@ -121,6 +121,7 @@ jobs:
       run: |
         rm -rf "$VCPKG_INSTALLATION_ROOT"
         echo "VCPKG_INSTALLATION_ROOT=" >> $GITHUB_ENV
+        echo "VCPKG_ROOT=" >> $GITHUB_ENV
       shell: bash
 
     - name: Build wheels (Windows)
