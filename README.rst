@@ -178,6 +178,7 @@ Python     numpy
 3.8        >= 1.17 
 3.9        >= 1.19
 3.10       >= 1.21
+3.11       >= 1.23
 ========== =========
 
 .. _lensfun: https://lensfun.github.io/
