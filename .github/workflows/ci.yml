@@ -116,6 +116,11 @@ jobs:
       with:
         python-version: ${{ matrix.config.python-version }}
 
+    - name: Remove pre-installed vcpkg
+      if: matrix.config.os-name == 'windows'
+      run: rm -rf "$VCPKG_INSTALLATION_ROOT"
+      shell: bash
+
     - name: Build wheels (Windows)
       if: matrix.config.os-name == 'windows'
       run: .github/scripts/build-windows.ps1
