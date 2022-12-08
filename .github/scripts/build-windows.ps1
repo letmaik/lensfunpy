@@ -20,9 +20,8 @@ function Initialize-Python {
         & $env:CONDA_ROOT\shell\condabin\conda-hook.ps1
         exec { conda update --yes -n base -c defaults conda }
     }
-    # Check Python version/arch
+    # Check Python version
     exec { python -c "import platform; assert platform.python_version().startswith('$env:PYTHON_VERSION')" }
-    exec { python -c "import struct; assert struct.calcsize('P') * 8 == $env:PYTHON_ARCH" }
 }
 
 function Create-VEnv {
