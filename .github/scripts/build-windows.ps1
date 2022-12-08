@@ -75,7 +75,7 @@ function Initialize-VS {
     $VS_EDITIONS = @("Enterprise", "Professional", "Community")
     $VS_INIT_CMD_SUFFIX = "Common7\Tools\vsdevcmd.bat"
 
-    $VS_ARCH = if ($env:PYTHON_ARCH -eq '32') { 'x86' } else { 'x64' }
+    $VS_ARCH = if ($env:PYTHON_ARCH -eq 'x86') { 'x86' } else { 'x64' }
     $VS_INIT_ARGS = "-arch=$VS_ARCH -no_logo"
 
     $found = $false
@@ -110,8 +110,8 @@ function Initialize-VS {
 if (!$env:PYTHON_VERSION) {
     throw "PYTHON_VERSION env var missing, must be x.y"
 }
-if ($env:PYTHON_ARCH -ne '32' -and $env:PYTHON_ARCH -ne '64') {
-    throw "PYTHON_ARCH env var must be 32 or 64"
+if ($env:PYTHON_ARCH -ne 'x86' -and $env:PYTHON_ARCH -ne 'x86_64') {
+    throw "PYTHON_ARCH env var must be x86 or x86_64"
 }
 if (!$env:NUMPY_VERSION) {
     throw "NUMPY_VERSION env var missing"

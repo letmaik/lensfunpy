@@ -94,9 +94,14 @@ popd
 ls -al $LIB_INSTALL_PREFIX/lib
 ls -al $LIB_INSTALL_PREFIX/lib/pkgconfig
 
+# By default, wheels are tagged with the architecture of the Python
+# installation, which would produce universal2 even if only building
+# for x86_64. The following line overrides that behavior.
+export _PYTHON_HOST_PLATFORM="macosx-${MACOS_MIN_VERSION}-${PYTHON_ARCH}"
+
 export CC=clang
 export CXX=clang++
-export CFLAGS="-arch x86_64"
+export CFLAGS="-arch ${PYTHON_ARCH}"
 export CXXFLAGS=$CFLAGS
 export LDFLAGS=$CFLAGS
 export ARCHFLAGS=$CFLAGS
@@ -113,7 +118,7 @@ popd
 rm -rf tmp_wheel
 
 delocate-listdeps --all dist/*.whl # lists direct library dependencies
-delocate-wheel --require-archs=x86_64 dist/*.whl # copies library dependencies into wheel
+delocate-wheel --require-archs=${PYTHON_ARCH} dist/*.whl # copies library dependencies into wheel
 delocate-listdeps --all dist/*.whl # verify
 
 # Dump target versions of dependend libraries.
