@@ -76,10 +76,10 @@ make install
 popd
 
 # Install glib (lensfun dependency)
-curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.69/glib-2.69.2.tar.xz
-$CHECK_SHA256 glib.tar.xz a62249e35a8635175a697b3215f1df2b89e0fbb4adb520dcbe21a3ae1ebb8882
+curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.75/glib-2.75.0.tar.xz
+$CHECK_SHA256 glib.tar.xz 6dde8e55cc4a2c83d96797120b08bcffb5f645b2e212164ae22d63c40e0e6360
 tar xzf glib.tar.xz
-pushd glib-2.69.2
+pushd glib-2.75.0
 mkdir build
 cd build
 meson --prefix=$LIB_INSTALL_PREFIX \
