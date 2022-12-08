@@ -156,7 +156,7 @@ In a PowerShell window:
 
     $env:USE_CONDA = '1'
     $env:PYTHON_VERSION = '3.7'
-    $env:PYTHON_ARCH = '64'
+    $env:PYTHON_ARCH = 'x86_64'
     $env:NUMPY_VERSION = '1.14.*'
     git clone https://github.com/letmaik/lensfunpy
     cd lensfunpy
