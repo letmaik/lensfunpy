@@ -949,10 +949,10 @@ cdef class Modifier:
         
         :return: per-channel coordinates for subpixel distortion correction,
                  or None if calibration data missing
-        :rtype: ndarray of shape (height, width, 2, 3) or None
+        :rtype: ndarray of shape (height, width, 3, 2) or None
         """
         width, height = self._widthHeight(width, height)
-        cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
+        cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 3, 2), dtype=DTYPE)
         if lf_modifier_apply_subpixel_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0]):
             return res
         else:
@@ -963,10 +963,10 @@ cdef class Modifier:
         
         :return: per-channel coordinates for combined distortion and subpixel distortion correction,
                  or None if calibration data missing
-        :rtype: ndarray of shape (height, width, 2, 3) or None
+        :rtype: ndarray of shape (height, width, 3, 2) or None
         """
         width, height = self._widthHeight(width, height)
-        cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 2, 3), dtype=DTYPE)
+        cdef np.ndarray[DTYPE_t, ndim=4, mode='c'] res = np.empty((height, width, 3, 2), dtype=DTYPE)
         if lf_modifier_apply_subpixel_geometry_distortion(self.lf, xu, yu, width, height, &res[0,0,0,0]):
             return res
         else:
