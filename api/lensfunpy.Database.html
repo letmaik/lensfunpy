@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Database class &mdash; lensfunpy 1.12.0 documentation</title>
@@ -29,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> lensfunpy
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            lensfunpy
           </a>
               <div class="version">
                 1.12.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -75,7 +79,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">API Reference</a></li>
           <li class="breadcrumb-item"><a href="classes.html">Classes</a></li>
       <li class="breadcrumb-item active">Database class</li>
@@ -96,7 +100,7 @@
 <dd><p>The main entry point to use lensfunpy’s functionality.</p>
 <p>Database.__init__(paths=None, xml=None, load_common=True, load_bundled=True)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>paths</strong> (<em>iterable</em><em> of </em><em>str</em>) – XML files to load</p></li>
 <li><p><strong>xml</strong> (<em>str</em>) – load data from XML string</p></li>
@@ -109,14 +113,14 @@
 <dt class="sig sig-object py" id="lensfunpy.Database.find_cameras">
 <span class="sig-name descname"><span class="pre">find_cameras</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loose_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_cameras" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>maker</strong> (<em>str</em>) – return cameras from the given manufacturer</p></li>
 <li><p><strong>model</strong> (<em>str</em>) – return cameras matching the given model</p></li>
 <li><p><strong>loose_search</strong> (<em>bool</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of <a class="reference internal" href="lensfunpy.Camera.html#lensfunpy.Camera" title="lensfunpy.Camera"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Camera</span></code></a> instances</p>
 </dd>
 </dl>
@@ -126,7 +130,7 @@
 <dt class="sig sig-object py" id="lensfunpy.Database.find_lenses">
 <span class="sig-name descname"><span class="pre">find_lenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Camera</span> <span class="pre">camera</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maker=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lens=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loose_search=False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_lenses" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>camera</strong> (<a class="reference internal" href="lensfunpy.Camera.html#lensfunpy.Camera" title="lensfunpy.Camera"><em>lensfunpy.Camera</em></a>) – </p></li>
 <li><p><strong>maker</strong> (<em>str</em>) – </p></li>
@@ -134,7 +138,7 @@
 <li><p><strong>loose_search</strong> (<em>bool</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of <a class="reference internal" href="lensfunpy.Lens.html#lensfunpy.Lens" title="lensfunpy.Lens"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Lens</span></code></a> instances</p>
 </dd>
 </dl>
@@ -144,10 +148,10 @@
 <dt class="sig sig-object py" id="lensfunpy.Database.find_mount">
 <span class="sig-name descname"><span class="pre">find_mount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lensfunpy.Database.find_mount" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="lensfunpy.Mount.html#lensfunpy.Mount" title="lensfunpy.Mount"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Mount</span></code></a> instance</p>
 </dd>
 </dl>
@@ -158,7 +162,7 @@
 <span class="sig-name descname"><span class="pre">cameras</span></span><a class="headerlink" href="#lensfunpy.Database.cameras" title="Permalink to this definition">¶</a></dt>
 <dd><p>All loaded cameras.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of <a class="reference internal" href="lensfunpy.Camera.html#lensfunpy.Camera" title="lensfunpy.Camera"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Camera</span></code></a> instances</p>
 </dd>
 </dl>
@@ -169,7 +173,7 @@
 <span class="sig-name descname"><span class="pre">lenses</span></span><a class="headerlink" href="#lensfunpy.Database.lenses" title="Permalink to this definition">¶</a></dt>
 <dd><p>All loaded lenses.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of <a class="reference internal" href="lensfunpy.Lens.html#lensfunpy.Lens" title="lensfunpy.Lens"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Lens</span></code></a> instances</p>
 </dd>
 </dl>
@@ -180,7 +184,7 @@
 <span class="sig-name descname"><span class="pre">mounts</span></span><a class="headerlink" href="#lensfunpy.Database.mounts" title="Permalink to this definition">¶</a></dt>
 <dd><p>All loaded mounts.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of <a class="reference internal" href="lensfunpy.Mount.html#lensfunpy.Mount" title="lensfunpy.Mount"><code class="xref py py-class docutils literal notranslate"><span class="pre">lensfunpy.Mount</span></code></a> instances</p>
 </dd>
 </dl>
