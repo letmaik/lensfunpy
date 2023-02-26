@@ -163,7 +163,7 @@ def windows_lensfun_compile():
     dll_runtime_libs = [('lensfun.dll', os.path.join(install_dir, 'bin')),
                         ('glib-2.0-0.dll', vcpkg_bin_dir),
                         # dependencies of glib
-                        ('pcre.dll', vcpkg_bin_dir),
+                        ('pcre2-8.dll', vcpkg_bin_dir),
                         ('iconv-2.dll', vcpkg_bin_dir),
                         ('charset-1.dll', vcpkg_bin_dir),
                         ('intl-8.dll', vcpkg_bin_dir),
