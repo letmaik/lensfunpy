@@ -91,9 +91,10 @@ Installation
 ------------
 
 Install lensfunpy by running:
-```sh
-pip install lensfunpy
-```
+
+.. code-block:: sh
+
+    pip install lensfunpy
 
 64-bit binary wheels are provided for Linux, macOS, and Windows.
 
