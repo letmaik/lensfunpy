@@ -1,7 +1,7 @@
 import numpy as np
 import lensfunpy as lensfun
 import gc
-from numpy.testing.utils import assert_equal
+from numpy.testing import assert_equal
 
 # the following strings were taken from the lensfun xml files
 cam_maker = 'NIKON CORPORATION'
