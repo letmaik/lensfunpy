@@ -274,7 +274,6 @@ setup(
       description = 'Lens distortion correction for Python, a wrapper for lensfun',
       long_description = open('README.rst').read(),
       author = 'Maik Riechert',
-      author_email = 'maik.riechert@arcor.de',
       url = 'https://github.com/letmaik/lensfunpy',
       classifiers=[
         'Development Status :: 4 - Beta',
@@ -284,10 +283,6 @@ setup(
         'Programming Language :: Cython',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
