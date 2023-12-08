@@ -14,12 +14,6 @@ jobs:
           os-name: linux
           docker-image: quay.io/pypa/manylinux2014_x86_64
           python-arch: 'x86_64'
-          python-version: '3.7'
-          numpy-version: '1.14.*'
-        - os-image: ubuntu-latest
-          os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
-          python-arch: 'x86_64'
           python-version: '3.8'
           numpy-version: '1.17.*'
         - os-image: ubuntu-latest
@@ -40,13 +34,13 @@ jobs:
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '1.23.*'
-
         - os-image: ubuntu-latest
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
-          python-arch: 'aarch64'
-          python-version: '3.7'
-          numpy-version: '1.19.*'
+          docker-image: quay.io/pypa/manylinux2014_x86_64
+          python-arch: 'x86_64'
+          python-version: '3.12'
+          numpy-version: '1.26.*'
+
         - os-image: ubuntu-latest
           os-name: linux
           docker-image: quay.io/pypa/manylinux2014_aarch64
@@ -71,13 +65,13 @@ jobs:
           python-arch: 'aarch64'
           python-version: '3.11'
           numpy-version: '1.23.*'
+        - os-image: ubuntu-latest
+          os-name: linux
+          docker-image: quay.io/pypa/manylinux2014_aarch64
+          python-arch: 'aarch64'
+          python-version: '3.12'
+          numpy-version: '1.26.*'
 
-        - os-image: macos-latest
-          os-name: mac
-          macos-min-version: '10.9'
-          python-arch: 'x86_64'
-          python-version: '3.7'
-          numpy-version: '1.14.*'
         - os-image: macos-latest
           os-name: mac
           macos-min-version: '10.9'
@@ -102,32 +96,38 @@ jobs:
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '1.23.*'
-
-        - os-image: windows-latest
-          os-name: windows
+        - os-image: macos-latest
+          os-name: mac
+          macos-min-version: '10.9'
           python-arch: 'x86_64'
-          python-version: '3.7'
-          numpy-version: '1.14.*'
-        - os-image: windows-latest
+          python-version: '3.12'
+          numpy-version: '1.26.*'
+
+        - os-image: windows-2019
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.8'
           numpy-version: '1.17.*'
-        - os-image: windows-latest
+        - os-image: windows-2019
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.9'
           numpy-version: '1.19.*'
-        - os-image: windows-latest
+        - os-image: windows-2019
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.10'
           numpy-version: '1.21.*'
-        - os-image: windows-latest
+        - os-image: windows-2019
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '1.23.*'
+        - os-image: windows-2019
+          os-name: windows
+          python-arch: 'x86_64'
+          python-version: '3.12'
+          numpy-version: '1.26.*'
 
     runs-on: ${{ matrix.config.os-image }}
 
@@ -192,10 +192,10 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
    
     - name: Setup Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
       with:
         python-version: '3.7'
 
@@ -214,7 +214,7 @@ jobs:
       run: sphinx-build -b html docs dist-docs
 
     - name: Store docs HTML as artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: docs
         path: dist-docs
@@ -228,13 +228,13 @@ jobs:
 
     steps:
     - name: Download wheels from artifact storage
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3
       with:
         name: wheels
         path: dist
 
     - name: Setup Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v4
     
     - name: Upload wheels to PyPI
       run: |
@@ -251,7 +251,7 @@ jobs:
 
     steps:
     - name: Download docs HTML from artifact storage
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3
       with:
         name: docs
         path: dist-docs
