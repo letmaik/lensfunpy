@@ -207,7 +207,7 @@ jobs:
 
     - name: Install lensfunpy from wheel
       run: |
-        pip install --no-deps lensfunpy --no-index -f dist
+        pip install dist/lensfunpy*cp310-manylinux*.whl
         pip install -r dev-requirements.txt
 
     - name: Build docs
