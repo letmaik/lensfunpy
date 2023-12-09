@@ -132,13 +132,13 @@ jobs:
     runs-on: ${{ matrix.config.os-image }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         submodules: true
 
     - name: Set up QEMU
       if: matrix.config.python-arch == 'aarch64'
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v3
 
     - name: Build wheels (Linux)
       if: matrix.config.os-name == 'linux'
@@ -159,7 +159,7 @@ jobs:
 
     - name: Setup Python (Windows)
       if: matrix.config.os-name == 'windows'
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.config.python-version }}
 
@@ -181,7 +181,7 @@ jobs:
         NUMPY_VERSION: ${{ matrix.config.numpy-version }}
 
     - name: Store wheels as artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: wheels
         path: dist
@@ -192,7 +192,7 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
    
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -200,7 +200,7 @@ jobs:
         python-version: '3.7'
 
     - name: Download wheels from artifact storage
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v3
       with:
         name: wheels
         path: dist
