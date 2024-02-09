@@ -8,7 +8,8 @@ lensfunpy is an easy-to-use Python wrapper for the lensfun_ library.
 Sample code
 -----------
 
-How to find cameras and lenses:
+How to find cameras and lenses
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -22,43 +23,48 @@ How to find cameras and lenses:
     db = lensfunpy.Database()
     cam = db.find_cameras(cam_maker, cam_model)[0]
     lens = db.find_lenses(cam, lens_maker, lens_model)[0]
-    
+
     print(cam)
     # Camera(Maker: NIKON CORPORATION; Model: NIKON D3S; Variant: ; 
     #        Mount: Nikon F AF; Crop Factor: 1.0; Score: 0)
-    
+
     print(lens)
     # Lens(Maker: Nikon; Model: Nikkor 28mm f/2.8D AF; Type: RECTILINEAR;
     #      Focal: 28.0-28.0; Aperture: 2.79999995232-2.79999995232; 
-    #      Crop factor: 1.0; Score: 110)    
+    #      Crop factor: 1.0; Score: 110)
 
-How to correct lens distortion:
+How to correct lens distortion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
     import cv2 # OpenCV library
-    
+
     focal_length = 28.0
     aperture = 1.4
     distance = 10
     image_path = '/path/to/image.tiff'
     undistorted_image_path = '/path/to/image_undist.tiff'
-    
-    im = cv2.imread(image_path)
-    height, width = im.shape[0], im.shape[1]
-    
+
+    img = cv2.imread(image_path)
+    height, width = img.shape[0], img.shape[1]
+
     mod = lensfunpy.Modifier(lens, cam.crop_factor, width, height)
-    mod.initialize(focal_length, aperture, distance)
-    
+    mod.initialize(focal_length, aperture, distance, pixel_format=img.dtype)
+
     undist_coords = mod.apply_geometry_distortion()
-    im_undistorted = cv2.remap(im, undist_coords, None, cv2.INTER_LANCZOS4)
-    cv2.imwrite(undistorted_image_path, im_undistorted)
-    
+    img_undistorted = cv2.remap(img, undist_coords, None, cv2.INTER_LANCZOS4)
+    cv2.imwrite(undistorted_image_path, img_undistorted)
+
 It is also possible to apply the correction via `SciPy <http://www.scipy.org>`_ instead of OpenCV.
 The `lensfunpy.util <https://letmaik.github.io/lensfunpy/api/lensfunpy.util.html>`_ module
 contains convenience functions for RGB images which handle both OpenCV and SciPy.
 
-How to correct lens vignetting:
+How to correct lens vignetting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note that the assumption is that the image is in a linear state, i.e., it is not
+gamma corrected.
 
 .. code-block:: python
 
@@ -69,6 +75,7 @@ How to correct lens vignetting:
     cam = db.find_cameras('NIKON CORPORATION', 'NIKON D3S')[0]
     lens = db.find_lenses(cam, 'Nikon', 'Nikkor AF 20mm f/2.8D')[0]
 
+    # The image is assumed to be in a linearly state.
     img = imageio.imread('/path/to/image.tiff')
 
     focal_length = 20
@@ -78,14 +85,54 @@ How to correct lens vignetting:
     height = img.shape[0]
 
     mod = lensfunpy.Modifier(lens, cam.crop_factor, width, height)
-    mod.initialize(focal_length, aperture, distance)
+    mod.initialize(focal_length, aperture, distance, pixel_format=img.dtype)
 
     did_apply = mod.apply_color_modification(img)
     if did_apply:
-        imageio.imwrite('corrected.tiff', img)
+        imageio.imwrite('/path/to/image_corrected.tiff', img)
     else:
         print('vignetting not corrected, calibration data missing?')
 
+
+How to correct lens vignetting and TCA
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note that the assumption is that the image is in a linear state, i.e., it is not
+gamma corrected. Vignetting should always be corrected first before applying the
+TCA correction.
+
+.. code-block:: python
+
+    import imageio
+    import cv2
+    import lensfunpy
+
+    db = lensfunpy.Database()
+    cam = db.find_cameras('Canon', 'Canon EOS 5D Mark IV')[0]
+    lens = db.find_lenses(cam, 'Sigma', 'Sigma 8mm f/3.5 EX DG circular fisheye')[0]
+
+    # The image is assumed to be in a linearly state.
+    img = imageio.imread('/path/to/image.tiff')
+
+    focal_length = 8.0
+    aperture = 11
+    distance = 10
+    width = img.shape[1]
+    height = img.shape[0]
+
+    mod = lensfunpy.Modifier(lens, cam.crop_factor, width, height)
+    mod.initialize(focal_length, aperture, distance, pixel_format=img.dtype, flags=lensfunpy.ModifyFlags.VIGNETTING | lensfunpy.ModifyFlags.TCA)
+
+    # Vignette Correction
+    mod.apply_color_modification(img)
+
+    # TCA Correction
+    undist_coords = mod.apply_subpixel_distortion()
+    img[..., 0] = cv2.remap(img[..., 0], undist_coords[..., 0, :], None, cv2.INTER_LANCZOS4)
+    img[..., 1] = cv2.remap(img[..., 1], undist_coords[..., 1, :], None, cv2.INTER_LANCZOS4)
+    img[..., 2] = cv2.remap(img[..., 2], undist_coords[..., 2, :], None, cv2.INTER_LANCZOS4)
+
+    imageio.imwrite('/path/to/image_corrected.tiff', img)
 
 Installation
 ------------
