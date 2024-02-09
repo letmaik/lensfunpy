@@ -54,10 +54,10 @@ export LIBRARY_PATH=$LIB_INSTALL_PREFIX/lib
 export PATH=$LIB_INSTALL_PREFIX/bin:$PATH
 
 # Install libffi (glib dependency)
-curl -L --retry 3 -o libffi.tar.gz https://sourceware.org/pub/libffi/libffi-3.4.4.tar.gz
+curl -L --retry 3 -o libffi.tar.gz https://sourceware.org/pub/libffi/libffi-3.4.3.tar.gz
 $CHECK_SHA256 libffi.tar.gz d06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37 || true
 tar xzf libffi.tar.gz
-pushd libffi-3.4.4
+pushd libffi-3.4.3
 ./configure --prefix=$LIB_INSTALL_PREFIX --disable-debug
 make install -j
 popd
