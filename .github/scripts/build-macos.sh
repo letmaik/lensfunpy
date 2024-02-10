@@ -54,19 +54,19 @@ export LIBRARY_PATH=$LIB_INSTALL_PREFIX/lib
 export PATH=$LIB_INSTALL_PREFIX/bin:$PATH
 
 # Install libffi (glib dependency)
-curl -L --retry 3 -o libffi.tar.gz https://sourceware.org/pub/libffi/libffi-3.2.1.tar.gz
-$CHECK_SHA256 libffi.tar.gz d06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37
+curl -L --retry 3 -o libffi.tar.gz https://sourceware.org/pub/libffi/libffi-3.4.3.tar.gz
+$CHECK_SHA256 libffi.tar.gz 4416dd92b6ae8fcb5b10421e711c4d3cb31203d77521a77d85d0102311e6c3b8
 tar xzf libffi.tar.gz
-pushd libffi-3.2.1
+pushd libffi-3.4.3
 ./configure --prefix=$LIB_INSTALL_PREFIX --disable-debug
 make install -j
 popd
 
 # Install gettext (glib dependency)
-curl -L --retry 3 -o gettext.tar.xz https://ftp.gnu.org/gnu/gettext/gettext-0.20.1.tar.xz
-$CHECK_SHA256 gettext.tar.xz 53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800
+curl -L --retry 3 -o gettext.tar.xz https://ftp.gnu.org/gnu/gettext/gettext-0.22.4.tar.xz
+$CHECK_SHA256 gettext.tar.xz 29217f1816ee2e777fa9a01f9956a14139c0c23cc1b20368f06b2888e8a34116
 tar xzf gettext.tar.xz
-pushd gettext-0.20.1
+pushd gettext-0.22.4
 ./configure --prefix=$LIB_INSTALL_PREFIX \
     --disable-debug \
     --disable-java --disable-csharp \
@@ -76,10 +76,10 @@ make install
 popd
 
 # Install glib (lensfun dependency)
-curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.75/glib-2.75.0.tar.xz
-$CHECK_SHA256 glib.tar.xz 6dde8e55cc4a2c83d96797120b08bcffb5f645b2e212164ae22d63c40e0e6360
+curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.79/glib-2.79.1.tar.xz
+$CHECK_SHA256 glib.tar.xz b3764dd6e29b664085921dd4dd6ba2430fc19760ab6857ecfa3ebd4e8c1d114c
 tar xzf glib.tar.xz
-pushd glib-2.75.0
+pushd glib-2.79.1
 mkdir build
 cd build
 meson --prefix=$LIB_INSTALL_PREFIX \
