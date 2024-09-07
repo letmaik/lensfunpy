@@ -203,9 +203,9 @@ In a PowerShell window:
 .. code-block:: sh
 
     $env:USE_CONDA = '1'
-    $env:PYTHON_VERSION = '3.7'
+    $env:PYTHON_VERSION = '3.10'
     $env:PYTHON_ARCH = 'x86_64'
-    $env:NUMPY_VERSION = '1.14.*'
+    $env:NUMPY_VERSION = '2.0.*'
     git clone https://github.com/letmaik/lensfunpy
     cd lensfunpy
     .github/scripts/build-windows.ps1
