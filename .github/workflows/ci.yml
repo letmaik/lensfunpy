@@ -14,12 +14,6 @@ jobs:
           os-name: linux
           docker-image: quay.io/pypa/manylinux2014_x86_64
           python-arch: 'x86_64'
-          python-version: '3.8'
-          numpy-version: '2.0.*'
-        - os-image: ubuntu-latest
-          os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
-          python-arch: 'x86_64'
           python-version: '3.9'
           numpy-version: '2.0.*'
         - os-image: ubuntu-latest
@@ -45,12 +39,6 @@ jobs:
           os-name: linux
           docker-image: quay.io/pypa/manylinux2014_aarch64
           python-arch: 'aarch64'
-          python-version: '3.8'
-          numpy-version: '2.0.*'
-        - os-image: ubuntu-latest
-          os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
-          python-arch: 'aarch64'
           python-version: '3.9'
           numpy-version: '2.0.*'
         - os-image: ubuntu-latest
@@ -72,12 +60,6 @@ jobs:
           python-version: '3.12'
           numpy-version: '2.0.*'
 
-        - os-image: macos-12
-          os-name: mac
-          macos-min-version: '10.9'
-          python-arch: 'x86_64'
-          python-version: '3.8'
-          numpy-version: '2.0.*'
         - os-image: macos-12
           os-name: mac
           macos-min-version: '10.9'
@@ -122,11 +104,6 @@ jobs:
           python-version: '3.12'
           numpy-version: '2.0.*'
 
-        - os-image: windows-2019
-          os-name: windows
-          python-arch: 'x86_64'
-          python-version: '3.8'
-          numpy-version: '2.0.*'
         - os-image: windows-2019
           os-name: windows
           python-arch: 'x86_64'
