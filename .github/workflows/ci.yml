@@ -62,25 +62,25 @@ jobs:
 
         - os-image: macos-13
           os-name: mac
-          macos-min-version: '10.9'
+          macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.9'
           numpy-version: '2.0.*'
         - os-image: macos-13
           os-name: mac
-          macos-min-version: '10.9'
+          macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.10'
           numpy-version: '2.0.*'
         - os-image: macos-13
           os-name: mac
-          macos-min-version: '10.9'
+          macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '2.0.*'
         - os-image: macos-13
           os-name: mac
-          macos-min-version: '10.9'
+          macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.12'
           numpy-version: '2.0.*'
@@ -88,19 +88,19 @@ jobs:
         - os-image: macos-14 # M1
           os-name: mac
           python-arch: arm64
-          macos-min-version: '11.0'
+          macos-min-version: '14.0'
           python-version: '3.10'
           numpy-version: '2.0.*'
         - os-image: macos-14 # M1
           os-name: mac
           python-arch: arm64
-          macos-min-version: '11.0'
+          macos-min-version: '14.0'
           python-version: '3.11'
           numpy-version: '2.0.*'
         - os-image: macos-14 # M1
           os-name: mac
           python-arch: arm64
-          macos-min-version: '11.0'
+          macos-min-version: '14.0'
           python-version: '3.12'
           numpy-version: '2.0.*'
 
