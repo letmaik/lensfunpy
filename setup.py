@@ -83,7 +83,7 @@ def windows_lensfun_compile():
     cwd = os.getcwd()
     
     # Download cmake to build lensfun
-    cmake_version = '3.13.4'
+    cmake_version = '3.16.9'
     cmake_url = 'https://github.com/Kitware/CMake/releases/download/v{v}/cmake-{v}-win32-x86.zip'.format(v=cmake_version)
     cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
 
