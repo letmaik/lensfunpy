@@ -5,7 +5,7 @@ source .github/scripts/retry.sh
 
 CHECK_SHA256=.github/scripts/check_sha256.sh
 
-brew install pkg-config meson
+brew install pkg-config meson python-packaging
 
 # General note:
 # Apple guarantees forward, but not backward ABI compatibility unless
