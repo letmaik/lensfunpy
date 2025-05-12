@@ -25,7 +25,7 @@ fi
 
 # Install liblensfun
 pushd external/lensfun
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off .
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
 make
 make install -j$(nproc)
 echo "/usr/local/lib64" | tee /etc/ld.so.conf.d/99local.conf
