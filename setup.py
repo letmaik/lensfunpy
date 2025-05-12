@@ -147,6 +147,7 @@ def windows_lensfun_compile():
     with open(patch_path, 'w') as f:
         f.write(content)
     cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
+                    '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
                     '-DGLIB2_BASE_DIR={} -DGLIB2_DLL={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir, glib2_dll),
@@ -186,6 +187,7 @@ def mac_lensfun_compile():
     os.chdir(cmake_build)
     install_name_dir = os.path.join(install_dir, 'lib')
     cmds = ['cmake .. -DCMAKE_BUILD_TYPE=Release ' +\
+                    '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_INSTALL_PREFIX=install ' +\
                     '-DCMAKE_INSTALL_NAME_DIR=' + install_name_dir,
