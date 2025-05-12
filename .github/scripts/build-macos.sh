@@ -75,6 +75,9 @@ make -j
 make install
 popd
 
+# Install packaging into system python (used by meson in glib build)
+python3 -m pip install packaging
+
 # Install glib (lensfun dependency)
 curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.79/glib-2.79.1.tar.xz
 $CHECK_SHA256 glib.tar.xz b3764dd6e29b664085921dd4dd6ba2430fc19760ab6857ecfa3ebd4e8c1d114c
