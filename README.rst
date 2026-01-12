@@ -53,7 +53,7 @@ How to correct lens distortion
     mod.initialize(focal_length, aperture, distance, pixel_format=img.dtype)
 
     undist_coords = mod.apply_geometry_distortion()
-    img_undistorted = cv2.remap(img, undist_coords, None, cv2.INTER_LANCZOS4)
+    img_undistorted = cv2.remap(img, undist_coords, None, cv2.INTER_LINEAR)
     cv2.imwrite(undistorted_image_path, img_undistorted)
 
 It is also possible to apply the correction via `SciPy <http://www.scipy.org>`_ instead of OpenCV.
@@ -128,9 +128,9 @@ TCA correction.
 
     # TCA Correction
     undist_coords = mod.apply_subpixel_distortion()
-    img[..., 0] = cv2.remap(img[..., 0], undist_coords[..., 0, :], None, cv2.INTER_LANCZOS4)
-    img[..., 1] = cv2.remap(img[..., 1], undist_coords[..., 1, :], None, cv2.INTER_LANCZOS4)
-    img[..., 2] = cv2.remap(img[..., 2], undist_coords[..., 2, :], None, cv2.INTER_LANCZOS4)
+    img[..., 0] = cv2.remap(img[..., 0], undist_coords[..., 0, :], None, cv2.INTER_LINEAR)
+    img[..., 1] = cv2.remap(img[..., 1], undist_coords[..., 1, :], None, cv2.INTER_LINEAR)
+    img[..., 2] = cv2.remap(img[..., 2], undist_coords[..., 2, :], None, cv2.INTER_LINEAR)
 
     imageio.imwrite('/path/to/image_corrected.tiff', img)
 
