@@ -30,6 +30,10 @@ popd
 # Install numpy/scipy deps
 retry yum install -y lapack-devel blas-devel
 
+# Upgrade pip and prefer binary packages
+${PYBIN}/python -m pip install --upgrade pip
+export PIP_PREFER_BINARY=1
+
 # install compile-time dependencies
 retry ${PYBIN}/pip install numpy==${NUMPY_VERSION} cython
 
