@@ -70,7 +70,7 @@ function Initialize-VS {
     $VS_ROOT_X86 = "C:\Program Files (x86)\Microsoft Visual Studio"
     $VS_ROOT_X64 = "C:\Program Files\Microsoft Visual Studio"
     $VS_ROOTS = @($VS_ROOT_X86, $VS_ROOT_X64)
-    $VS_VERSIONS = @("2017", "2019", "2022")
+    $VS_VERSIONS = @("2022", "2019", "2017")
     $VS_EDITIONS = @("Enterprise", "Professional", "Community")
     $VS_INIT_CMD_SUFFIX = "Common7\Tools\vsdevcmd.bat"
 
