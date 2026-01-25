@@ -4,6 +4,10 @@ on: [push, pull_request]
 
 permissions: read-all
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
@@ -12,147 +16,153 @@ jobs:
         config:
         - os-image: ubuntu-latest
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
-          python-arch: 'x86_64'
-          python-version: '3.9'
-          numpy-version: '2.0.*'
-        - os-image: ubuntu-latest
-          os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
+          docker-image: quay.io/pypa/manylinux_2_28_x86_64
           python-arch: 'x86_64'
           python-version: '3.10'
           numpy-version: '2.0.*'
         - os-image: ubuntu-latest
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
+          docker-image: quay.io/pypa/manylinux_2_28_x86_64
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '2.0.*'
         - os-image: ubuntu-latest
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
+          docker-image: quay.io/pypa/manylinux_2_28_x86_64
           python-arch: 'x86_64'
           python-version: '3.12'
           numpy-version: '2.0.*'
         - os-image: ubuntu-latest
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_x86_64
+          docker-image: quay.io/pypa/manylinux_2_28_x86_64
           python-arch: 'x86_64'
           python-version: '3.13'
           numpy-version: '2.2.*'
+        - os-image: ubuntu-latest
+          os-name: linux
+          docker-image: quay.io/pypa/manylinux_2_28_x86_64
+          python-arch: 'x86_64'
+          python-version: '3.14'
+          numpy-version: '2.3.*'
 
         - os-image: ubuntu-22.04-arm
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
-          python-arch: 'aarch64'
-          python-version: '3.9'
-          numpy-version: '2.0.*'
-        - os-image: ubuntu-22.04-arm
-          os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
+          docker-image: quay.io/pypa/manylinux_2_28_aarch64
           python-arch: 'aarch64'
           python-version: '3.10'
           numpy-version: '2.0.*'
         - os-image: ubuntu-22.04-arm
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
+          docker-image: quay.io/pypa/manylinux_2_28_aarch64
           python-arch: 'aarch64'
           python-version: '3.11'
           numpy-version: '2.0.*'
         - os-image: ubuntu-22.04-arm
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
+          docker-image: quay.io/pypa/manylinux_2_28_aarch64
           python-arch: 'aarch64'
           python-version: '3.12'
           numpy-version: '2.0.*'
         - os-image: ubuntu-22.04-arm
           os-name: linux
-          docker-image: quay.io/pypa/manylinux2014_aarch64
+          docker-image: quay.io/pypa/manylinux_2_28_aarch64
           python-arch: 'aarch64'
           python-version: '3.13'
           numpy-version: '2.2.*'
+        - os-image: ubuntu-22.04-arm
+          os-name: linux
+          docker-image: quay.io/pypa/manylinux_2_28_aarch64
+          python-arch: 'aarch64'
+          python-version: '3.14'
+          numpy-version: '2.3.*'
 
-        - os-image: macos-13
-          os-name: mac
-          macos-min-version: '13.0'
-          python-arch: 'x86_64'
-          python-version: '3.9'
-          numpy-version: '2.0.*'
-        - os-image: macos-13
+        - os-image: macos-15-intel
           os-name: mac
           macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.10'
           numpy-version: '2.0.*'
-        - os-image: macos-13
+        - os-image: macos-15-intel
           os-name: mac
           macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '2.0.*'
-        - os-image: macos-13
+        - os-image: macos-15-intel
           os-name: mac
           macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.12'
           numpy-version: '2.0.*'
-        - os-image: macos-13
+        - os-image: macos-15-intel
           os-name: mac
           macos-min-version: '13.0'
           python-arch: 'x86_64'
           python-version: '3.13'
           numpy-version: '2.2.*'
+        - os-image: macos-15-intel
+          os-name: mac
+          macos-min-version: '13.0'
+          python-arch: 'x86_64'
+          python-version: '3.14'
+          numpy-version: '2.3.*'
 
-        - os-image: macos-14 # M1
+        - os-image: macos-15
           os-name: mac
           python-arch: arm64
           macos-min-version: '14.0'
           python-version: '3.10'
           numpy-version: '2.0.*'
-        - os-image: macos-14 # M1
+        - os-image: macos-15
           os-name: mac
           python-arch: arm64
           macos-min-version: '14.0'
           python-version: '3.11'
           numpy-version: '2.0.*'
-        - os-image: macos-14 # M1
+        - os-image: macos-15
           os-name: mac
           python-arch: arm64
           macos-min-version: '14.0'
           python-version: '3.12'
           numpy-version: '2.0.*'
-        - os-image: macos-14 # M1
+        - os-image: macos-15
           os-name: mac
           python-arch: arm64
           macos-min-version: '14.0'
           python-version: '3.13'
           numpy-version: '2.2.*'
+        - os-image: macos-15
+          os-name: mac
+          python-arch: arm64
+          macos-min-version: '14.0'
+          python-version: '3.14'
+          numpy-version: '2.3.*'
 
-        - os-image: windows-2019
-          os-name: windows
-          python-arch: 'x86_64'
-          python-version: '3.9'
-          numpy-version: '2.0.*'
-        - os-image: windows-2019
+        - os-image: windows-2025
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.10'
           numpy-version: '2.0.*'
-        - os-image: windows-2019
+        - os-image: windows-2025
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.11'
           numpy-version: '2.0.*'
-        - os-image: windows-2019
+        - os-image: windows-2025
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.12'
           numpy-version: '2.0.*'
-        - os-image: windows-2019
+        - os-image: windows-2025
           os-name: windows
           python-arch: 'x86_64'
           python-version: '3.13'
           numpy-version: '2.2.*'
+        - os-image: windows-2025
+          os-name: windows
+          python-arch: 'x86_64'
+          python-version: '3.14'
+          numpy-version: '2.3.*'
 
     runs-on: ${{ matrix.config.os-image }}
 
