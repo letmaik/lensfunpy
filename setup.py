@@ -81,6 +81,8 @@ def windows_lensfun_compile():
     clone_submodules()
 
     cwd = os.getcwd()
+
+    assert is64Bit, "Only 64-bit Windows is supported currently"
     
     # Download cmake to build lensfun
     cmake_version = '3.16.9'
@@ -88,7 +90,7 @@ def windows_lensfun_compile():
     cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
 
     # Download vcpkg to build dependencies of lensfun
-    vcpkg_commit = '2025.01.13'
+    vcpkg_commit = '2026.01.16'
     vcpkg_url = 'https://github.com/Microsoft/vcpkg/archive/{}.zip'.format(vcpkg_commit)
     vcpkg_dir = os.path.abspath('external/vcpkg-{}'.format(vcpkg_commit))
     vcpkg_bootstrap = os.path.join(vcpkg_dir, 'bootstrap-vcpkg.bat')
@@ -123,8 +125,7 @@ def windows_lensfun_compile():
             sys.exit(code) 
 
     # lensfun depends on glib2, so let's build it with vcpkg
-    vcpkg_arch = 'x64' if is64Bit else 'x86'
-    vcpkg_triplet = '{}-windows'.format(vcpkg_arch)
+    vcpkg_triplet = 'x64-windows'
     code = os.system(vcpkg + ' install glib:' + vcpkg_triplet)
     if code != 0:
         sys.exit(code)
@@ -146,13 +147,13 @@ def windows_lensfun_compile():
     content = content.replace('IF(PYTHON)', 'IF(FALSE)')
     with open(patch_path, 'w') as f:
         f.write(content)
-    cmds = [cmake + ' .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ' +\
+    cmds = [cmake + ' .. -G "Visual Studio 17 2022" -A x64 ' +\
                     '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
                     '-DGLIB2_BASE_DIR={} -DGLIB2_DLL={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir, glib2_dll),
-            cmake + ' --build .',
-            cmake + ' --build . --target install',
+            cmake + ' --build . --config Release --parallel',
+            cmake + ' --build . --target install --config Release',
             ]
     for cmd in cmds:
         print(cmd)
