@@ -79,6 +79,18 @@ make -j
 make install
 popd
 
+# Install pcre2 (glib dependency)
+curl -L --retry 3 -o pcre2.tar.gz https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.gz
+$CHECK_SHA256 pcre2.tar.gz 0e138387df7835d7403b8351e2226c1377da804e0737db0e071b48f07c9d12ee
+tar xzf pcre2.tar.gz
+pushd pcre2-10.45
+./configure --prefix=$LIB_INSTALL_PREFIX \
+    --disable-pcre2-16 \
+    --disable-pcre2-32
+make -j
+make install
+popd
+
 # Install glib (lensfun dependency)
 curl -L --retry 3 -o glib.tar.xz https://download.gnome.org/sources/glib/2.79/glib-2.79.1.tar.xz
 $CHECK_SHA256 glib.tar.xz b3764dd6e29b664085921dd4dd6ba2430fc19760ab6857ecfa3ebd4e8c1d114c
