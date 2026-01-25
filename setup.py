@@ -147,6 +147,14 @@ def windows_lensfun_compile():
     content = content.replace('IF(PYTHON)', 'IF(FALSE)')
     with open(patch_path, 'w') as f:
         f.write(content)
+    # patch main CMakeLists.txt to define PLATFORM_WINDOWS for MSVC
+    # remove after https://github.com/lensfun/lensfun/issues/2676 is fixed
+    patch_path = '../CMakeLists.txt'
+    with open(patch_path) as f:
+        content = f.read()
+    content = content.replace('IF(WIN32)\n\n  IF (MSVC)', 'IF(WIN32)\n  SET(PLATFORM_WINDOWS 1)\n\n  IF (MSVC)')
+    with open(patch_path, 'w') as f:
+        f.write(content)
     cmds = [cmake + ' .. -G "Visual Studio 17 2022" -A x64 ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
