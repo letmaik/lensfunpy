@@ -85,9 +85,9 @@ def windows_lensfun_compile():
     assert is64Bit, "Only 64-bit Windows is supported currently"
     
     # Download cmake to build lensfun
-    cmake_version = '3.16.9'
-    cmake_url = 'https://github.com/Kitware/CMake/releases/download/v{v}/cmake-{v}-win32-x86.zip'.format(v=cmake_version)
-    cmake = os.path.abspath('external/cmake-{}-win32-x86/bin/cmake.exe'.format(cmake_version))
+    cmake_version = '3.31.10'
+    cmake_url = 'https://github.com/Kitware/CMake/releases/download/v{v}/cmake-{v}-windows-x86_64.zip'.format(v=cmake_version)
+    cmake = os.path.abspath('external/cmake-{}-windows-x86_64/bin/cmake.exe'.format(cmake_version))
 
     # Download vcpkg to build dependencies of lensfun
     vcpkg_commit = '2026.01.16'
@@ -148,7 +148,6 @@ def windows_lensfun_compile():
     with open(patch_path, 'w') as f:
         f.write(content)
     cmds = [cmake + ' .. -G "Visual Studio 17 2022" -A x64 ' +\
-                    '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 ' +\
                     '-DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off ' +\
                     '-DCMAKE_TOOLCHAIN_FILE={}/scripts/buildsystems/vcpkg.cmake '.format(vcpkg_dir) +\
                     '-DGLIB2_BASE_DIR={} -DGLIB2_DLL={} -DCMAKE_INSTALL_PREFIX=install'.format(vcpkg_install_dir, glib2_dll),
