@@ -17,14 +17,10 @@ if [ ! -d "$PYBIN" ]; then
     exit 1
 fi
 
-# Upgrade pip and prefer binary packages
-# Note: lensfun's CMake build requires setuptools for apps/
-${PYBIN}/python -m pip install --upgrade pip setuptools
-export PIP_PREFER_BINARY=1
-
 # Install liblensfun
 pushd external/lensfun
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
+sed -i 's/IF(PYTHON)/IF(FALSE)/g' apps/CMakeLists.txt
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=off -DINSTALL_HELPER_SCRIPTS=off .
 make
 make install -j$(nproc)
 echo "/usr/local/lib64" | tee /etc/ld.so.conf.d/99local.conf
@@ -34,6 +30,10 @@ popd
 
 # Install numpy/scipy deps
 retry dnf install -y lapack-devel blas-devel
+
+# Upgrade pip and prefer binary packages
+${PYBIN}/python -m pip install --upgrade pip
+export PIP_PREFER_BINARY=1
 
 # install compile-time dependencies
 retry ${PYBIN}/pip install numpy==${NUMPY_VERSION} cython
