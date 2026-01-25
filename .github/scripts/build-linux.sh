@@ -28,7 +28,7 @@ export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig
 popd
 
 # Install numpy/scipy deps
-retry yum install -y lapack-devel blas-devel
+retry dnf install -y lapack-devel blas-devel
 
 # Upgrade pip and prefer binary packages
 ${PYBIN}/python -m pip install --upgrade pip
