@@ -80,13 +80,13 @@ make install
 popd
 
 # Install pcre2 (glib dependency)
-curl -L --retry 3 -o pcre2.tar.gz https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.gz
-$CHECK_SHA256 pcre2.tar.gz 0e138387df7835d7403b8351e2226c1377da804e0737db0e071b48f07c9d12ee
+curl -L --retry 3 -o pcre2.tar.gz https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47.tar.gz
+$CHECK_SHA256 pcre2.tar.gz c08ae2388ef333e8403e670ad70c0a11f1eed021fd88308d7e02f596fcd9dc16
 tar xzf pcre2.tar.gz
-pushd pcre2-10.45
+pushd pcre2-10.47
 ./configure --prefix=$LIB_INSTALL_PREFIX \
-    --disable-pcre2-16 \
-    --disable-pcre2-32
+    --disable-dependency-tracking \
+    --enable-jit
 make -j
 make install
 popd
