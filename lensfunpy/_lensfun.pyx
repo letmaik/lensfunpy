@@ -1,5 +1,9 @@
 # cython: c_string_type=unicode, c_string_encoding=utf8
 # cython: embedsignature=True
+# cython: language_level=3
+
+from typing import Optional, List, Union, Any
+from numpy.typing import NDArray
 
 from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
@@ -227,7 +231,8 @@ cdef class Database:
     def __cinit__(self):
         self.lf = lf_db_new()
 
-    def __init__(self, paths=None, xml=None, load_common=True, load_bundled=True):
+    def __init__(self, paths: Optional[List[str]] = None, xml: Optional[str] = None, 
+                 load_common: bool = True, load_bundled: bool = True) -> None:
         """Database.__init__(paths=None, xml=None, load_common=True, load_bundled=True)
         
         :type paths: iterable of str
@@ -247,7 +252,7 @@ cdef class Database:
             bundled_paths = glob.glob(xml_glob)
 
             for path in bundled_paths:
-                handleError(lf_db_load_file(self.lf, _chars(path)))
+                handleError(lf_db_load_file(self.lf, path))
 
         if load_common:
             code = lf_db_load(self.lf)
@@ -259,30 +264,31 @@ cdef class Database:
                 handleError(code)
 
         for path in paths:
-            handleError(lf_db_load_file(self.lf, _chars(path)))
+            handleError(lf_db_load_file(self.lf, path))
 
         if xml:
-            xml = _chars(xml.strip()) # stripping as lensfun is very strict here
+            xml = xml.strip() # stripping as lensfun is very strict here
             handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
 
 
     def __dealloc__(self):
         lf_db_destroy(self.lf)
     
-    property cameras:
+    @property
+    def cameras(self) -> List[Camera]:
         """
         All loaded cameras.
         
         :rtype: list of :class:`lensfunpy.Camera` instances
         """
-        def __get__(self):
-            cdef const lfCamera *const * lfCams
-            lfCams = lf_db_get_cameras(self.lf)
-            cams = self._convertCams(<const lfCamera **>lfCams)
-            # NOTE: lfCams must not be lf_free'd! it points to an internal list (not a copy!)
-            return cams
+        cdef const lfCamera *const * lfCams
+        lfCams = lf_db_get_cameras(self.lf)
+        cams = self._convertCams(<const lfCamera **>lfCams)
+        # NOTE: lfCams must not be lf_free'd! it points to an internal list (not a copy!)
+        return cams
         
-    def find_cameras(self, maker=None, model=None, loose_search=False):
+    def find_cameras(self, maker: Optional[str] = None, model: Optional[str] = None, 
+                     loose_search: bool = False) -> List[Camera]:
         """
         
         :param str maker: return cameras from the given manufacturer
@@ -296,13 +302,10 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            # direct assignment to cmaker is NOT possible (as the C string is tied to the lifetime of the Python string)
-            maker = _chars(maker)
             cmaker = maker
         if model is None:
             cmodel = NULL
         else:
-            model = _chars(model)
             cmodel = model
         if loose_search:
             lfCams = lf_db_find_cameras_ext(self.lf, cmaker, cmodel, LF_SEARCH_LOOSE)
@@ -312,43 +315,44 @@ cdef class Database:
         lf_free(lfCams)
         return cams
     
-    property mounts:
+    @property
+    def mounts(self) -> List[Mount]:
         """
         All loaded mounts.
         
         :rtype: list of :class:`lensfunpy.Mount` instances
         """
-        def __get__(self):
-            cdef const lfMount *const * lfMounts
-            lfMounts = lf_db_get_mounts(self.lf)
-            mounts = self._convertMounts(<const lfMount **>lfMounts)
-            # NOTE: lfMounts must not be lf_free'd! it points to an internal list (not a copy!)
-            return mounts
+        cdef const lfMount *const * lfMounts
+        lfMounts = lf_db_get_mounts(self.lf)
+        mounts = self._convertMounts(<const lfMount **>lfMounts)
+        # NOTE: lfMounts must not be lf_free'd! it points to an internal list (not a copy!)
+        return mounts
         
-    def find_mount(self, name):
+    def find_mount(self, name: str) -> Mount:
         """
         
         :param str name:
         :rtype: :class:`lensfunpy.Mount` instance
         """
         cdef const lfMount * lfMoun
-        lfMoun = lf_db_find_mount(self.lf, _chars(name))
+        lfMoun = lf_db_find_mount(self.lf, name)
         return Mount(<uintptr_t>lfMoun, self)
     
-    property lenses:
+    @property
+    def lenses(self) -> List[Lens]:
         """
         All loaded lenses.
         
         :rtype: list of :class:`lensfunpy.Lens` instances
         """
-        def __get__(self):
-            cdef const lfLens *const * lfLenses
-            lfLenses = lf_db_get_lenses(self.lf)
-            lenses = self._convertLenses(<const lfLens **>lfLenses)
-            # NOTE: lfLenses must not be lf_free'd! it points to an internal list (not a copy!)
-            return lenses
+        cdef const lfLens *const * lfLenses
+        lfLenses = lf_db_get_lenses(self.lf)
+        lenses = self._convertLenses(<const lfLens **>lfLenses)
+        # NOTE: lfLenses must not be lf_free'd! it points to an internal list (not a copy!)
+        return lenses
     
-    def find_lenses(self, Camera camera not None, maker=None, lens=None, loose_search=False):
+    def find_lenses(self, Camera camera not None, maker: Optional[str] = None, 
+                    lens: Optional[str] = None, loose_search: bool = False) -> List[Lens]:
         """
         
         :param lensfunpy.Camera camera: 
@@ -363,12 +367,10 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            maker = _chars(maker)
             cmaker = maker
         if lens is None:
             clens = NULL
         else:
-            lens = _chars(lens)
             clens = lens
         lfLenses = lf_db_find_lenses_hd(self.lf, camera.lf, cmaker, clens, LF_SEARCH_LOOSE if loose_search else 0)
         lenses = self._convertLenses(lfLenses)
@@ -414,59 +416,59 @@ cdef class Camera:
         self.lf = <lfCamera*> lfCam
         self.db = db
     
-    property maker:
+    @property
+    def maker(self) -> str:
         """
         The camera manufacturer.
         
         :rtype: str
         """
-        def __get__(self):
-            return self.lf.Maker
+        return self.lf.Maker
     
-    property model:
+    @property
+    def model(self) -> str:
         """
         The camera model.
         
         :rtype: str
         """
-        def __get__(self):
-            return self.lf.Model
+        return self.lf.Model
         
-    property variant:
+    @property
+    def variant(self) -> Optional[str]:
         """
         The camera variant.
         
         :rtype: str|None
         """
-        def __get__(self):
-            return None if self.lf.Variant is NULL else self.lf.Variant
+        return None if self.lf.Variant is NULL else self.lf.Variant
         
-    property mount:
+    @property
+    def mount(self) -> Optional[str]:
         """
         The camera mount.
         
         :rtype: str|None
         """
-        def __get__(self):
-            return None if self.lf.Mount is NULL else self.lf.Mount
+        return None if self.lf.Mount is NULL else self.lf.Mount
         
-    property crop_factor:
+    @property
+    def crop_factor(self) -> float:
         """
         The crop factor of the camera sensor.
         
         :rtype: float
         """
-        def __get__(self):
-            return self.lf.CropFactor
+        return self.lf.CropFactor
 
-    property score:
+    @property
+    def score(self) -> int:
         """
         Search score. 
         
         :rtype: int
         """
-        def __get__(self):
-            return self.lf.Score
+        return self.lf.Score
         
     def __richcmp__(self, other, int op):
         if isinstance(other, Camera):
@@ -508,24 +510,24 @@ cdef class Mount:
         self.lf = <lfMount*> lfMoun
         self.db = db
         
-    property name:
+    @property
+    def name(self) -> str:
         """
         The mount name.
         
         :rtype: str
         """
-        def __get__(self):
-            return self.lf.Name
+        return self.lf.Name
         
-    property compat:
+    @property
+    def compat(self) -> List[str]:
         """
         The mounts that are compatible to this one.
         
         :return: names of compatible mounts
         :rtype: list of str
         """
-        def __get__(self):
-            return _convertStringList(self.lf.Compat)
+        return _convertStringList(self.lf.Compat)
         
     def __richcmp__(self, other, int op):
         if isinstance(other, Mount):
@@ -548,132 +550,132 @@ cdef class Lens:
         self.lf = <lfLens*> lfLen
         self.db = db
         
-    property maker:
+    @property
+    def maker(self) -> str:
         """
         The lens manufacturer.
         
         :rtype: str
         """
-        def __get__(self):
-            return self.lf.Maker
+        return self.lf.Maker
     
-    property model:
+    @property
+    def model(self) -> str:
         """
         The lens model.
         
         :rtype: str
         """
-        def __get__(self):
-            return self.lf.Model
+        return self.lf.Model
         
-    property type:
+    @property
+    def type(self) -> LensType:
         """
         The lens type.
         
         :rtype: :class:`lensfunpy.LensType` instance
         """
-        def __get__(self):
-            try:
-                return next(t for t in LensType if t.value == self.lf.Type)
-            except StopIteration:
-                raise NotImplementedError("Unknown lens type ({}), please report an issue for lensfunpy".format(self.lf.Type))
+        try:
+            return next(t for t in LensType if t.value == self.lf.Type)
+        except StopIteration:
+            raise NotImplementedError("Unknown lens type ({}), please report an issue for lensfunpy".format(self.lf.Type))
         
-    property mounts:
+    @property
+    def mounts(self) -> List[str]:
         """
         Compatible mounts.
         
         :rtype: list of :class:`lensfunpy.Mount` instances
         """
-        def __get__(self):
-            return _convertStringList(self.lf.Mounts)                
+        return _convertStringList(self.lf.Mounts)                
         
-    property min_focal:
+    @property
+    def min_focal(self) -> float:
         """
         Minimum focal length.
         
         :rtype: float
         """
-        def __get__(self):
-            return self.lf.MinFocal
+        return self.lf.MinFocal
         
-    property max_focal:
+    @property
+    def max_focal(self) -> float:
         """
         Maximum focal length.
         
         :rtype: float
         """
-        def __get__(self):
-            return self.lf.MaxFocal
+        return self.lf.MaxFocal
         
-    property min_aperture:
+    @property
+    def min_aperture(self) -> Optional[float]:
         """
         Minimum aperture. Returns None if unknown.
         
         :rtype: float|None
         """
-        def __get__(self):
-            val = self.lf.MinAperture
-            return val if val != 0.0 else None
+        val = self.lf.MinAperture
+        return val if val != 0.0 else None
         
-    property max_aperture:
+    @property
+    def max_aperture(self) -> Optional[float]:
         """
         Maximum aperture. Returns None if unknown.
         
         :rtype: float|None
         """
-        def __get__(self):
-            val = self.lf.MaxAperture
-            return val if val != 0.0 else None
+        val = self.lf.MaxAperture
+        return val if val != 0.0 else None
         
-    property crop_factor:
+    @property
+    def crop_factor(self) -> float:
         """
         
         :rtype: float
         """
-        def __get__(self):
-            return self.lf.CropFactor
+        return self.lf.CropFactor
 
-    property center_x:
+    @property
+    def center_x(self) -> float:
         """
         
         :rtype: float
         """
-        def __get__(self):
-            return self.lf.CenterX
+        return self.lf.CenterX
         
-    property center_y:
+    @property
+    def center_y(self) -> float:
         """
         
         :rtype: float
         """
-        def __get__(self):
-            return self.lf.CenterY
+        return self.lf.CenterY
 
-    property calib_distortion:
+    @property
+    def calib_distortion(self) -> List[LensCalibDistortion]:
         """
         
         :rtype: list of :class:`lensfunpy.LensCalibDistortion` instances
         """
-        def __get__(self):
-            return _convertCalibsDistortion(self.lf.CalibDistortion)
+        return _convertCalibsDistortion(self.lf.CalibDistortion)
 
-    property calib_tca:
+    @property
+    def calib_tca(self) -> List[LensCalibTCA]:
         """
         
         :rtype: list of :class:`lensfunpy.LensCalibTCA` instances
         """
-        def __get__(self):
-            return _convertCalibsTCA(self.lf.CalibTCA)
+        return _convertCalibsTCA(self.lf.CalibTCA)
 
-    property calib_vignetting:
+    @property
+    def calib_vignetting(self) -> List[LensCalibVignetting]:
         """
         
         :rtype: list of :class:`lensfunpy.LensCalibTCA` instances
         """
-        def __get__(self):
-            return _convertCalibsVignetting(self.lf.CalibVignetting)
+        return _convertCalibsVignetting(self.lf.CalibVignetting)
         
-    def interpolate_distortion(self, float focal):
+    def interpolate_distortion(self, float focal) -> Optional[LensCalibDistortion]:
         """
         
         :rtype: lensfunpy.LensCalibDistortion
@@ -686,7 +688,7 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
     
-    def interpolate_tca(self, float focal):
+    def interpolate_tca(self, float focal) -> Optional[LensCalibTCA]:
         """
         
         :rtype: lensfunpy.LensCalibTCA
@@ -699,7 +701,7 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
     
-    def interpolate_vignetting(self, float focal, float aperture, float distance):
+    def interpolate_vignetting(self, float focal, float aperture, float distance) -> Optional[LensCalibVignetting]:
         """
         
         :rtype: lensfunpy.LensCalibVignetting
@@ -712,14 +714,14 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
                             
-    property score:
+    @property
+    def score(self) -> int:
         """
         Search score. 
         
         :rtype: int
         """
-        def __get__(self):
-            return self.lf.Score
+        return self.lf.Score
         
     def __richcmp__(self, other, int op):
         if isinstance(other, Lens):
@@ -817,7 +819,7 @@ cdef class Modifier:
     cdef float _distance
     cdef float _scale
 
-    def __init__(self, Lens lens not None, float crop, int width, int height):
+    def __init__(self, Lens lens not None, float crop, int width, int height) -> None:
         """
         :param lensfunpy.Lens: 
         :param float crop: crop factor of ...?
@@ -834,8 +836,8 @@ cdef class Modifier:
         lf_modifier_destroy(self.lf)
 
     def initialize(self, float focal, float aperture, float distance=1000.0, float scale=0.0, 
-                   targeom=LensType.RECTILINEAR, pixel_format=np.uint8, 
-                   int flags=ModifyFlags.ALL, bint reverse=0):
+                   targeom: LensType = LensType.RECTILINEAR, pixel_format: Any = np.uint8, 
+                   int flags=ModifyFlags.ALL, bint reverse=0) -> None:
         """
         :param float focal: The focal length in mm at which the image was taken. 
         :param float aperture: The aperture (f-number) at which the image was taken. 
@@ -860,77 +862,77 @@ cdef class Modifier:
         self._distance = distance
         self._scale = scale
         
-    property lens:
+    @property
+    def lens(self) -> Lens:
         """
         The :class:`lensfunpy.Lens` used when creating the modifier.
         """
-        def __get__(self):
-            return self._lens
+        return self._lens
         
-    property crop:
+    @property
+    def crop(self) -> float:
         """
         The crop factor used when creating the modifier.
         
         :rtype: float
         """
-        def __get__(self):
-            return self._crop
+        return self._crop
         
-    property width:
+    @property
+    def width(self) -> int:
         """
         The image width used when creating the modifier.
         
         :rtype: int
         """
-        def __get__(self):
-            return self._width
+        return self._width
         
-    property height:
+    @property
+    def height(self) -> int:
         """
         The image height used when creating the modifier.
         
         :rtype: int
         """
-        def __get__(self):
-            return self._height
+        return self._height
         
-    property focal_length:
+    @property
+    def focal_length(self) -> float:
         """
         The focal lenght used when initialising the modifier.
         
         :rtype: float
         """
-        def __get__(self):
-            return self._focal
+        return self._focal
         
-    property aperture:
+    @property
+    def aperture(self) -> float:
         """
         The aperture used when initialising the modifier.
         
         :rtype: float
         """
-        def __get__(self):
-            return self._aperture
+        return self._aperture
         
-    property distance:
+    @property
+    def distance(self) -> float:
         """
         The subject distance used when initialising the modifier.
         
         :rtype: float
         """
-        def __get__(self):
-            return self._distance
+        return self._distance
         
-    property scale:
+    @property
+    def scale(self) -> float:
         """
         The scale used when initialising the modifier.
         
         :rtype: float
         """
-        def __get__(self):
-            return self._scale
+        return self._scale
 
-    def apply_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1) -> Optional[NDArray[np.float32]]:
         """
         
         :return: coordinates for geometry distortion correction,
@@ -944,7 +946,7 @@ cdef class Modifier:
         else:
             return None
     
-    def apply_subpixel_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_subpixel_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1) -> Optional[NDArray[np.float32]]:
         """
         
         :return: per-channel coordinates for subpixel distortion correction,
@@ -958,7 +960,7 @@ cdef class Modifier:
         else:
             return None
 
-    def apply_subpixel_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_subpixel_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1) -> Optional[NDArray[np.float32]]:
         """
         
         :return: per-channel coordinates for combined distortion and subpixel distortion correction,
@@ -972,7 +974,7 @@ cdef class Modifier:
         else:
             return None
     
-    def apply_color_modification(self, img_dtypes[:,:,::1] img):
+    def apply_color_modification(self, img_dtypes[:,:,::1] img) -> bool:
         """
 
         :param ndarray img: Image (h,w,3) for which to apply the vignetting correction, in place.
@@ -1012,8 +1014,4 @@ cdef handleError(int code):
         else:
             raise LensfunError('Unknown lensfun error (code: {}), please report an issue for lensfunpy'.format(code))
 
-def _chars(s):
-    if isinstance(s, unicode):
-        # convert unicode to chars
-        s = (<unicode>s).encode('UTF-8')
-    return s
+

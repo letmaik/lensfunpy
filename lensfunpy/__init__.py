@@ -1,4 +1,14 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from lensfunpy._lensfun import (
+        Database, Camera, Mount, Lens, Modifier,
+        ModifyFlags, LensType, DistortionModel, TCAModel, VignettingModel,
+        LensCalibDistortion, LensCalibTCA, LensCalibVignetting,
+        LensfunError, XMLFormatError
+    )
 
 from ._version import __version__
 

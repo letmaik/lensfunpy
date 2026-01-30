@@ -219,7 +219,7 @@ def bundle_db_files():
         print('copying', path, '->', dest)
         shutil.copyfile(path, dest)
 
-package_data = {'lensfunpy': []}
+package_data = {'lensfunpy': ['py.typed', '_lensfun.pyi']}
 
 # evil hack, check cmd line for relevant commands
 # custom cmdclasses didn't work out in this case
