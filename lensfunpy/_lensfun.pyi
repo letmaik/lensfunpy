@@ -6,8 +6,9 @@ from typing import Optional, List, Tuple, NamedTuple, Any
 import numpy as np
 from numpy.typing import NDArray
 
-# Module-level version
+# Module-level version and constants
 lensfun_version: Tuple[int, int, int, int]
+LF_NO_DATABASE: int
 
 # Named tuples for calibration data
 class LensCalibDistortion(NamedTuple):
@@ -32,50 +33,50 @@ class ModifyFlags(IntEnum):
     """
     Flags for controlling which corrections to apply.
     """
-    TCA: int
-    VIGNETTING: int
-    DISTORTION: int
-    GEOMETRY: int
-    SCALE: int
-    ALL: int
+    TCA = ...
+    VIGNETTING = ...
+    DISTORTION = ...
+    GEOMETRY = ...
+    SCALE = ...
+    ALL = ...
 
 class LensType(Enum):
     """
     Lens projection types.
     """
-    UNKNOWN: int
-    RECTILINEAR: int
-    FISHEYE: int
-    PANORAMIC: int
-    EQUIRECTANGULAR: int
-    FISHEYE_ORTHOGRAPHIC: int
-    FISHEYE_STEREOGRAPHIC: int
-    FISHEYE_EQUISOLID: int
-    FISHEYE_THOBY: int
+    UNKNOWN = ...
+    RECTILINEAR = ...
+    FISHEYE = ...
+    PANORAMIC = ...
+    EQUIRECTANGULAR = ...
+    FISHEYE_ORTHOGRAPHIC = ...
+    FISHEYE_STEREOGRAPHIC = ...
+    FISHEYE_EQUISOLID = ...
+    FISHEYE_THOBY = ...
 
 class DistortionModel(Enum):
     """
     Distortion model types.
     """
-    NONE: int
-    POLY3: int
-    POLY5: int
-    PTLENS: int
+    NONE = ...
+    POLY3 = ...
+    POLY5 = ...
+    PTLENS = ...
 
 class TCAModel(Enum):
     """
     Transverse Chromatic Aberration model types.
     """
-    NONE: int
-    LINEAR: int
-    POLY3: int
+    NONE = ...
+    LINEAR = ...
+    POLY3 = ...
 
 class VignettingModel(Enum):
     """
     Vignetting model types.
     """
-    NONE: int
-    PA: int
+    NONE = ...
+    PA = ...
 
 # Exceptions
 class LensfunError(Exception):
@@ -304,16 +305,16 @@ class Lens:
         ...
     
     @property
-    def min_aperture(self) -> float:
+    def min_aperture(self) -> Optional[float]:
         """
-        Minimum aperture (maximum f-number).
+        Minimum aperture (maximum f-number). Returns None if unknown.
         """
         ...
     
     @property
-    def max_aperture(self) -> float:
+    def max_aperture(self) -> Optional[float]:
         """
-        Maximum aperture (minimum f-number).
+        Maximum aperture (minimum f-number). Returns None if unknown.
         """
         ...
     
@@ -346,42 +347,21 @@ class Lens:
         ...
     
     @property
-    def has_distortion_calibration(self) -> bool:
-        """
-        Whether distortion calibration data is available.
-        """
-        ...
-    
-    @property
-    def has_tca_calibration(self) -> bool:
-        """
-        Whether TCA calibration data is available.
-        """
-        ...
-    
-    @property
-    def has_vignetting_calibration(self) -> bool:
-        """
-        Whether vignetting calibration data is available.
-        """
-        ...
-    
-    @property
-    def distortion_calibrations(self) -> List[LensCalibDistortion]:
+    def calib_distortion(self) -> List[LensCalibDistortion]:
         """
         Distortion calibration data.
         """
         ...
     
     @property
-    def tca_calibrations(self) -> List[LensCalibTCA]:
+    def calib_tca(self) -> List[LensCalibTCA]:
         """
         TCA calibration data.
         """
         ...
     
     @property
-    def vignetting_calibrations(self) -> List[LensCalibVignetting]:
+    def calib_vignetting(self) -> List[LensCalibVignetting]:
         """
         Vignetting calibration data.
         """
@@ -452,10 +432,10 @@ class Modifier:
         aperture: float,
         distance: float = 1000.0,
         scale: float = 0.0,
-        targeom: LensType = LensType.RECTILINEAR,
-        pixel_format: Any = np.uint8,
-        flags: int = ModifyFlags.ALL,
-        reverse: bool = False
+        targeom: LensType = ...,
+        pixel_format: Any = ...,
+        flags: int = ...,
+        reverse: int = 0
     ) -> None:
         """
         Initialize the modifier with shooting parameters.
@@ -531,8 +511,8 @@ class Modifier:
     
     def apply_geometry_distortion(
         self,
-        xu: float = 0,
-        yu: float = 0,
+        xu: float = 0.0,
+        yu: float = 0.0,
         width: int = -1,
         height: int = -1
     ) -> Optional[NDArray[np.float32]]:
@@ -550,8 +530,8 @@ class Modifier:
     
     def apply_subpixel_distortion(
         self,
-        xu: float = 0,
-        yu: float = 0,
+        xu: float = 0.0,
+        yu: float = 0.0,
         width: int = -1,
         height: int = -1
     ) -> Optional[NDArray[np.float32]]:
@@ -569,8 +549,8 @@ class Modifier:
     
     def apply_subpixel_geometry_distortion(
         self,
-        xu: float = 0,
-        yu: float = 0,
+        xu: float = 0.0,
+        yu: float = 0.0,
         width: int = -1,
         height: int = -1
     ) -> Optional[NDArray[np.float32]]:

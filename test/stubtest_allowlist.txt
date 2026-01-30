@@ -8,11 +8,5 @@ lensfunpy\._lensfun\.__setstate_cython__
 # Doctest dictionary (not part of public API)
 lensfunpy\._lensfun\.__test__
 
-# Internal helper functions
-lensfunpy\._lensfun\._chars
-lensfunpy\._lensfun\._convertStringList
-lensfunpy\._lensfun\.handleError
-
-# Internal variables
-lensfunpy\._lensfun\.DTYPE
+# Internal variables (not part of public API)
 lensfunpy\._lensfun\.npPixelFormat
