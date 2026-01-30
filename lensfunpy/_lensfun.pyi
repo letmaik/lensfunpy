@@ -442,14 +442,14 @@ class Modifier:
         
         :param focal: The focal length in mm at which the image was taken
         :param aperture: The aperture (f-number) at which the image was taken
-        :param distance: The approximative focus distance in meters (distance > 0)
+        :param distance: The approximate focus distance in meters (distance > 0)
         :param scale: An additional scale factor to be applied onto the image (1.0 - no scaling; 0.0 - automatic scaling)
         :param targeom: Target geometry. If LF_MODIFY_GEOMETRY is set in flags and targeom
                        is different from lens.type, a geometry conversion will be applied on the image
         :param pixel_format: Pixel format of the image
         :param flags: A set of flags (see ModifyFlags) telling which distortions you want corrected.
                      A value of ModifyFlags.ALL orders correction of everything possible
-        :param reverse: If true, a reverse transform will be prepared (undistorted -> distorted)
+        :param reverse: If true (non-zero), a reverse transform will be prepared (undistorted -> distorted)
         """
         ...
     

@@ -2,11 +2,11 @@
 # These are internal implementation details that users shouldn't rely on
 
 # Cython-generated pickling support methods (module-level)
-lensfunpy\._lensfun\.__reduce_cython__
-lensfunpy\._lensfun\.__setstate_cython__
+lensfunpy._lensfun.__reduce_cython__
+lensfunpy._lensfun.__setstate_cython__
 
 # Doctest dictionary (not part of public API)
-lensfunpy\._lensfun\.__test__
+lensfunpy._lensfun.__test__
 
 # Internal variables (not part of public API)
-lensfunpy\._lensfun\.npPixelFormat
+lensfunpy._lensfun.npPixelFormat
