@@ -1,5 +1,6 @@
 # cython: c_string_type=unicode, c_string_encoding=utf8
 # cython: embedsignature=True
+# cython: language_level=3
 
 from typing import Optional, List, Union, Any
 from numpy.typing import NDArray
@@ -230,7 +231,8 @@ cdef class Database:
     def __cinit__(self):
         self.lf = lf_db_new()
 
-    def __init__(self, paths=None, xml=None, load_common=True, load_bundled=True) -> None:
+    def __init__(self, paths: Optional[List[str]] = None, xml: Optional[str] = None, 
+                 load_common: bool = True, load_bundled: bool = True) -> None:
         """Database.__init__(paths=None, xml=None, load_common=True, load_bundled=True)
         
         :type paths: iterable of str
@@ -250,7 +252,7 @@ cdef class Database:
             bundled_paths = glob.glob(xml_glob)
 
             for path in bundled_paths:
-                handleError(lf_db_load_file(self.lf, _chars(path)))
+                handleError(lf_db_load_file(self.lf, path))
 
         if load_common:
             code = lf_db_load(self.lf)
@@ -262,10 +264,10 @@ cdef class Database:
                 handleError(code)
 
         for path in paths:
-            handleError(lf_db_load_file(self.lf, _chars(path)))
+            handleError(lf_db_load_file(self.lf, path))
 
         if xml:
-            xml = _chars(xml.strip()) # stripping as lensfun is very strict here
+            xml = xml.strip() # stripping as lensfun is very strict here
             handleError(lf_db_load_data(self.lf, 'XML', xml, len(xml)))
 
 
@@ -285,7 +287,8 @@ cdef class Database:
         # NOTE: lfCams must not be lf_free'd! it points to an internal list (not a copy!)
         return cams
         
-    def find_cameras(self, maker=None, model=None, loose_search=False) -> List[Camera]:
+    def find_cameras(self, maker: Optional[str] = None, model: Optional[str] = None, 
+                     loose_search: bool = False) -> List[Camera]:
         """
         
         :param str maker: return cameras from the given manufacturer
@@ -299,13 +302,10 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            # direct assignment to cmaker is NOT possible (as the C string is tied to the lifetime of the Python string)
-            maker = _chars(maker)
             cmaker = maker
         if model is None:
             cmodel = NULL
         else:
-            model = _chars(model)
             cmodel = model
         if loose_search:
             lfCams = lf_db_find_cameras_ext(self.lf, cmaker, cmodel, LF_SEARCH_LOOSE)
@@ -328,14 +328,14 @@ cdef class Database:
         # NOTE: lfMounts must not be lf_free'd! it points to an internal list (not a copy!)
         return mounts
         
-    def find_mount(self, name) -> Mount:
+    def find_mount(self, name: str) -> Mount:
         """
         
         :param str name:
         :rtype: :class:`lensfunpy.Mount` instance
         """
         cdef const lfMount * lfMoun
-        lfMoun = lf_db_find_mount(self.lf, _chars(name))
+        lfMoun = lf_db_find_mount(self.lf, name)
         return Mount(<uintptr_t>lfMoun, self)
     
     @property
@@ -351,7 +351,8 @@ cdef class Database:
         # NOTE: lfLenses must not be lf_free'd! it points to an internal list (not a copy!)
         return lenses
     
-    def find_lenses(self, Camera camera not None, maker=None, lens=None, loose_search=False) -> List[Lens]:
+    def find_lenses(self, Camera camera not None, maker: Optional[str] = None, 
+                    lens: Optional[str] = None, loose_search: bool = False) -> List[Lens]:
         """
         
         :param lensfunpy.Camera camera: 
@@ -366,12 +367,10 @@ cdef class Database:
         if maker is None:
             cmaker = NULL
         else:
-            maker = _chars(maker)
             cmaker = maker
         if lens is None:
             clens = NULL
         else:
-            lens = _chars(lens)
             clens = lens
         lfLenses = lf_db_find_lenses_hd(self.lf, camera.lf, cmaker, clens, LF_SEARCH_LOOSE if loose_search else 0)
         lenses = self._convertLenses(lfLenses)
@@ -837,7 +836,7 @@ cdef class Modifier:
         lf_modifier_destroy(self.lf)
 
     def initialize(self, float focal, float aperture, float distance=1000.0, float scale=0.0, 
-                   targeom=LensType.RECTILINEAR, pixel_format=np.uint8, 
+                   targeom: LensType = LensType.RECTILINEAR, pixel_format: Any = np.uint8, 
                    int flags=ModifyFlags.ALL, bint reverse=0) -> None:
         """
         :param float focal: The focal length in mm at which the image was taken. 
@@ -1015,8 +1014,4 @@ cdef handleError(int code):
         else:
             raise LensfunError('Unknown lensfun error (code: {}), please report an issue for lensfunpy'.format(code))
 
-def _chars(s):
-    if isinstance(s, unicode):
-        # convert unicode to chars
-        s = (<unicode>s).encode('UTF-8')
-    return s
+
