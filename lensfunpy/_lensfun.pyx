@@ -1,6 +1,9 @@
 # cython: c_string_type=unicode, c_string_encoding=utf8
 # cython: embedsignature=True
 
+from typing import Optional, List, Union, Any
+from numpy.typing import NDArray
+
 from libc.stdint cimport uintptr_t
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 
@@ -227,7 +230,7 @@ cdef class Database:
     def __cinit__(self):
         self.lf = lf_db_new()
 
-    def __init__(self, paths=None, xml=None, load_common=True, load_bundled=True):
+    def __init__(self, paths=None, xml=None, load_common=True, load_bundled=True) -> None:
         """Database.__init__(paths=None, xml=None, load_common=True, load_bundled=True)
         
         :type paths: iterable of str
@@ -282,7 +285,7 @@ cdef class Database:
             # NOTE: lfCams must not be lf_free'd! it points to an internal list (not a copy!)
             return cams
         
-    def find_cameras(self, maker=None, model=None, loose_search=False):
+    def find_cameras(self, maker=None, model=None, loose_search=False) -> List[Camera]:
         """
         
         :param str maker: return cameras from the given manufacturer
@@ -325,7 +328,7 @@ cdef class Database:
             # NOTE: lfMounts must not be lf_free'd! it points to an internal list (not a copy!)
             return mounts
         
-    def find_mount(self, name):
+    def find_mount(self, name) -> Mount:
         """
         
         :param str name:
@@ -348,7 +351,7 @@ cdef class Database:
             # NOTE: lfLenses must not be lf_free'd! it points to an internal list (not a copy!)
             return lenses
     
-    def find_lenses(self, Camera camera not None, maker=None, lens=None, loose_search=False):
+    def find_lenses(self, Camera camera not None, maker=None, lens=None, loose_search=False) -> List[Lens]:
         """
         
         :param lensfunpy.Camera camera: 
@@ -673,7 +676,7 @@ cdef class Lens:
         def __get__(self):
             return _convertCalibsVignetting(self.lf.CalibVignetting)
         
-    def interpolate_distortion(self, float focal):
+    def interpolate_distortion(self, float focal) -> Optional[LensCalibDistortion]:
         """
         
         :rtype: lensfunpy.LensCalibDistortion
@@ -686,7 +689,7 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
     
-    def interpolate_tca(self, float focal):
+    def interpolate_tca(self, float focal) -> Optional[LensCalibTCA]:
         """
         
         :rtype: lensfunpy.LensCalibTCA
@@ -699,7 +702,7 @@ cdef class Lens:
         PyMem_Free(res)
         return calib
     
-    def interpolate_vignetting(self, float focal, float aperture, float distance):
+    def interpolate_vignetting(self, float focal, float aperture, float distance) -> Optional[LensCalibVignetting]:
         """
         
         :rtype: lensfunpy.LensCalibVignetting
@@ -817,7 +820,7 @@ cdef class Modifier:
     cdef float _distance
     cdef float _scale
 
-    def __init__(self, Lens lens not None, float crop, int width, int height):
+    def __init__(self, Lens lens not None, float crop, int width, int height) -> None:
         """
         :param lensfunpy.Lens: 
         :param float crop: crop factor of ...?
@@ -835,7 +838,7 @@ cdef class Modifier:
 
     def initialize(self, float focal, float aperture, float distance=1000.0, float scale=0.0, 
                    targeom=LensType.RECTILINEAR, pixel_format=np.uint8, 
-                   int flags=ModifyFlags.ALL, bint reverse=0):
+                   int flags=ModifyFlags.ALL, bint reverse=0) -> None:
         """
         :param float focal: The focal length in mm at which the image was taken. 
         :param float aperture: The aperture (f-number) at which the image was taken. 
@@ -930,7 +933,7 @@ cdef class Modifier:
         def __get__(self):
             return self._scale
 
-    def apply_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1) -> Optional[NDArray[np.float32]]:
         """
         
         :return: coordinates for geometry distortion correction,
@@ -944,7 +947,7 @@ cdef class Modifier:
         else:
             return None
     
-    def apply_subpixel_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_subpixel_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1) -> Optional[NDArray[np.float32]]:
         """
         
         :return: per-channel coordinates for subpixel distortion correction,
@@ -958,7 +961,7 @@ cdef class Modifier:
         else:
             return None
 
-    def apply_subpixel_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1):
+    def apply_subpixel_geometry_distortion(self, float xu = 0, float yu = 0, int width = -1, int height = -1) -> Optional[NDArray[np.float32]]:
         """
         
         :return: per-channel coordinates for combined distortion and subpixel distortion correction,
@@ -972,7 +975,7 @@ cdef class Modifier:
         else:
             return None
     
-    def apply_color_modification(self, img_dtypes[:,:,::1] img):
+    def apply_color_modification(self, img_dtypes[:,:,::1] img) -> bool:
         """
 
         :param ndarray img: Image (h,w,3) for which to apply the vignetting correction, in place.
