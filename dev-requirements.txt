@@ -11,6 +11,7 @@ scipy
 
 # test dependencies
 pytest
+mypy  # for type checking and stubtest validation
 
 # documentation dependencies
 sphinx_rtd_theme
